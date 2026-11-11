@@ -7,7 +7,7 @@
 export const LOOK={
   font:'system-ui, sans-serif', // Canvas font; CSS fonts are documented in park.css.
   ownOutline:'#c8ddcc66', ownOutlineWidth:1.3,
-  kickOutline:'#ffffff', kickOutlineWidth:3.5, // Held kick button, even during cooldown.
+  kickOutline:'#ffffff', kickOutlineWidth:1.5, // Held kick button, even during cooldown.
   parkZoom:1, // Pixels per world unit while walking: 1 = full-size players.
   spectatorMargin:150, // Space outside a field visible to its participants.
   toastMs:4500,
@@ -19,11 +19,11 @@ export const LOOK={
 export const RULES={
   kickoffTakerGap:48, // Empty space between taker and ball edges.
   botCelebrationChance:.65, // Winning bots sometimes pulse their kick ring.
-  botCelebrationPulse:.28, // Seconds per on/off cycle.
+  botCelebrationPulse:.15, // Seconds per on/off cycle.
   kickFlashSeconds:.12, // Minimum visible flash for a quick tap (including bot kicks).
-  celebrationSeconds:2.8, kickoffSeconds:3, intermissionSeconds:8,
-  halftimeWhistleGapsSeconds:[.25], // Silence after the first completed whistle.
-  fulltimeWhistleGapsSeconds:[.25,.35], // Silence before the second and final whistles.
+  celebrationSeconds:5, kickoffSeconds:3, intermissionSeconds:8,
+  halftimeWhistleGapsSeconds:[.15], // Silence after the first completed whistle.
+  fulltimeWhistleGapsSeconds:[.15,.25], // Silence before the second and final whistles.
   periodWhistlePlaybackRates:[.98,1.03,.96], // Small pitch changes, one per whistle.
   assistSeconds:5, deflectionSeconds:5,
   controlSeconds:.3, controlRelativeSpeed:55, // Sustained control ends deflection credit.
@@ -34,7 +34,7 @@ export const RULES={
 // Supported file types: mp3, ogg, wav. Gain multiplies the player's volume setting.
 export const SOUNDS={
   goal:{src:'/audio/goal.mp3',gain:1},
-  fireGoal:{src:'/audio/goal-fire.wav',gain:.55}, // Short boom layered onto fiery goals.
+  fireGoal:{src:'/audio/goal-explosion.mp3',gain:.55}, // Short boom layered onto fiery goals.
   kick:{src:'/audio/kick.mp3',gain:1}, touch:{src:'/audio/touch.mp3',gain:1}, post:{src:'/audio/post.mp3',gain:1},
   wall:{src:'/audio/wall.mp3',gain:1}, kickoff:{src:'/audio/kickoff.mp3',gain:1,durationSeconds:.911},
 };
