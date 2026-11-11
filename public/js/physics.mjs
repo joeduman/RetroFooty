@@ -242,7 +242,12 @@ export class PhysicsEngine {
     const count=Math.max(1,Math.ceil(dt/(1/240))),h=dt/count;
     for(let s=0;s<count;s++){
       this.time+=h;
-      for(const p of this.players){this.motor(p,h);p.x+=p.vx*h;p.y+=p.vy*h;}
+      for(const p of this.players)this.motor(p,h);
+      // Celebration keeps the same contact reach, alignment, momentum and
+      // cooldown rules as live play. Park walking passes animateBall=false,
+      // so its hidden ball remains inactive.
+      if(animateBall)for(const p of this.players)if(p.input.shoot)this.shoot(p);
+      for(const p of this.players){p.x+=p.vx*h;p.y+=p.vy*h;}
       // A scored ball still rolls, curves and bounces in the net during the GOAL display.
       // This does not check for another score or start a second kickoff.
       if(animateBall){

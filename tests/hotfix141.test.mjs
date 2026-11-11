@@ -7,10 +7,10 @@ import {Renderer} from '../public/js/renderer.mjs';
 import {COURTS,PARK} from '../public/js/park-layout.mjs';
 const idle={x:0,y:0,aimX:1,aimY:0,sprint:false,shoot:false};
 
-test('3v3–5v5 pitches are 7% larger in both dimensions; small modes unchanged',()=>{
- const prior={1:[1080,660],2:[1230,740],3:[1360,820],4:[1490,910],5:[1630,980]};
+test('RetroFooty pitches grow from their current dimensions by 5%, 10% and 15%',()=>{
+ const prior={1:[1080,660],2:[1230,740],3:[1455,877],4:[1594,974],5:[1744,1049]};
  for(let n=1;n<=5;n++){
-  const p=createPitch(n),scale=n>=3?1.07:1;
+  const p=createPitch(n),scale=n===1?1.05:n===2?1.10:1.15;
   assert.equal(p.width,Math.round(prior[n][0]*scale),String(n));
   assert.equal(p.height,Math.round(prior[n][1]*scale),String(n));
   const court=COURTS.find(c=>c.size===n);

@@ -169,7 +169,7 @@ $('login-form').onsubmit=event=>{
    $('match-status').textContent=latest.state==='ended'?'':TEXT.matchMenuHelp;
    updateNextMatch(now);
    if(latest.state==='ended'&&(changed||previous?.state!=='ended')){$('match-panel').hidden=true;input.reset();inputSend(idle());showSummary();}
-   complete();audio.play(m.events,prefs.volume);
+   complete();audio.play(m.events,prefs.volume,{team:latest.human?.team??null});
   }
  };
 };

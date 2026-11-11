@@ -46,7 +46,9 @@ export function forecastBall(engine, {horizon=1.8, interval=.075, ball=engine.ba
   const path=[snapshot(0)];
   for(let elapsed=0;elapsed<duration-1e-9;) {
     const dt=Math.min(step,duration-elapsed),goal=simulation.step(dt);
-    elapsed+=dt;path.push(snapshot(elapsed,goal));
+    // step() returns immediately on a scoring substep. Use the time actually
+    // simulated so a goal inside this sampling interval is not dated too late.
+    elapsed=simulation.time;path.push(snapshot(elapsed,goal));
     if(goal)break;
   }
   return path;

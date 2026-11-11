@@ -63,8 +63,13 @@ test('blocked or failing explosion playback never prevents the normal cheer or l
   },{throwFire:true});
 });
 
-test('the fire explosion asset is a short, non-silent PCM sound with headroom',async()=>{
-  const bytes=await readFile(new URL('../public/audio/goal-fire.wav',import.meta.url));
+test('the configured fire explosion asset is present and has valid audio data',async()=>{
+  const bytes=await readFile(new URL('../public'+SOUNDS.fireGoal.src,import.meta.url));
+  if(!SOUNDS.fireGoal.src.endsWith('.wav')){
+    assert.ok(bytes.length>1000);
+    assert.ok(bytes.toString('ascii',0,3)==='ID3'||bytes.some((value,index)=>value===255&&(bytes[index+1]&224)===224),'MP3 must contain an ID3 tag or MPEG audio frames');
+    return;
+  }
   assert.equal(bytes.toString('ascii',0,4),'RIFF');assert.equal(bytes.toString('ascii',8,12),'WAVE');
   let format,data;
   for(let offset=12;offset+8<=bytes.length;){

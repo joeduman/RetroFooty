@@ -3,8 +3,9 @@ import {TUNING as C, clamp, distance, unit} from './config.mjs';
 import {kickDirection} from './physics.mjs';
 import {forecastBall, reachTime, interceptBall, evaluateKick, bankTarget} from './ai-prediction.mjs';
 import {ActiveOpponentMemory} from './ai-active-memory.mjs';
+import {DIFFICULTIES} from './ai-policy.mjs';
 
-export const EXPERT_VERSION='expert-predictive-1';
+export const EXPERT_VERSION='expert-predictive-2';
 const arrival=race=>race.reachable?race.t:race.arrival;
 
 // The frozen controller retains difficulty/model/trainer contracts. Expert
@@ -16,7 +17,9 @@ export class AIController extends LegacyController {
   }
   reset(){
     super.reset();this.forecast=[];this.races?.clear();this.diagnostics?.clear();this.intentions={};this.activeMemory?.resetMotion();
-    for(const m of this.memory.values())Object.assign(m,{progressAt:0,progressX:null,loops:0,escapeUntil:0,lastTarget:null});
+    for(const m of this.memory.values())Object.assign(m,{progressAt:0,progressX:null,loops:0,escapeUntil:0,lastTarget:null,
+      touchPhase:'intercept',chaseAt:null,clearSide:0,shieldSince:null,raceUntil:0,raceTouch:null,
+      expertSprinting:false,expertSteerAt:null,expertSteerX:0,expertSteerY:0});
   }
   observe(){super.observe();this.activeMemory.observe(this.engine);}
   expert(player){return this.teamDifficulty[player.team]==='expert';}
@@ -93,15 +96,17 @@ export class AIController extends LegacyController {
       add(point,'advance',70+clamp(lane,-60,100)*.5+space*.15+(range>400?20:0)+(stale&&side!==0?25:0),{controlled:true});
     }
     if(nearOwn||stale||b.y<p.top+35||b.y>p.bottom-35){
-      const side=b.y<p.height/2?-1:1;
+      if(!m.clearSide||Math.abs(b.y-p.height/2)>45)m.clearSide=b.y<p.height/2?-1:1;
+      const side=m.clearSide;
       for(const offset of [side*140,-side*140]){
         const point={x:clamp(b.x+dir*280,p.left+40,p.right-40),y:clamp(b.y+offset,p.top+45,p.bottom-45)};
-        add(point,nearOwn?'clear':'escape',95+clamp(this.lane(b,point,opponents),-60,100)*.6+(nearOwn?45:0)+(stale?35:0));
+        add(point,nearOwn?'clear':'escape',95+clamp(this.lane(b,point,opponents),-60,100)*.6+(nearOwn?45:0)+(stale?35:0)+(Math.sign(offset)===side?7:0));
       }
     }
     for(const o of options){
       if(this.ownGoalRisk(b,o.point,plan)){o.score=-10000;continue;}
       if(nearOwn&&((o.landing||o.point).x-b.x)*dir<40)o.score-=130;
+      if(nearOwn&&(b.y-p.height/2)*((o.landing||o.point).y-p.height/2)<0)o.score-=35;
       const normal=unit(b.x-player.x,b.y-player.y),aim=unit(o.point.x-b.x,o.point.y-b.y),alignment=normal.x*aim.x+normal.y*aim.y;
       o.score-=Math.max(0,.7-alignment)*(pressure<100?38:14);
     }
@@ -138,6 +143,8 @@ export class AIController extends LegacyController {
     const {ball:b,pitch:p,time,players}=this.engine,plan=this.plans[player.team],dir=plan.dir;
     if(!m.aim||time>=m.nextAim)this.chooseAim(player,m);
     const d=distance(player,b),race=this.races.get(player.id),opponents=players.filter(q=>q.team!==player.team);
+    if(m.chaseAt==null||time-m.chaseAt>.2){m.touchPhase='intercept';m.expertSteerAt=null;}
+    m.chaseAt=time;
     const rival=opponents.reduce((best,q)=>!best||distance(q,b)<distance(best,b)?q:best,null),pressure=rival?distance(rival,b):999;
     const eta=race?arrival(race.boost):reachTime(player,b),aim=unit(m.aim.point.x-b.x,m.aim.point.y-b.y),normal=unit(b.x-player.x,b.y-player.y);
     const aligned=normal.x*aim.x+normal.y*aim.y,contact=player.radius+b.radius,targetBall=d>95&&race?.boost.reachable?race.boost:b;
@@ -148,7 +155,17 @@ export class AIController extends LegacyController {
       const adaptation=tendency.confidence>.45?12*tendency.reverse-8*tendency.straight*tendency.boost:0;
       const gap=clamp(d*.6+adaptation,70,145);
       x=b.x+toward.x*gap;y=b.y+toward.y*gap+(tendency.confidence>.3?tendency.lateralBias*16:0);action='contain';
-    }else if(d<150&&aligned<.93){
+    }else{
+      // Keep the contact approach stable across small angle/distance changes.
+      // Entry and release thresholds differ so a touch cannot alternate between
+      // arc shaping and carrying on consecutive ticks.
+      if(m.touchPhase==='control'&&(d>88||aligned<.78))m.touchPhase='intercept';
+      if(d<68&&aligned>.96)m.touchPhase='control';
+      else if(m.touchPhase!=='control'){
+        if(d<150&&aligned<.90)m.touchPhase='shape-touch';
+        else if(m.touchPhase==='shape-touch'&&(aligned>.97||d>175))m.touchPhase='intercept';
+      }
+      if(m.touchPhase==='shape-touch'){
       // Follow an arc around the collision disc toward the rear contact face.
       // A fixed lateral waypoint deadlocks before the required contact angle.
       const angle=Math.atan2(player.y-b.y,player.x-b.x),rear=Math.atan2(-aim.y,-aim.x);
@@ -157,7 +174,8 @@ export class AIController extends LegacyController {
       const next=angle+clamp(turn,-.65,.65),radius=clamp(d,contact+18,75);
       waypoint={x:b.x+Math.cos(next)*radius,y:b.y+Math.sin(next)*radius};
       x=b.x-aim.x*(contact+18);y=b.y-aim.y*(contact+18);action='shape-touch';
-    }else if(d<65&&aligned>.7){x=b.x+aim.x*42;y=b.y+aim.y*42;action='control';}
+      }else if(m.touchPhase==='control'){x=b.x+aim.x*42;y=b.y+aim.y*42;action='control';}
+    }
     const actual=kickDirection(normal,aim),safe=!this.ownGoalRisk(b,{x:b.x+actual.x*1000,y:b.y+actual.y*1000},plan);
     const goalX=dir===1?p.right:p.left,t=(goalX-b.x)/(actual.x||1e-9),shotY=b.y+actual.y*t;
     const onTarget=t>0&&shotY>p.goalTop+b.radius+4&&shotY<p.goalBottom-b.radius-4;
@@ -168,12 +186,32 @@ export class AIController extends LegacyController {
     // otherwise winnable challenges to the opponent's already held button.
     const contested=pressure<105&&d<115&&aligned>.70;
     const shoot=safe&&((legal&&accurate&&(!isShot||onTarget||bank))||contested);
+    const threat=rival&&unit(rival.x-b.x,rival.y-b.y),relative={x:player.x-b.x,y:player.y-b.y};
+    const defensiveThird=(b.x-plan.own)*dir<(p.right-p.left)*.38;
+    const shieldCandidate=defensiveThird&&!plan.goalThreat&&b.lastPlayer===player.id&&d<64&&pressure<140&&
+      Math.hypot(b.vx,b.vy)<150&&threat&&relative.x*threat.x+relative.y*threat.y>8&&!shoot;
+    if(!shieldCandidate)m.shieldSince=null;else if(m.shieldSince==null)m.shieldSince=time;
+    const protect=Boolean(shieldCandidate&&time-m.shieldSince<.55);
+    if(protect){
+      x=d<45?player.x+threat.x*38:b.x+threat.x*(contact+7);
+      y=d<45?player.y+threat.y*38:b.y+threat.y*(contact+7);
+      waypoint=null;action='shield';
+    }
     const emergency=plan.goalThreat&&d>55,walkArrival=race?arrival(race.walk):reachTime(player,targetBall,{boost:false});
     const duel=pressure<70&&d>45&&d<115&&goalSide&&player.stamina>35;
-    const useful=duel||(Boolean(race?.boost.reachable)&&action!=='contain'&&walkArrival-eta>.08&&
-      ((eta<enemyArrival+.08&&walkArrival>enemyArrival-.05)||(pressure>100&&d>75&&goalSide&&b.vx*dir>50)||emergency));
+    const raceUseful=Boolean(race?.boost.reachable)&&action!=='contain'&&!protect&&walkArrival-eta>.10&&
+      eta<enemyArrival+.22&&walkArrival>enemyArrival-.28;
+    const raceRival=opponents.reduce((best,q)=>!best||arrival(this.races.get(q.id)?.boost??{reachable:false,arrival:reachTime(q,targetBall)})<
+      arrival(this.races.get(best.id)?.boost??{reachable:false,arrival:reachTime(best,targetBall)})?q:best,null);
+    const staminaEdge=raceRival&&player.stamina>raceRival.stamina+12;
+    if(raceUseful&&(staminaEdge||defensiveThird)){m.raceUntil=time+clamp(eta+.4,.5,2.6);m.raceTouch=b.lastPlayer;}
+    const raceRun=action!=='contain'&&!protect&&time<(m.raceUntil||0)&&b.lastPlayer===m.raceTouch&&d>contact+2&&eta<enemyArrival+.35;
+    const shieldDuel=protect&&rival&&distance(player,rival)<65&&rival.stamina>0;
+    const useful=duel||raceUseful||raceRun||shieldDuel||(Boolean(race?.boost.reachable)&&action!=='contain'&&walkArrival-eta>.08&&
+      ((pressure>100&&d>75&&goalSide&&b.vx*dir>50)||emergency));
     const target={x,y,waypoint,aimX:aim.x,aimY:aim.y,shoot,close:true,emergency,urgent:useful,burst:useful,
-      commit:pressure<70&&d<100,action,boostUseful:useful,raceArrival:eta};m.lastTarget=target;return target;
+      commit:pressure<70&&d<100,action,protect,shieldDuel,commitRun:raceRun||raceUseful&&(staminaEdge||defensiveThird),
+      boostUseful:useful,raceArrival:eta,rivalStamina:raceRival?.stamina};m.lastTarget=target;return target;
   }
   cover(player,plan){
     const target=super.cover(player,plan);if(!this.expert(player))return target;
@@ -186,7 +224,11 @@ export class AIController extends LegacyController {
       target.x=intent.point.x;target.y=intent.point.y;target.action='receive';target.urgent=false;
       m.lastTarget=target;return target;
     }
-    target.action=plan.frontPostThreat?'near-post':plan.goalThreat?'deny-shot':'cover';m.lastTarget=target;return target;
+    const d=distance(player,target),progress=(b.x-plan.own)*plan.dir;
+    const recovery=!plan.possession&&d>120&&(target.x-player.x)*plan.dir< -80&&
+      (progress<(p.right-p.left)*.62||b.vx*plan.dir< -35)&&plan.opponentNear<300;
+    target.recovery=recovery;target.boostUseful=target.emergency||recovery;target.commitRun=recovery;
+    target.action=plan.frontPostThreat?'near-post':plan.goalThreat?'deny-shot':recovery?'recover':'cover';m.lastTarget=target;return target;
   }
   support(player,plan){
     const target=super.support(player,plan);if(!this.expert(player))return target;
@@ -215,9 +257,31 @@ export class AIController extends LegacyController {
       if(target.close&&!target.frontPost){
         const destination=target.waypoint||target,dx=destination.x-player.x,dy=destination.y-player.y,d=Math.hypot(dx,dy),toward=unit(dx,dy,0,0);
         const speed=player.vx*toward.x+player.vy*toward.y,braking=speed>0?speed*speed/(2*C.braking):0,amount=clamp((d-braking)/18,0,1);
-        player.input.x=toward.x*amount;player.input.y=toward.y*amount;m.steerX=player.input.x;m.steerY=player.input.y;
-        if(!target.boostUseful&&!target.emergency){player.input.sprint=false;m.sprint=false;}
+        const desiredX=toward.x*amount,desiredY=toward.y*amount,gap=m.expertSteerAt==null?Infinity:time-m.expertSteerAt;
+        const blend=gap>.2?1:1-Math.exp(-clamp(gap,0,.05)/(target.emergency?.025:target.protect?.035:.045));
+        m.expertSteerAt=time;
+        m.expertSteerX=(m.expertSteerX??desiredX)+(desiredX-(m.expertSteerX??desiredX))*blend;
+        m.expertSteerY=(m.expertSteerY??desiredY)+(desiredY-(m.expertSteerY??desiredY))*blend;
+        if(d<1){m.expertSteerX=0;m.expertSteerY=0;}
+        const length=Math.max(1,Math.hypot(m.expertSteerX,m.expertSteerY));
+        player.input.x=m.expertSteerX/length;player.input.y=m.expertSteerY/length;m.steerX=player.input.x;m.steerY=player.input.y;
       }
+      // The legacy burst timer remains the fallback. A physically useful race
+      // or recovery is allowed to finish instead of inserting a compulsory rest
+      // while an opponent still has an interception opportunity.
+      const travel=distance(player,target.waypoint||target),useful=target.boostUseful||target.emergency;
+      const allowed=!this.engine.kickoff&&useful&&travel>(target.commit||target.shieldDuel?12:target.close?32:55);
+      const policy=this.teamPolicy[player.team],reserve=(target.rivalStamina<25?26:40)*policy.boostReserve/DIFFICULTIES.expert.boostSense;
+      const committed=target.commitRun&&!target.protect,minimum=(committed?6:16)*policy.boostReserve/DIFFICULTIES.expert.boostSense;
+      if(allowed&&target.emergency&&player.stamina>0){player.input.sprint=true;m.expertSprinting=true;}
+      else if(allowed&&(committed||target.shieldDuel)&&
+        (m.expertSprinting?player.stamina>minimum:player.stamina>(committed?Math.max(10,reserve*.45):reserve))){
+        player.input.sprint=true;m.expertSprinting=true;
+      }else{
+        m.expertSprinting=false;
+        if(!allowed||player.stamina<minimum)player.input.sprint=false;
+      }
+      m.sprint=player.input.sprint;
       if(player.input.shoot){
         const normal=unit(b.x-player.x,b.y-player.y),aim=unit(player.input.aimX,player.input.aimY),actual=kickDirection(normal,aim);
         if(this.ownGoalRisk(b,{x:b.x+actual.x*1000,y:b.y+actual.y*1000},plan))player.input.shoot=false;

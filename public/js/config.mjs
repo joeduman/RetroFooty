@@ -21,10 +21,12 @@ export const unit = (x, y, fallbackX = 1, fallbackY = 0) => {
 export function createPitch(size = 4) {
   const sizes = { 1: [1080, 660], 2: [1230, 740], 3: [1360, 820], 4: [1490, 910], 5: [1630, 980] };
   const [baseWidth, baseHeight] = sizes[size] || sizes[4];
-  // 3v3, 4v4 and 5v5 have 7% more space in both dimensions; 1v1/2v2 remain unchanged.
+  // Grow the current Build 15 dimensions: 1v1 +5%, 2v2 +10%, 3v3–5v5 +15%.
+  // Preserve the earlier 7% enlargement before applying this additional change.
   const larger = Number(size) >= 3 && Number(size) <= 5;
-  const width = Math.round(baseWidth * (larger ? 1.07 : 1));
-  const height = Math.round(baseHeight * (larger ? 1.07 : 1));
+  const growth=Number(size)===1?1.05:Number(size)===2?1.10:1.15;
+  const width = Math.round(Math.round(baseWidth * (larger ? 1.07 : 1))*growth);
+  const height = Math.round(Math.round(baseHeight * (larger ? 1.07 : 1))*growth);
   const margin = 88, goalWidth = ({1:168,2:192,3:216,4:238,5:260})[size] || 238;
   return { width, height, left: margin, right: width - margin, top: margin,
     bottom: height - margin, goalTop: (height - goalWidth) / 2,

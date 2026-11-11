@@ -51,6 +51,10 @@
 .effect-fire{background:radial-gradient(ellipse at center,#e574193d,transparent 74%)}
 .effect-fire:before{content:'';position:absolute;left:11px;top:12px;width:25px;height:30px;border-radius:70% 10% 65% 45%;transform:rotate(-35deg);background:radial-gradient(ellipse at 40% 70%,#fff7c4 0%,#ffc85b 25%,#f97b22 60%,#ba3716 90%);box-shadow:0 0 12px #ff932c66}
 .effect-fire:after{content:'';position:absolute;left:6px;top:8px;width:2px;height:3px;background:#ffe292;box-shadow:25px -1px #ffe292,31px 22px #f6b150,3px 33px #f6b150,16px -5px #ffe292}
+.effect-black-hole{background:radial-gradient(ellipse at center,#9382eb55,transparent 75%)}
+.effect-black-hole:before{content:'';position:absolute;left:7px;top:14px;width:30px;height:23px;border-radius:50%;background:#03040b;border:2px solid #d3c7ff;box-shadow:0 0 7px 2px #aa78ed99,inset 0 0 5px #465283;transform:rotate(-22deg)}
+.effect-black-hole:after{content:'';position:absolute;left:2px;top:21px;width:39px;height:9px;border:2px solid #9ad3fc;border-left-color:transparent;border-right-color:transparent;border-radius:50%;transform:rotate(-22deg);box-shadow:0 0 5px #8b75d666}
+.goal-effect-choices .goal-effect-option:last-child:nth-child(odd){grid-column:1/-1}
 @media(max-width:520px){.goal-effect-choices .goal-effect-option{flex-direction:column;text-align:center;padding:8px 6px;gap:5px}.goal-effect-preview{flex-basis:46px;height:46px}.goal-effect-copy small{font-size:9px}}
 
 /* SHIRT CUSTOMIZATION — Add new designs in js/input.mjs, register their

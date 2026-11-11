@@ -20,7 +20,7 @@ const goalEffectPicker=mountGoalEffectPicker($('goal-effect-picker-local'),prefs
   prefs.goalEffectId=goalEffectId;savePreferences(prefs);goalEffectPicker.refresh(goalEffectId);
   if(match.human)match.human.goalEffectId=goalEffectId;
 });
-const sound=events=>gameAudio.play(events,prefs.volume);
+const sound=events=>gameAudio.play(events,prefs.volume,{team:match.human?.team??null});
 const input=new InputController($('field'),renderer,prefs,{pause:togglePause,changed:()=>savePreferences(prefs),isActive:()=>started&&!paused&&!replay,onBound:refreshBindings});
 const clockText=seconds=>`${Math.floor(seconds/60)}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;
 function saveRecording(data){

@@ -75,6 +75,18 @@ test('shared forecast keeps relative times and invalidates on a new kick',()=>{
   assert.equal(cache.at,engine.time);
 });
 
+test('a forecast timestamps a goal at its actual scoring substep rather than the sample boundary',()=>{
+  const engine=new PhysicsEngine(createPitch(1),[]);
+  Object.assign(engine.ball,{x:engine.pitch.right-20,y:engine.pitch.height/2,vx:400,vy:0});
+  const prediction=forecastBall(engine,{horizon:.4,interval:.15}),goal=prediction.at(-1);
+  let scored=null;
+  while(!scored&&engine.time<.4)scored=engine.step(1/240);
+  assert.equal(scored,'red');assert.equal(goal.goal,scored);
+  assert.ok(Math.abs(goal.t-engine.time)<1e-9);
+  assert.ok(distance(goal,engine.ball)<1e-7);
+  assert.ok(goal.t<.15,'a goal between samples must retain its earlier physical time');
+});
+
 function actualArrival({vx=0,stamina=100,boost=true,targetDistance=360}={}){
   const engine=new PhysicsEngine(createPitch(1),[]),player=new Player(1,'red',1,'runner');
   Object.assign(player,{x:200,y:330,vx,stamina});

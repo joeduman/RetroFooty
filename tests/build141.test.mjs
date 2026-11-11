@@ -5,7 +5,7 @@ import path from 'node:path';import os from 'node:os';import {spawnSync} from 'n
 import {Match} from '../public/js/match.mjs';
 import {MatchStats} from '../public/js/stats.mjs';
 import {ReplayRecorder,replayFrame} from '../public/js/replay.mjs';
-import {createPitch,STEP} from '../public/js/config.mjs';
+import {createPitch,STEP,TUNING as C} from '../public/js/config.mjs';
 import {Renderer} from '../public/js/renderer.mjs';
 const idle={x:0,y:0,aimX:1,aimY:0,sprint:false,shoot:false};
 const advance=(m,seconds)=>{for(let i=0;i<Math.round(seconds/STEP);i++)m.update(STEP,idle);};
@@ -24,7 +24,7 @@ test('halftime waits for live attack to return over midfield, then switches dire
 test('a goal on the expired half ends the attack and starts halftime after celebration',()=>{
  const m=new Match({size:1,spectator:true,duration:60,goldenGoal:false,seed:7});m.state='playing';m.remaining=30+STEP;m.engine.ball.x=m.pitch.right+12;m.engine.ball.y=m.pitch.height/2;
  m.update(STEP);assert.equal(m.state,'goal');assert.equal(m.halftimeAfterGoal,true);
- advance(m,3);assert.equal(m.state,'halftime');
+ advance(m,C.celebrationSeconds);assert.equal(m.state,'halftime');
 });
 test('both teams can score through the correct goal after swapping sides',()=>{
  const m=new Match({size:1,spectator:true,duration:60});m.startSecondHalf();m.state='playing';m.engine.kickoff=null;

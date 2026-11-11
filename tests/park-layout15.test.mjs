@@ -5,7 +5,7 @@ import {createPitch} from '../public/js/config.mjs';
 import {ParkPhysics} from '../public/js/park-physics.mjs';
 import {ParkRenderer} from '../public/js/park-renderer.mjs';
 
-test('the smaller park contains exactly five full-size match courts with open walking lanes',()=>{
+test('the park contains five enlarged match courts with open walking lanes',()=>{
  assert.deepEqual(COURTS.map(f=>f.size),[1,2,3,4,5]);
  assert.ok(PARK.width*PARK.height<8800*4000*.5);
  for(const f of COURTS){
@@ -15,10 +15,10 @@ test('the smaller park contains exactly five full-size match courts with open wa
  }
  for(let i=0;i<COURTS.length;i++)for(const b of COURTS.slice(i+1)){
   const a=COURTS[i],horizontal=Math.max(a.x-b.x-b.w,b.x-a.x-a.w),vertical=Math.max(a.y-b.y-b.h,b.y-a.y-a.h);
-  assert.ok(Math.max(horizontal,vertical)>=140,`${a.name} and ${b.name} need a walking lane`);
+  assert.ok(Math.max(horizontal,vertical)-56>=140,`${a.name} and ${b.name} need a walking lane after arena runoff and player radii`);
  }
  const physics=new ParkPhysics();
- for(const point of [PARK.spawn,{x:1825,y:1500},{x:1825,y:2600},{x:2930,y:1350},{x:3800,y:1800}]){
+ for(const point of [PARK.spawn,{x:2010,y:1800},{x:2010,y:3070},{x:3060,y:1600},{x:4100,y:2000}]){
   const player={...point,radius:18,vx:0,vy:0};physics.boundaries(player);assert.equal(player.x,point.x);assert.equal(player.y,point.y);
  }
 });

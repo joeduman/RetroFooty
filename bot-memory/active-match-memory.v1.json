@@ -1,0 +1,131 @@
+{
+  "schema": "teamball.active-match-memory.v1",
+  "version": 1,
+  "policyVersion": 0,
+  "references": {},
+  "candidates": [
+    {
+      "id": "f091c205-e711-47ec-b4aa-219f54f54bbe",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 2,
+      "pattern": {
+        "samples": 2763,
+        "boost": 0.18863606470126842,
+        "turn": 0.08351127522635274,
+        "reverse": 0.03427996653589149,
+        "lateralBias": -0.04051177078653329,
+        "straight": 0.34001643176177676,
+        "wall": 0.10525877853084391,
+        "challenge": 0.3011858699926714,
+        "kick": 0.0364605132731172
+      },
+      "score": {
+        "red": 3,
+        "blue": 5
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "5166c18a-3a9d-43cc-990f-b63c3d67d260",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 2,
+      "pattern": {
+        "samples": 58,
+        "boost": 0.1848023562859241,
+        "turn": 0.2190368434746541,
+        "reverse": 0.061052540334064306,
+        "lateralBias": -0.06945468977914704,
+        "straight": 0.6275728299680834,
+        "wall": 0.017241379310344827,
+        "challenge": 0.21526648732078282,
+        "kick": 0.022685984163083952
+      },
+      "score": {
+        "red": 4,
+        "blue": 1
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "157380d0-2164-4be0-8935-0f7a7b447b95",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 2,
+      "pattern": {
+        "samples": 3120,
+        "boost": 0.2465301121388545,
+        "turn": 0.12946779606217787,
+        "reverse": 0.04614528036168535,
+        "lateralBias": 0.07008410113022584,
+        "straight": 0.77558637150564,
+        "wall": 0.07149816621147127,
+        "challenge": 0.3992014104086597,
+        "kick": 0.03556154854487289
+      },
+      "score": {
+        "red": 4,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "f2efe817-fb06-402f-8d34-74cabb2cc324",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 2,
+      "pattern": {
+        "samples": 2029,
+        "boost": 0.3046957931182441,
+        "turn": 0.14894983070491727,
+        "reverse": 0.06331481186751275,
+        "lateralBias": 0.038232964240473816,
+        "straight": 0.5574253407753403,
+        "wall": 0.08080743837020525,
+        "challenge": 0.4101742751793113,
+        "kick": 0.07226978551649978
+      },
+      "score": {
+        "red": 2,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "ee33bac0-6ada-4075-8a86-96df87f76b67",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 2,
+      "pattern": {
+        "samples": 2116,
+        "boost": 0.3287381058506714,
+        "turn": 0.04158331111781041,
+        "reverse": 0.01363760273754602,
+        "lateralBias": -0.07099614778091744,
+        "straight": 0.7060797017830993,
+        "wall": 0.19311045252648912,
+        "challenge": 0.5038382724013465,
+        "kick": 0.07534849453214704
+      },
+      "score": {
+        "red": 6,
+        "blue": 7
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    }
+  ],
+  "rejected": [],
+  "history": [],
+  "evaluations": []
+}

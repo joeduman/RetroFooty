@@ -96,7 +96,7 @@ function connect(type){
    refreshRoom();$('resume').hidden=latest.state==='lobby';$('start').textContent=latest.state==='ended'?'PLAY AGAIN':'START MATCH';
    if(latest.state==='ended'&&old?.state!=='ended')showSummary();
    if(recorder&&finalReport&&latest.state==='ended')archive(recorder.meta.joinedLate?'joined late':'complete');
-   audio.play(m.events,prefs.volume);
+   audio.play(m.events,prefs.volume,{team:latest.human?.team??null});
   }
  };
 }

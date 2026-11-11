@@ -38,7 +38,7 @@ export class GameAudio {
     const duration=Number.isFinite(loaded)&&loaded>0?loaded:Number.isFinite(configured)&&configured>0?configured:.911;
     let elapsed=0;
     for(let n=1;n<count;n++){
-      const configuredGap=gaps?.[n-1],gap=Number.isFinite(configuredGap)&&configuredGap>=0?configuredGap:n===2?.75:.5;
+      const configuredGap=gaps?.[n-1],gap=Number.isFinite(configuredGap)&&configuredGap>=0?configuredGap:n===2?.35:.25;
       elapsed+=duration/rates[n-1]+gap;
       const timer=this.schedule(()=>{this.whistleTimers.delete(timer);blow(n);},Math.round(elapsed*1000));
       this.whistleTimers.add(timer);
@@ -64,7 +64,7 @@ export class GameAudio {
     sound.play().catch(()=>{});return true;
   }
   goalCheer(volume){this.customSound('goal',volume);}
-  play(events, volume) {
+  play(events, volume, {team=null}={}) {
     this.volume=Number.isFinite(volume)?Math.max(0,Math.min(1,volume)):0;
     if(!Array.isArray(events))return;
     // Period whistles are independent of impact throttling and goal cheering.
@@ -94,8 +94,11 @@ export class GameAudio {
 
     try {
       if (event.type === 'goal') {
-        this.goalCheer(volume);
+        const conceded=(team==='red'||team==='blue')&&(event.team==='red'||event.team==='blue')&&event.team!==team;
+        if(conceded)this.customSound('scoredOn',volume);
+        else this.goalCheer(volume);
         if(event.goalEffectId==='fire')this.customSound('fireGoal',volume);
+        if(event.goalEffectId==='black-hole')this.customSound('blackHoleGoal',volume);
         this.last = performance.now();
         return;
       }

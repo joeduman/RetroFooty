@@ -34,7 +34,9 @@ export const RULES={
 // Supported file types: mp3, ogg, wav. Gain multiplies the player's volume setting.
 export const SOUNDS={
   goal:{src:'/audio/goal.mp3',gain:1},
-  fireGoal:{src:'/audio/goal-explosion.mp3',gain:.55}, // Short boom layered onto fiery goals.
+  scoredOn:{src:'/audio/scored_on.mp3',gain:1}, // Heard only by the conceding team.
+  blackHoleGoal:{src:'/audio/goal-blackhole.mp3',gain:2.5},
+  fireGoal:{src:'/audio/goal-explosion.mp3',gain:.55},
   kick:{src:'/audio/kick.mp3',gain:1}, touch:{src:'/audio/touch.mp3',gain:1}, post:{src:'/audio/post.mp3',gain:1},
   wall:{src:'/audio/wall.mp3',gain:1}, kickoff:{src:'/audio/kickoff.mp3',gain:1,durationSeconds:.911},
 };

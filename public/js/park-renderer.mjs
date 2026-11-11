@@ -2,11 +2,24 @@ import {PARK,COURTS} from './park-layout.mjs';
 import {Renderer} from './renderer.mjs';
 import {LOOK,TEXT} from './customize.mjs';
 const WALKS=[
- [[120,120],[4880,120],[4880,2670],[120,2670],[120,120]],
- [[120,1370],[4880,1370]],
- [[1435,120],[1435,1090],[1840,1280],[1825,2670]],
- [[2930,120],[2930,1370],[3800,1370],[3800,2670]]
+ [[120,120],[PARK.width-120,120],[PARK.width-120,PARK.height-130],[120,PARK.height-130],[120,120]],
+ [[120,1600],[PARK.width-120,1600]],
+ [[1472,120],[1472,1200],[PARK.spawn.x,PARK.spawn.y],[PARK.spawn.x,PARK.height-130]],
+ [[3060,120],[3060,1600],[4100,1600],[4100,PARK.height-130]]
 ];
+const clock=seconds=>{const value=Number.isFinite(seconds)?Math.max(0,Math.ceil(seconds)):0;return `${Math.floor(value/60)}:${String(value%60).padStart(2,'0')}`;};
+// Spectators read the same authoritative match time as field participants.
+export function spectatorClock(field,compact=false){
+ if(!field)return '';
+ if(field.state==='ended'||field.state==='intermission')return Number.isFinite(field.nextMatchIn)?compact?`NEXT ${clock(field.nextMatchIn)}`:TEXT.matchEnded(field.nextMatchIn):'FULL TIME';
+ if(compact)return `${field.overtime?'+':''}${clock(field.overtime?field.extraElapsed:field.remaining)}`;
+ if(field.state==='halftime')return `${clock(field.remaining)} · HALF TIME`;
+ if(field.state==='kickoff')return `${clock(field.remaining)} · KICKOFF ${Math.max(1,Math.ceil(field.wait||0))}`;
+ if(field.state==='goal')return `${field.overtime?'+':''}${clock(field.overtime?field.extraElapsed:field.remaining)} · GOAL`;
+ if(field.overtime)return `+${clock(field.extraElapsed)} · GOLDEN GOAL`;
+ const phase=field.halftimePending||field.fulltimePending?'LAST ATTACK':`HALF ${field.half||1}`;
+ return `${clock(field.remaining)} · ${phase}`;
+}
 // One world coordinate system for fields, balls, players and spectators.
 // Walking follows the avatar; joining changes only the camera framing.
 export class ParkRenderer {
@@ -63,6 +76,7 @@ export class ParkRenderer {
   this.text('THE COMMONS',PARK.spawn.x,PARK.spawn.y-95,16,'#536653',800);this.text('TEAMBALL',PARK.spawn.x,PARK.spawn.y-70,25,'#50634e',850);
   // A garden loop and seating give the eastern end a destination without
   // introducing another play area or blocking the walking promenade.
+  c.save();c.translate(320,340);
   c.strokeStyle='#a59f7e';c.lineWidth=58;c.beginPath();c.ellipse(4310,2110,385,360,0,0,Math.PI*2);c.stroke();
   c.strokeStyle='#c5bea0';c.lineWidth=46;c.stroke();
   for(const [x,y] of [[4130,1940],[4470,2240],[4380,1900],[4150,2280]]){
@@ -70,10 +84,11 @@ export class ParkRenderer {
    for(let i=0;i<11;i++){c.fillStyle=i%3?'#cfbc87':'#d1a18c';c.beginPath();c.arc(x+Math.sin(i*2.4)*50,y+Math.cos(i*1.8)*26,3,0,Math.PI*2);c.fill();}
   }
   this.text('GARDEN WALK',4310,2116,18,'#a5bc8e',750);this.bench(4090,2450);this.bench(4500,1770);this.bench(4690,2110,true);
+  c.restore();
   for(let x=100;x<PARK.width;x+=185){this.tree(x,38,27+(x%3)*3);this.tree(x,PARK.height-37,29+(x%4)*2);}
   for(let y=260;y<PARK.height-100;y+=190){this.tree(39,y,29);this.tree(PARK.width-39,y,30);}
-  for(const [x,y,r] of [[1390,970,32],[1500,1015,27],[1650,1140,30],[2050,1130,32],[2190,1170,25],[2875,1150,31],[3030,1475,32],[3650,1570,31],[3730,1850,35],[3900,2460,37],[4730,1570,34],[4700,2540,37],[1780,1510,28]])this.tree(x,y,r);
-  for(const [x,y] of [[1260,1120],[1540,1215],[2130,1360],[2530,1370],[3350,1380],[3830,1580],[3800,2380],[1670,2650],[2910,2650]])this.lamp(x,y);
+  for(const [x,y,r] of [[1470,1100,32],[1530,1260,27],[1770,1420,30],[2240,1420,32],[2420,1500,25],[3020,1400,31],[3310,1740,32],[4050,1790,31],[4070,2080,35],[4070,2820,37],[5260,1710,34],[5260,2870,37],[2020,1770,28]])this.tree(x,y,r);
+  for(const [x,y] of [[1260,1500],[1570,1535],[2250,1600],[2630,1600],[3490,1600],[4110,1790],[4100,2790],[1770,3070],[3010,3070]])this.lamp(x,y);
   c.strokeStyle='#193d2a';c.lineWidth=16;c.strokeRect(8,8,PARK.width-16,PARK.height-16);
  }
  drawOverview(park,id,width,height,now){
@@ -91,7 +106,9 @@ export class ParkRenderer {
    const live=park?.fields.find(q=>q.size===f.size);c.fillStyle='#203d2b';c.fillRect(f.x,f.y,f.w,f.h);c.strokeStyle=f.color;c.lineWidth=12;c.strokeRect(f.x,f.y,f.w,f.h);
    c.strokeStyle='#b8cf9a88';c.lineWidth=7;c.beginPath();c.moveTo(f.x+f.w/2,f.y+25);c.lineTo(f.x+f.w/2,f.y+f.h-25);c.stroke();
    c.beginPath();c.arc(f.x+f.w/2,f.y+f.h/2,85,0,Math.PI*2);c.stroke();
-   this.text(f.name,f.x+f.w/2,f.y+f.h/2-10,13/scale,'#eef1d9',800);this.text(`${live?.members.length??0}/${f.size*2}`,f.x+f.w/2,f.y+f.h/2+17/scale,9/scale,'#b4c9a8',600);
+   this.text(f.name,f.x+f.w/2,f.y+f.h/2-10/scale,13/scale,'#eef1d9',800);
+   this.text(`${live?.members.length??0}/${f.size*2}`,f.x+f.w/2,f.y+f.h/2+4/scale,9/scale,'#b4c9a8',600);
+   this.text(live?spectatorClock(live,true):'--:--',f.x+f.w/2,f.y+f.h/2+16/scale,8/scale,'#e4dbac',600);
   }
   for(const player of park?.players||[]){if(player.field!==null||player.id===id)continue;c.fillStyle='#c8d3bd';c.beginPath();c.arc(player.x,player.y,2.6/scale,0,Math.PI*2);c.fill();}
   const me=park?.players.find(p=>p.id===id);
@@ -122,17 +139,17 @@ const zoom=framed
    if(left>r.width+250||left+f.w*this.scale< -250||top>r.height+200||top+f.h*this.scale< -200)continue;
    const live=park?.fields.find(q=>q.size===f.size);if(!live)continue;
    const focused=field===f.size&&view;
-   const match=focused?view:{pitch:live.pitch,sidesSwapped:live.sidesSwapped,players:live.players,engine:{ball:live.ball,obstacles:live.obstacles||[]},training:live.training,score:live.score,state:live.practice&&!live.members.length?'idle':live.state,wait:live.wait,goalTeam:live.goalTeam,goalInfo:live.goalInfo,kickoffTeam:live.kickoffTeam,kickoffPlayer:live.kickoffPlayer};
+   const match=focused?view:{pitch:live.pitch,round:live.matchId,sidesSwapped:live.sidesSwapped,players:live.players,engine:{ball:live.ball,obstacles:live.obstacles||[]},training:live.training,score:live.score,state:live.practice&&!live.members.length?'idle':live.state,wait:live.wait,goalTeam:live.goalTeam,goalInfo:live.goalInfo,kickoffTeam:live.kickoffTeam,kickoffPlayer:live.kickoffPlayer};
    c.save();c.translate(f.x,f.y);this.art.pitchArt(match.pitch,match.sidesSwapped);if(focused)this.art.aimGuide(match,prefs,pointer);
    for(const player of match.players){const p=focused?player:this.pose(`f${f.size}-${player.id}`,player,dt);this.art.player({...p,human:Boolean(focused&&p.id===view.human.id)},prefs);}
-   this.art.ball(focused?match.engine.ball:this.pose(`ball${f.size}`,match.engine.ball,dt));
+   this.art.drawMatchBall(match,focused?match.engine.ball:this.pose(`ball${f.size}`,match.engine.ball,dt),now);
    // A nearby watcher sees the same goal scorer and countdown as participants.
    this.art.overlay(match,false);
    c.restore();
-   c.fillStyle='#18372be8';c.beginPath();c.roundRect(f.x+f.w/2-86,f.y-90,172,42,12);c.fill();c.strokeStyle=f.color+'77';c.lineWidth=1;c.stroke();
-   this.text(f.name,f.x+f.w/2,f.y-61,25,f.color,850);
-   const next=Number.isFinite(live.nextMatchIn)?TEXT.matchEnded(live.nextMatchIn):`${live.members.length}/${2*f.size} players`;
-   this.text(`${live.score.red} \u2014 ${live.score.blue}   \u00b7   ${next}`,f.x+f.w/2,f.y-23,16,'#d6e0c5',600);
+   c.fillStyle='#18372bf2';c.beginPath();c.roundRect(f.x+f.w/2-150,f.y-108,300,102,12);c.fill();c.strokeStyle=f.color+'77';c.lineWidth=1;c.stroke();
+   this.text(f.name,f.x+f.w/2,f.y-77,25,f.color,850);
+   this.text(`${live.score.red} \u2014 ${live.score.blue}   \u00b7   ${live.members.length}/${2*f.size} players`,f.x+f.w/2,f.y-48,16,'#d6e0c5',600);
+   this.text(spectatorClock(live),f.x+f.w/2,f.y-22,16,'#eee0b3',700);
    // Benches are visual sideline landmarks. Watchers remain controllable avatars.
    for(const x of [f.x+f.w*.25,f.x+f.w*.75])this.bench(x,f.y+f.h+70);
   }

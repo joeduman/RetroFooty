@@ -57,7 +57,7 @@ test('goal confetti honors reduced motion and accepts non-match overlay fixtures
 });
 
 test('the goal effect catalog accepts only known cosmetic IDs',()=>{
-  assert.deepEqual(GOAL_EFFECT_OPTIONS.map(effect=>effect.id),['classic','fire']);
+  assert.deepEqual(GOAL_EFFECT_OPTIONS.map(effect=>effect.id),['classic','fire','black-hole']);
   assert.equal(normalizeGoalEffect('fire'),'fire');assert.equal(normalizeGoalEffect('classic'),'classic');
   for(const value of [null,undefined,{},'unknown','https://example.invalid/effect.js'])assert.equal(normalizeGoalEffect(value),'classic');
 });
