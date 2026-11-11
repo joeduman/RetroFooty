@@ -1,0 +1,481 @@
+{
+  "build": "12.5",
+  "version": "0.12.5",
+  "files": [
+    {
+      "path": "CHANGELOG.txt",
+      "sha256": "4d263f146a86603e7cec3e46b1197c0b7c1a32346f2a95afe91f66a9ba0e4a19",
+      "bytes": 11862
+    },
+    {
+      "path": "CUSTOMIZE.md",
+      "sha256": "ffed96cf38e9e0b18fdc034ccd8c810511c639d53ccc6164f71a97e28d4e93e4",
+      "bytes": 2762
+    },
+    {
+      "path": "FEEDBACK-08.txt",
+      "sha256": "eea3fbd45c6408baf77c9f677f0da8ccea6779a3a8a106426ea0df59c99186cd",
+      "bytes": 2518
+    },
+    {
+      "path": "FEEDBACK-09.txt",
+      "sha256": "ffe315092b7f7ffab60ffc00b9d76e13a3e189d0db53d69eae051f21459d2e70",
+      "bytes": 2863
+    },
+    {
+      "path": "README-Windows.txt",
+      "sha256": "ad90a0d856a1999706a9647f31f909ebde7fbd44da26be89c5ccd696f2cb64c6",
+      "bytes": 5417
+    },
+    {
+      "path": "REFERENCE-NOTES.txt",
+      "sha256": "eea85323ee203833c35404715daa3c3dafc787feef37cd0df55b84d6d8227739",
+      "bytes": 9232
+    },
+    {
+      "path": "START-TEAMBALL.cmd",
+      "sha256": "de837f5fc1830b2e346255456e82c300b2dd253330711ac79768943ebe3e634f",
+      "bytes": 229
+    },
+    {
+      "path": "STOP-TEAMBALL.cmd",
+      "sha256": "617f3b412e4b67fd6c86359a75b04b18bd994c3670871f96c89f804b056c32b6",
+      "bytes": 43
+    },
+    {
+      "path": "TEST-RESULTS.txt",
+      "sha256": "3bdc99c477a299c2180e7e5e6d15c78269d7389e5f4f7a679d370720a95b31b3",
+      "bytes": 1174
+    },
+    {
+      "path": "Teamball-PowerShell-Commands.txt",
+      "sha256": "7afa445dab4f7d8d2411bd1aeec03f3ddbdde7c9f855fe6e391cbb501ea52bd6",
+      "bytes": 388
+    },
+    {
+      "path": "build-comparison.json",
+      "sha256": "0259b373e7de2b7aedb631709e2aeec2e4643b5060d91de60bb19c1948ba90c2",
+      "bytes": 441
+    },
+    {
+      "path": "docs/build09/README-Windows.txt",
+      "sha256": "d4f7dca515021f933e619fbb179fe2ecdf20bba5bcb776875bb645fbe748e17f",
+      "bytes": 9183
+    },
+    {
+      "path": "docs/build09/TEST-RESULTS.txt",
+      "sha256": "28ab6c2f521d9af0e1646bb045a37ff1ec263cd912b10bd45ac02037b569ff8a",
+      "bytes": 7936
+    },
+    {
+      "path": "docs/build09/Teamball-PowerShell-Commands.txt",
+      "sha256": "5909dec18f3da8f94d05b6c09e15075fdfb1163ef02e4c7c74a46350384ba888",
+      "bytes": 2444
+    },
+    {
+      "path": "docs/build09/browser-results.json",
+      "sha256": "dd03fb0d2480479ea872b47cbb22c70360944a8c4c34e1b3a5405e749d7ee0d0",
+      "bytes": 3684
+    },
+    {
+      "path": "docs/build09/package-results.json",
+      "sha256": "ff86c9400ce15c153a4d5f90e3bad7e029a7e47561c9dff63658576ad1e7722b",
+      "bytes": 602
+    },
+    {
+      "path": "docs/build09/simulation-results.json",
+      "sha256": "56439a7fab8679c1206c392c0d1ae7d7c2cc9ad9a9e29c6a83ac2a9e9ff99d32",
+      "bytes": 23938
+    },
+    {
+      "path": "docs/build09/unit-results.txt",
+      "sha256": "b38852d465d2546facf6d127b17f8d4ddb299b184394d85ffd0e4767fae5f20c",
+      "bytes": 6276
+    },
+    {
+      "path": "docs/build10/README-Windows.txt",
+      "sha256": "acff277e835a21b984ddb59b6b4df3ae3a5659d25b03c76743d15a675948a1b2",
+      "bytes": 3620
+    },
+    {
+      "path": "docs/build10/TEST-RESULTS.txt",
+      "sha256": "50f8edd8d5f7eb1b9372ff8b3614e7f3dff1326157372f36eb4a38e453b711e7",
+      "bytes": 1181
+    },
+    {
+      "path": "docs/build10/browser-results.json",
+      "sha256": "6cdfe7ede72206f7ba14fa0fde4f94c0bde89556e35c4008938a5d565e4419bb",
+      "bytes": 3685
+    },
+    {
+      "path": "docs/build10/online-browser-results.json",
+      "sha256": "122430b7cc7b8f4f5fa947aeb5dde62778d5990ad77451e8153df9a773aea4dd",
+      "bytes": 459
+    },
+    {
+      "path": "docs/build10/unit-results.txt",
+      "sha256": "88f607f7e7b3175b4ac417332e6eff1a5fc051dcc4565a0f59b6f7bbc8907911",
+      "bytes": 6555
+    },
+    {
+      "path": "docs/build11/README-Windows.txt",
+      "sha256": "b016248b5e65c7844410e983ed7847dd84c98872750c5b44460e390885cee31e",
+      "bytes": 4451
+    },
+    {
+      "path": "docs/build11/TEST-RESULTS.txt",
+      "sha256": "8d15290daf26b7b9322cbc61b14da14c56c97d7d29ca45c69a592846a4d745f3",
+      "bytes": 1653
+    },
+    {
+      "path": "docs/build11/unit-results.txt",
+      "sha256": "c1562e5b0e77c1f82b7672134cb5ca8546abee29ef91a312b2a6d1e6c9829996",
+      "bytes": 7344
+    },
+    {
+      "path": "node_modules/ws/LICENSE",
+      "sha256": "2b29dcfe0d6471f7e8c92c5fb38c9f93edee10330937055440192f1832b1ecef",
+      "bytes": 1183
+    },
+    {
+      "path": "node_modules/ws/README.md",
+      "sha256": "159e978944730f24a007b40d126ffcc6c9138d0257fee634fed70cda197b211c",
+      "bytes": 15389
+    },
+    {
+      "path": "node_modules/ws/browser.js",
+      "sha256": "010da44addea1d88b2b732540c3f1fd0cbcb28926b96623d4c64222e0ead2d0e",
+      "bytes": 176
+    },
+    {
+      "path": "node_modules/ws/index.js",
+      "sha256": "924564d5be26d59b9682c4263f68320e48dde7240bd2d1ad17ec305537429dd2",
+      "bytes": 796
+    },
+    {
+      "path": "node_modules/ws/lib/buffer-util.js",
+      "sha256": "4e996b0c29f30bb094d836a2a563aceebaf3e8692a1e3d5bb4a01a233029732f",
+      "bytes": 3501
+    },
+    {
+      "path": "node_modules/ws/lib/constants.js",
+      "sha256": "391e823142b8b370e55a2fd32b022deaf03b8415c56000009674ebc86a0b4f86",
+      "bytes": 503
+    },
+    {
+      "path": "node_modules/ws/lib/event-target.js",
+      "sha256": "c45d3c6e12d170c860c0c3f1a050aa0f864d9806632b609a1e607d675aba128c",
+      "bytes": 7321
+    },
+    {
+      "path": "node_modules/ws/lib/extension.js",
+      "sha256": "852564f0f6b460287043803eae732666fb5610f676874354fc89f06aa4e986ed",
+      "bytes": 6183
+    },
+    {
+      "path": "node_modules/ws/lib/limiter.js",
+      "sha256": "e0469d4b83f6ba764b15f80e1766b75c136fbff68f048f4c050f0b1c7f065f69",
+      "bytes": 1034
+    },
+    {
+      "path": "node_modules/ws/lib/permessage-deflate.js",
+      "sha256": "16a91536988a53c23047ee5882392068728a839a244178c3b09b8c54982f58b0",
+      "bytes": 14669
+    },
+    {
+      "path": "node_modules/ws/lib/receiver.js",
+      "sha256": "a6ada33c9a2d54eaf595824b821ea89ca2c6395f89aa06755c52142148274884",
+      "bytes": 17439
+    },
+    {
+      "path": "node_modules/ws/lib/sender.js",
+      "sha256": "b343e24310aeb924e713767fb7cd445bccf4f3cc3504ceb2c56ce76b89c1cf45",
+      "bytes": 16962
+    },
+    {
+      "path": "node_modules/ws/lib/stream.js",
+      "sha256": "a56fcb6e2b152097ee820b6f5410b1f71e59819b45d08d9f8bda588fe39070ec",
+      "bytes": 4204
+    },
+    {
+      "path": "node_modules/ws/lib/subprotocol.js",
+      "sha256": "be3f6323d6f549568577dcba9004c1479d95c65a7abb0fe0c582875b9fac0b7c",
+      "bytes": 1498
+    },
+    {
+      "path": "node_modules/ws/lib/validation.js",
+      "sha256": "41ce8e83d0d434132e1704895fedb91f6703a701b42d91c80954ab29b2845593",
+      "bytes": 3903
+    },
+    {
+      "path": "node_modules/ws/lib/websocket-server.js",
+      "sha256": "6d8dd89a841748c80445fd5fcdb5ba8005369b53cc3525135e11304c8b9c55e5",
+      "bytes": 17022
+    },
+    {
+      "path": "node_modules/ws/lib/websocket.js",
+      "sha256": "9b7bd84b9a95e5bfa66de2dd0ba21aa69ac21013d04c39db066acca66504618b",
+      "bytes": 37973
+    },
+    {
+      "path": "node_modules/ws/package.json",
+      "sha256": "ac6b2fe23179ebdef3368ecf828f1df1fa361b84f5fb54cca982d716a16df34b",
+      "bytes": 1829
+    },
+    {
+      "path": "node_modules/ws/wrapper.mjs",
+      "sha256": "fe154662301fd558f935f9c217fccbe7a7dac02ff39e648a000589403ff27c7f",
+      "bytes": 554
+    },
+    {
+      "path": "online.mjs",
+      "sha256": "9cbdf21436992e35c858599c80120539fc88f45a96373084fb9b5d76f5b07c74",
+      "bytes": 6959
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "4e95f1b67eff5003c7b3bbdcc71cae730dc5907e7995b0b74d1fae6ec741b16e",
+      "bytes": 899
+    },
+    {
+      "path": "package.json",
+      "sha256": "62f6141983eca66234f25355e03c518dc10566c3ebf0be04c2229ed4e5dc91f7",
+      "bytes": 538
+    },
+    {
+      "path": "park.mjs",
+      "sha256": "19e5eea45fd2be87ae74b8b70172a1f74734fc3745daebcf038a00fe12bc89e7",
+      "bytes": 9578
+    },
+    {
+      "path": "public/audio/goal.mp3",
+      "sha256": "f1aa9185c1bd0dcef226a1665058387c009d89f49c5cfebee07f961b91647737",
+      "bytes": 79581
+    },
+    {
+      "path": "public/index.html",
+      "sha256": "bb9ec49b0f234bac48747fafcf8ccd50112160c38ba2980bc8d7c1628a05762e",
+      "bytes": 4818
+    },
+    {
+      "path": "public/js/ai.mjs",
+      "sha256": "2f3871817902ec78c085278f0e4f457209565ed01ea328ebfc4e9b742bf0edac",
+      "bytes": 15924
+    },
+    {
+      "path": "public/js/app.mjs",
+      "sha256": "6f861f5ebc3637f7fc08d753864831151d2285c2111495829853dbfe10a7efbc",
+      "bytes": 19764
+    },
+    {
+      "path": "public/js/audio.mjs",
+      "sha256": "e6bf6505a8e476513b135536304cee3184cd06ecc272709da3e9afd9f8a00aeb",
+      "bytes": 4128
+    },
+    {
+      "path": "public/js/config.mjs",
+      "sha256": "cf8ffb17b58b70f04b297e1d89a53f83cb80b6e7d9299e3699d12ca5f24f0d02",
+      "bytes": 1932
+    },
+    {
+      "path": "public/js/customize.mjs",
+      "sha256": "8a16363f625320450b70681002407d4b28a5904a4ae76ce51ddc059477d382e4",
+      "bytes": 3716
+    },
+    {
+      "path": "public/js/input.mjs",
+      "sha256": "7927219b8f3cc6a2d748a9cb501278ff9a97e1e28a5d4ad1be30111c005ea6dc",
+      "bytes": 5040
+    },
+    {
+      "path": "public/js/match.mjs",
+      "sha256": "71657fcab2124a13972bbfcb8d178ff1c29cbc3ec1f3096d8ec4e8e021cf13de",
+      "bytes": 6771
+    },
+    {
+      "path": "public/js/online-client.mjs",
+      "sha256": "10b977755627128a233ae88098ef134af0f2c4748982bfe53cd50be006c75faa",
+      "bytes": 8734
+    },
+    {
+      "path": "public/js/online-prediction.mjs",
+      "sha256": "d503497b96df3f8fbbaca7d2d64b4bb4c9a82589283e4c8d599442fe775ac430",
+      "bytes": 1613
+    },
+    {
+      "path": "public/js/park-client.mjs",
+      "sha256": "144758738b090e6d253942cc635562179a95001d787ca87b1356455776495dd4",
+      "bytes": 12319
+    },
+    {
+      "path": "public/js/park-layout.mjs",
+      "sha256": "20d0ca62aae32c2ff84b82002147625a198787b3aba8866a66bc5d430d40bdcd",
+      "bytes": 819
+    },
+    {
+      "path": "public/js/park-physics.mjs",
+      "sha256": "50af30716cc41a58600564c7004806865eaa434c3a89c9f0e5d637a03bea0fe4",
+      "bytes": 1437
+    },
+    {
+      "path": "public/js/park-renderer.mjs",
+      "sha256": "bac8e0e64cd3f9b56d18154aa7e07e992338aaf5d6720a5200582f0a661c13c7",
+      "bytes": 5599
+    },
+    {
+      "path": "public/js/physics.mjs",
+      "sha256": "12474056880d7bcef26baea0b6f9551ebdda1ea8633e599f33e1632795ddd572",
+      "bytes": 12747
+    },
+    {
+      "path": "public/js/practice.mjs",
+      "sha256": "21316541e619cc7ace0d3b666e1fe686019adaa2383d166624e09c3a2d72554b",
+      "bytes": 8103
+    },
+    {
+      "path": "public/js/renderer.mjs",
+      "sha256": "9deafa7df73e0438dcf32d10f6442c5e19131a0b2d1a236c5bc0fdbfac74b483",
+      "bytes": 9439
+    },
+    {
+      "path": "public/js/replay.mjs",
+      "sha256": "a6e3f7be981b8068ca2f254ebaa1e4633d1ff8a6bdfd555873a8018ee9c1961a",
+      "bytes": 6531
+    },
+    {
+      "path": "public/js/report.mjs",
+      "sha256": "cb9f033b6368530cdce25f8e80d757822b4a81a2ca0e73591d791223436c967c",
+      "bytes": 2920
+    },
+    {
+      "path": "public/js/stats.mjs",
+      "sha256": "45fed8dcd6f9f368b126544e9119ccfcdd125fada3851e8def45c49324f28498",
+      "bytes": 4477
+    },
+    {
+      "path": "public/local.html",
+      "sha256": "2298f92cddf1823f10d3b8d084c7cc1c87789e8cc5f107d1b99ce7115ed5d543",
+      "bytes": 11946
+    },
+    {
+      "path": "public/online.html",
+      "sha256": "d4f285fd011f412d703ffd284eb1e9082f4f308424871eeb3f06112ea2abfab1",
+      "bytes": 3940
+    },
+    {
+      "path": "public/park.css",
+      "sha256": "e641a4eb1b2455c49840becae95ff42d85091cabb9b9d11329e4e054981bd65a",
+      "bytes": 4745
+    },
+    {
+      "path": "public/styles.css",
+      "sha256": "f657a1d3b55214afb115998ffca979f2b5edea4bf64e34fb7370d2355a917e00",
+      "bytes": 11690
+    },
+    {
+      "path": "reference-observations.json",
+      "sha256": "193a5e355f275d3abf1f831db60936d1d0bbda219fb6c361e5aa63577183cbfb",
+      "bytes": 2151
+    },
+    {
+      "path": "server.js",
+      "sha256": "e988f3f71449cb973d05d081921915ca83199702eb78c40e0a3a51ad754e9502",
+      "bytes": 4439
+    },
+    {
+      "path": "stop.js",
+      "sha256": "4aae3e5955bd85a70cf54c26fe9826e5c6e1bd10e3fb6af7ccbead731af6a7af",
+      "bytes": 1729
+    },
+    {
+      "path": "tests/browser-smoke.mjs",
+      "sha256": "6e6df7de1c44fa08ebd1a6869e4207119e7d99528182167eb6ee70f73390028d",
+      "bytes": 22591
+    },
+    {
+      "path": "tests/build07.test.mjs",
+      "sha256": "f95e721b7af402f8f57118c25debb1fe5fb8378a95dea01780b95adebfda14c7",
+      "bytes": 7353
+    },
+    {
+      "path": "tests/build08.test.mjs",
+      "sha256": "9ab50c1eff361c848d9598731c39fff4847de139451fedc1c2295c8c3ff4351c",
+      "bytes": 10142
+    },
+    {
+      "path": "tests/build09.test.mjs",
+      "sha256": "c54412056368c747438261ff10b8385cc947bdc3af7fed5b0b70335e23ad1a54",
+      "bytes": 4895
+    },
+    {
+      "path": "tests/build11.test.mjs",
+      "sha256": "de2c75757fbb8379e9c36f988e5c4eb5cc2182bdee5cc68537162cabad5bc147",
+      "bytes": 6387
+    },
+    {
+      "path": "tests/build12.test.mjs",
+      "sha256": "3f2707c9cda0417ace977a425f9a92ad2d20228432f2a050e38455f691690f93",
+      "bytes": 7055
+    },
+    {
+      "path": "tests/build125.test.mjs",
+      "sha256": "d165807093c86b331ab591747068b99e5a3c60f22fbf30431e561d8c7d10bc37",
+      "bytes": 5423
+    },
+    {
+      "path": "tests/compare-builds.mjs",
+      "sha256": "9c5bd6660d9fb3533fbd68713504c965bc7be12e163ed6f6a50101157a199d54",
+      "bytes": 1812
+    },
+    {
+      "path": "tests/online-browser.cjs",
+      "sha256": "15afdbdd39c5b5688df994cd097a697c375e79486e439ac45c081e27a5145287",
+      "bytes": 4788
+    },
+    {
+      "path": "tests/online-client.test.mjs",
+      "sha256": "ec0b107306a29c5786eadfad175fb3426045da725f804b9bc19dc03107dcebb5",
+      "bytes": 4217
+    },
+    {
+      "path": "tests/online.test.mjs",
+      "sha256": "ec0315d4d046692360d22b23fcbd98d78badb245d62d47b6126914b64de82509",
+      "bytes": 3562
+    },
+    {
+      "path": "tests/park-client.test.mjs",
+      "sha256": "da602d5c0bd0bf76212e0959480e5a05319b6016a8f34e4c12a85d2e40982723",
+      "bytes": 5068
+    },
+    {
+      "path": "tests/park-network.test.mjs",
+      "sha256": "f7b485190a810919443aaa26c0d175f93c0ea203d28ce888dfe6b78b53639710",
+      "bytes": 3006
+    },
+    {
+      "path": "tests/physics.test.mjs",
+      "sha256": "dd6800b78698d3a44391119042aaab866d8294b28617c0e89915a056555b23c9",
+      "bytes": 11759
+    },
+    {
+      "path": "tests/server.test.mjs",
+      "sha256": "a170f2a5ebfa8300688a6e611c947c33c3c5bfafb5deef9821274a5d66b9e19b",
+      "bytes": 3012
+    },
+    {
+      "path": "tests/simulate.mjs",
+      "sha256": "6353cf114c9c7657c4c34a3c8623dbbce3666dba47623b8f72f557d4e28acb4c",
+      "bytes": 3326
+    },
+    {
+      "path": "tests/simulation-results.json",
+      "sha256": "0359e90ea277e8dbe3c83b811cf7f76c49929f4744292a4d7bf822e19c51decd",
+      "bytes": 5019
+    },
+    {
+      "path": "tests/unit-results.txt",
+      "sha256": "6c926bd6223519fb799511958055c1299da94c8ec860e92c6a2e42f2a0721280",
+      "bytes": 9532
+    }
+  ]
+}

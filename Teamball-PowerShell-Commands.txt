@@ -1,0 +1,10 @@
+# Run inside the extracted Teamball-12 folder
+$env:PORT=25568
+node server.js
+# Stop this copy (from a second terminal):
+node stop.js
+# To use the old 6969 port instead:
+$env:PORT=6969
+node server.js
+# Optional firewall rule, only if needed; PowerShell as Administrator:
+New-NetFirewallRule -DisplayName "Teamball TCP 25568" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 25568

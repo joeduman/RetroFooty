@@ -1,0 +1,16 @@
+{
+  "results": [
+    "local menu exposes online co-op",
+    "two browsers have distinct players on one team",
+    "friend cannot see start control",
+    "friend keyboard moves authoritative player",
+    "menu keeps shared clock running",
+    "menu clears inputs",
+    "disconnect replaced by bot",
+    "friend rejoins live match",
+    "remaining friend becomes room host",
+    "local practice still runs",
+    "no browser runtime errors"
+  ],
+  "errors": []
+}

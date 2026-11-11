@@ -1,0 +1,23 @@
+{
+  "testedAt": "2026-11-02T21:15:04.871Z",
+  "secondsPerMatch": 120,
+  "gamesPerBuild": 15,
+  "results": [
+    {
+      "build": "08",
+      "goals": 54,
+      "completedPasses": 378,
+      "ownGoals": 6,
+      "dangerousKicks": 0,
+      "sprintDutyPercent": 16.5
+    },
+    {
+      "build": "09",
+      "goals": 115,
+      "completedPasses": 329,
+      "ownGoals": 13,
+      "dangerousKicks": 0,
+      "sprintDutyPercent": 19.61
+    }
+  ]
+}

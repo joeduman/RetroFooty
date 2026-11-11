@@ -1,0 +1,23 @@
+{
+  "schema": "teamball.overnight-training.v1",
+  "pid": 27268,
+  "status": "stopped",
+  "startedAt": "2026-11-10T23:38:21-0500",
+  "hours": 8.0,
+  "completedCycles": 45,
+  "failedCycles": 0,
+  "teacherMatches": 10,
+  "selfplayMatches": 10,
+  "benchmarkMatches": 20,
+  "modes": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "lastCycle": "2026-11-11T00:37:10-0500",
+  "lastExit": 0,
+  "stoppedReason": "requested stop",
+  "stoppedAt": "2026-11-11T00:38:01-0500"
+}

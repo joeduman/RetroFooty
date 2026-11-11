@@ -1,0 +1,1086 @@
+{
+  "schema": "teamball.neural-history.v1",
+  "evaluations": [
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 1,
+        "draws": 7,
+        "losses": 4,
+        "winRate": 0.375,
+        "goalDifference": -5,
+        "averageRating": -0.37999999999999995,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T11:28:17.795Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 3,
+        "draws": 3,
+        "losses": 6,
+        "winRate": 0.375,
+        "goalDifference": -6,
+        "averageRating": -0.4773333333333334,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T11:28:41.592Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 1,
+        "draws": 4,
+        "losses": 7,
+        "winRate": 0.25,
+        "goalDifference": -9,
+        "averageRating": -0.7883333333333332,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:16:59.787Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 2,
+        "draws": 6,
+        "losses": 4,
+        "winRate": 0.4166666666666667,
+        "goalDifference": -4,
+        "averageRating": -0.3846666666666667,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:19:19.504Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 1,
+        "draws": 7,
+        "losses": 4,
+        "winRate": 0.375,
+        "goalDifference": -3,
+        "averageRating": -0.24733333333333332,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:19:38.280Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 2,
+        "draws": 3,
+        "losses": 7,
+        "winRate": 0.2916666666666667,
+        "goalDifference": -6,
+        "averageRating": -0.5396666666666667,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:19:50.317Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 2,
+        "draws": 5,
+        "losses": 5,
+        "winRate": 0.375,
+        "goalDifference": -4,
+        "averageRating": -0.36800000000000005,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:20:14.386Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 1,
+        "draws": 7,
+        "losses": 4,
+        "winRate": 0.375,
+        "goalDifference": -7,
+        "averageRating": -0.6203333333333333,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:21:14.584Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 2,
+        "draws": 5,
+        "losses": 5,
+        "winRate": 0.375,
+        "goalDifference": -5,
+        "averageRating": -0.45633333333333326,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:21:24.321Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 0,
+        "draws": 7,
+        "losses": 5,
+        "winRate": 0.2916666666666667,
+        "goalDifference": -7,
+        "averageRating": -0.6163333333333333,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:22:18.286Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 1,
+        "draws": 6,
+        "losses": 5,
+        "winRate": 0.3333333333333333,
+        "goalDifference": -6,
+        "averageRating": -0.5463333333333332,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:22:28.065Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 0,
+        "draws": 5,
+        "losses": 7,
+        "winRate": 0.20833333333333334,
+        "goalDifference": -7,
+        "averageRating": -0.643,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:22:39.560Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 0,
+        "draws": 8,
+        "losses": 4,
+        "winRate": 0.3333333333333333,
+        "goalDifference": -6,
+        "averageRating": -0.539,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:22:49.325Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 0,
+        "draws": 9,
+        "losses": 3,
+        "winRate": 0.375,
+        "goalDifference": -4,
+        "averageRating": -0.3393333333333333,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:24:03.304Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 12,
+        "wins": 1,
+        "draws": 4,
+        "losses": 7,
+        "winRate": 0.25,
+        "goalDifference": -8,
+        "averageRating": -0.7236666666666666,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:40:04.207Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 10,
+        "losses": 8,
+        "winRate": 0.35,
+        "goalDifference": -8,
+        "averageRating": -0.4417999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:40:40.011Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 11,
+        "losses": 6,
+        "winRate": 0.425,
+        "goalDifference": -4,
+        "averageRating": -0.19760000000000005,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:41:50.896Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 8,
+        "losses": 9,
+        "winRate": 0.35,
+        "goalDifference": -5,
+        "averageRating": -0.2882,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:43:02.198Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 4,
+        "draws": 10,
+        "losses": 6,
+        "winRate": 0.45,
+        "goalDifference": -2,
+        "averageRating": -0.10540000000000002,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:44:13.261Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 0,
+        "draws": 13,
+        "losses": 7,
+        "winRate": 0.325,
+        "goalDifference": -10,
+        "averageRating": -0.5312,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-09T12:45:24.312Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 10,
+        "losses": 8,
+        "winRate": 0.35,
+        "goalDifference": -10,
+        "averageRating": -0.5756000000000002,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:24:44.104Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 7,
+        "losses": 12,
+        "winRate": 0.225,
+        "goalDifference": -13,
+        "averageRating": -0.6618,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:26:01.399Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 8,
+        "losses": 10,
+        "winRate": 0.3,
+        "goalDifference": -15,
+        "averageRating": -0.754,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:27:17.408Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 8,
+        "losses": 10,
+        "winRate": 0.3,
+        "goalDifference": -9,
+        "averageRating": -0.466,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:32:04.457Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 10,
+        "losses": 7,
+        "winRate": 0.4,
+        "goalDifference": -8,
+        "averageRating": -0.4173999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:33:22.563Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 8,
+        "losses": 11,
+        "winRate": 0.25,
+        "goalDifference": -11,
+        "averageRating": -0.5526,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:34:41.249Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 9,
+        "losses": 8,
+        "winRate": 0.375,
+        "goalDifference": -10,
+        "averageRating": -0.5325999999999997,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:36:00.703Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 7,
+        "losses": 10,
+        "winRate": 0.325,
+        "goalDifference": -10,
+        "averageRating": -0.532,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:39:08.326Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 8,
+        "losses": 10,
+        "winRate": 0.3,
+        "goalDifference": -12,
+        "averageRating": -0.6219999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:40:27.690Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 5,
+        "draws": 12,
+        "losses": 3,
+        "winRate": 0.55,
+        "goalDifference": 4,
+        "averageRating": 0.20660000000000006,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:41:45.825Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 4,
+        "draws": 8,
+        "losses": 8,
+        "winRate": 0.4,
+        "goalDifference": -7,
+        "averageRating": -0.38239999999999985,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:43:04.528Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 9,
+        "losses": 8,
+        "winRate": 0.375,
+        "goalDifference": -8,
+        "averageRating": -0.4305999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:44:22.408Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 0,
+        "draws": 9,
+        "losses": 11,
+        "winRate": 0.225,
+        "goalDifference": -17,
+        "averageRating": -0.8876000000000002,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:45:41.434Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 7,
+        "losses": 12,
+        "winRate": 0.225,
+        "goalDifference": -14,
+        "averageRating": -0.7224,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:47:00.205Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 9,
+        "losses": 9,
+        "winRate": 0.325,
+        "goalDifference": -13,
+        "averageRating": -0.6658,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:48:19.635Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 8,
+        "losses": 9,
+        "winRate": 0.35,
+        "goalDifference": -8,
+        "averageRating": -0.4395999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:49:38.147Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 0,
+        "draws": 7,
+        "losses": 13,
+        "winRate": 0.175,
+        "goalDifference": -20,
+        "averageRating": -1.0328000000000002,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:50:57.421Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 0,
+        "draws": 10,
+        "losses": 10,
+        "winRate": 0.25,
+        "goalDifference": -12,
+        "averageRating": -0.6426,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:52:16.695Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 10,
+        "losses": 8,
+        "winRate": 0.35,
+        "goalDifference": -11,
+        "averageRating": -0.5828000000000001,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:53:35.083Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 10,
+        "losses": 9,
+        "winRate": 0.3,
+        "goalDifference": -14,
+        "averageRating": -0.7391999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:54:53.637Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 5,
+        "draws": 7,
+        "losses": 8,
+        "winRate": 0.425,
+        "goalDifference": -8,
+        "averageRating": -0.4016,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:56:13.260Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 5,
+        "draws": 6,
+        "losses": 9,
+        "winRate": 0.4,
+        "goalDifference": -9,
+        "averageRating": -0.47299999999999986,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:57:32.370Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 0,
+        "draws": 7,
+        "losses": 13,
+        "winRate": 0.175,
+        "goalDifference": -18,
+        "averageRating": -0.9427999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T04:58:51.825Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 7,
+        "losses": 11,
+        "winRate": 0.275,
+        "goalDifference": -10,
+        "averageRating": -0.532,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:00:10.381Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 13,
+        "losses": 6,
+        "winRate": 0.375,
+        "goalDifference": -9,
+        "averageRating": -0.4877999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:01:28.773Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 8,
+        "losses": 11,
+        "winRate": 0.25,
+        "goalDifference": -12,
+        "averageRating": -0.6296000000000002,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:02:48.720Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 5,
+        "losses": 14,
+        "winRate": 0.175,
+        "goalDifference": -18,
+        "averageRating": -0.9304,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:04:08.475Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 13,
+        "losses": 6,
+        "winRate": 0.375,
+        "goalDifference": -6,
+        "averageRating": -0.32780000000000004,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:05:27.314Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 9,
+        "losses": 10,
+        "winRate": 0.275,
+        "goalDifference": -12,
+        "averageRating": -0.6292,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:06:46.257Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 6,
+        "draws": 9,
+        "losses": 5,
+        "winRate": 0.525,
+        "goalDifference": 1,
+        "averageRating": 0.04199999999999995,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:08:05.336Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 4,
+        "draws": 7,
+        "losses": 9,
+        "winRate": 0.375,
+        "goalDifference": -5,
+        "averageRating": -0.5178,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:09:24.725Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 11,
+        "losses": 7,
+        "winRate": 0.375,
+        "goalDifference": -8,
+        "averageRating": -0.4024,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:10:43.825Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 4,
+        "losses": 13,
+        "winRate": 0.25,
+        "goalDifference": -11,
+        "averageRating": -0.5882000000000001,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:12:02.665Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 12,
+        "losses": 7,
+        "winRate": 0.35,
+        "goalDifference": -13,
+        "averageRating": -0.7292,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:13:21.120Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 10,
+        "losses": 8,
+        "winRate": 0.35,
+        "goalDifference": -10,
+        "averageRating": -0.5248,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:14:41.605Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 6,
+        "losses": 11,
+        "winRate": 0.3,
+        "goalDifference": -9,
+        "averageRating": -0.5226000000000001,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:15:59.927Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 4,
+        "draws": 9,
+        "losses": 7,
+        "winRate": 0.425,
+        "goalDifference": -2,
+        "averageRating": -0.08700000000000004,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:17:19.394Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 9,
+        "losses": 9,
+        "winRate": 0.325,
+        "goalDifference": -15,
+        "averageRating": -0.7838,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:18:37.210Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 6,
+        "losses": 11,
+        "winRate": 0.3,
+        "goalDifference": -12,
+        "averageRating": -0.6512,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:19:54.582Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 5,
+        "draws": 7,
+        "losses": 8,
+        "winRate": 0.425,
+        "goalDifference": -2,
+        "averageRating": -0.11719999999999997,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:21:14.534Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 8,
+        "losses": 11,
+        "winRate": 0.25,
+        "goalDifference": -12,
+        "averageRating": -0.6178,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:22:34.687Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 10,
+        "losses": 9,
+        "winRate": 0.3,
+        "goalDifference": -11,
+        "averageRating": -0.587,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:23:53.710Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 11,
+        "losses": 6,
+        "winRate": 0.425,
+        "goalDifference": -6,
+        "averageRating": -0.3242,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:25:11.892Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 0,
+        "draws": 13,
+        "losses": 7,
+        "winRate": 0.325,
+        "goalDifference": -7,
+        "averageRating": -0.3653999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:26:31.903Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 9,
+        "losses": 8,
+        "winRate": 0.375,
+        "goalDifference": -3,
+        "averageRating": -0.20620000000000002,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:27:52.571Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 6,
+        "losses": 13,
+        "winRate": 0.2,
+        "goalDifference": -14,
+        "averageRating": -0.7272000000000001,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:29:11.879Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 12,
+        "losses": 7,
+        "winRate": 0.35,
+        "goalDifference": -9,
+        "averageRating": -0.829,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:30:32.220Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 1,
+        "draws": 9,
+        "losses": 10,
+        "winRate": 0.275,
+        "goalDifference": -14,
+        "averageRating": -0.7314,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:31:51.142Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 6,
+        "losses": 12,
+        "winRate": 0.25,
+        "goalDifference": -9,
+        "averageRating": -0.47520000000000007,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:33:18.713Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 2,
+        "draws": 7,
+        "losses": 11,
+        "winRate": 0.275,
+        "goalDifference": -15,
+        "averageRating": -0.7903999999999998,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:34:44.698Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 3,
+        "draws": 7,
+        "losses": 10,
+        "winRate": 0.325,
+        "goalDifference": -13,
+        "averageRating": -0.6573999999999999,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:36:08.893Z"
+    },
+    {
+      "promoted": false,
+      "benchmark": {
+        "games": 20,
+        "wins": 4,
+        "draws": 7,
+        "losses": 9,
+        "winRate": 0.375,
+        "goalDifference": -10,
+        "averageRating": -0.5084,
+        "passed": false
+      },
+      "source": "rejected-tournament",
+      "at": "2026-11-11T05:37:28.321Z"
+    }
+  ],
+  "promotions": 0
+}

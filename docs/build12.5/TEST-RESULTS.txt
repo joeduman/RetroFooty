@@ -1,0 +1,21 @@
+TEAMBALL BUILD 12.5 - VALIDATION
+
+105 automated tests passed (npm test). Output: tests/unit-results.txt.
+New coverage: deflected goals and assists, multiple defender contacts,
+defender kicks/control, expired shot credit, random kickoff team/taker,
+conceding-side restarts, kick flashes, goal names in replays, old replay
+compatibility, full-size park geometry, walking acceleration/bounds,
+custom goal playback/cooldown/rejection, sustained physics contact events.
+Existing coverage includes real WebSocket sessions, field isolation,
+joining/leaving, controller/report flows, physics and extracted server use.
+
+Simulation: 10 full matches, 52.665 simulated live minutes.
+Goals: 81. Failures: 0.
+Details: tests/simulation-results.json.
+
+Canvas scenes were rendered and inspected for the sideline and joined-field
+views. This used a native canvas adapter, not a full browser visual pass.
+Goal MP3 bytes were verified against the user's uploaded file.
+No WAN/multiple-PC playtest, physical audio listening test, or full browser
+visual/interaction pass is claimed. Actual network feel still needs a
+host-and-friend playtest. Names are display names, not authenticated accounts.

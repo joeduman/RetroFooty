@@ -1,0 +1,147 @@
+TEAMBALL BUILD 09 - TEST RESULTS
+
+Physics/model/replay/server checks: 72 passed, 0 failed.
+Browser integration checks: 66 passed; 0 JavaScript errors.
+Bot simulation: 50 complete matches, ten per mode.
+Total live match time: 262.542 simulated minutes, including golden goal, excluding restarts.
+
+Simulation outcomes
+Goals: 710; completed passes: 3443; recorded own goals: 102.
+Passing decisions: 5036; bank-pass decisions: 82.
+Decision counts are not completed-pass statistics. Completed passes require reception.
+Longest continuous ball speed below 8 units/s: 2.383 seconds.
+Largest ball movement in one 1/120s playing step: 6.028 world units.
+Largest residual circle overlap after solving contacts: 0.327 world units.
+Ball radius: 8; player radius: 18.
+No non-finite positions, escaped bodies, incomplete rounds, or threshold failures.
+Kickoff/goal resets are excluded from ball-step and overlap measurements.
+
+Mode    Red goals    Blue goals    Longest low-speed interval
+1v1        83          232         0.375s
+2v2        30           28         0.467s
+3v3        62           61         1.283s
+4v4        45           50         2.108s
+5v5        58           61         2.383s
+
+Matched Build 08 / Build 09 comparison
+15 two-minute matches per build, three fixed seeds per format. All players are bots.
+Both builds use identical sizes, seeds and time limits; physics and AI changes both apply.
+
+Build   Goals   Completed passes   Own goals   Sprint duty
+08       54           378            6          16.5%
+09      115           329           13          19.61%
+
+The new build produced more goals and sprinting, fewer completed passes, and more own
+goals in total. This supports increased aggression, not a blanket teamwork improvement.
+Own-goal share in this sample was approximately 11.1% vs 11.3% of all goals.
+The dangerous-kick ray heuristic remained 0 in both samples; it does not cover later
+deflections or guarantee safe physical touches. Bots still make mistakes.
+
+Build 09 regression coverage
+- Free-ball separation after stopping; steering nearby cannot pull a ball into an orbit.
+- Opposite physical contact spin signs, held-shot aim, hard first sprint contacts.
+- Bots can sprint against close opponent possession; shield challengers boost independently.
+- Timed practice starts and attempt resets protect time, positions, stamina and shots.
+- Cones collide with the ball; physical gate scoring rejects shots.
+- Saved state endpoints, interpolation, reset jumps, stats and early-exit labels.
+- Practice replay targets preserve return-leg gate identity and cone layouts.
+- Existing movement, input, kickoff, stamina parity, stats, heatmaps and server stop checks.
+
+Browser checks
+- Build 09 loads without the fatal overlay
+- 1v1 starts with 2 players and the chosen name
+- 2v2 starts with 4 players and the chosen name
+- 3v3 starts with 6 players and the chosen name
+- 4v4 starts with 8 players and the chosen name
+- 5v5 starts with 10 players and the chosen name
+- keyboard input moves the human upward
+- sprint reaches higher speed and uses stamina
+- pause freezes the clock and ball
+- custom sprint binding is displayed
+- remapped sprint works
+- player name and match size survive reload
+- custom controls and display preferences survive reload
+- right-side selection gives the human a blue player on the right
+- new matches show a three-second kickoff
+- kickoff inputs cannot move players, use stamina or start the clock
+- match-screen aim-line toggle updates without pausing
+- side, exclusive movement mode and aim-line setting survive reload
+- watch mode runs without a human
+- pitch, players and HUD render beyond a flat green screen
+- small-screen menu has no horizontal overflow
+- mouse steering moves the human
+- practice setup opens from the main menu
+- free practice starts immediately with one human
+- practice unlimited stamina survives active sprinting
+- practice tracks movement, sprint time and heat
+- reset setup clears movement without leaving practice
+- finish practice displays a report for the actual players
+- heatmap names the selected human
+- desktop report fits within the viewport
+- mobile report and heatmap stay within the viewport
+- practice again restarts the selected drill
+- dribble practice has the correct actors and normal stamina setting
+- wall practice has the correct actors and normal stamina setting
+- corner practice has the correct actors and normal stamina setting
+- shield practice has the correct actors and normal stamina setting
+- sparring practice has the correct actors and normal stamina setting
+- Escape cancels drill selection and resumes practice
+- postgame heatmap can switch to a bot
+- golden-goal preference survives reload
+- normal match restores regulation rules after practice
+- dribble instructions describe a scored challenge
+- practice pitch choice is applied independently
+- training HUD shows targets and a personal best
+- restart challenge resets its timer and score
+- shield drill challenger actually moves toward a steal
+- a shield steal ends the challenge and shows the score
+- completed shield result records a personal best
+- personal best survives a browser reload
+- history includes matches left early
+- finished and stopped sessions are saved
+- saved reports retain players and an early-exit label
+- a saved replay plays from recorded frames
+- replay pause freezes playback
+- replay supports half speed
+- replay timeline seeks within the recording
+- replay controls fit a narrow viewport
+- history and replays survive browser reload
+- saved replay still plays after reload
+- click and Space remain armed while held and stop after release
+- mouse mode ignores WASD/arrows and keyboard mode ignores mouse movement
+- brief taps are buffered, expire, and clear on focus loss
+- boot impact generates an audible bounded waveform
+- boot impact ends cleanly without continuing audio
+- no JavaScript errors during all UI flows
+- a missing module shows recovery instructions instead of a green screen
+
+Fresh ZIP checks: 8 passed
+- extracted ZIP starts the Build 09 server
+- extracted ZIP starts right-side 5v5 with an eight-minute clock and protected kickoff
+- extracted ZIP protects drill timer, players and stamina before GO
+- extracted ZIP saves an early match and its stats
+- extracted ZIP retains all ten players in saved reports after reload
+- extracted ZIP replays, pauses, changes speed and seeks saved play
+- extracted ZIP has no JavaScript errors
+- extracted ZIP authenticated stop shuts down only its own server
+
+Reproduce
+npm.cmd test
+npm.cmd run test:simulation
+node tests/compare-builds.mjs "PATH-TO-EXTRACTED-BUILD-08"
+Optional Playwright instructions are in tests/browser-smoke.mjs.
+No npm dependencies are required to play.
+
+Limits
+The supplied Teamball 2 montage was inspected directly; Help(7).mp4 was transcribed.
+Exact original acceleration/drag values are not claimed from panning, edited footage.
+These checks validate functionality and stability, not human enjoyment or perfect tactics.
+Replays store visible states at 20 Hz with interpolation, plus reports, in this browser.
+They are not screen recordings. Early exits through the game UI are saved; crashes may
+lose the last 15 seconds since a checkpoint. Browser storage and site-data retention apply.
+Browser tests used headless Chromium on Linux. Visual checks cover match, practice, report,
+history and replay screens; mobile geometry is checked. An optional modal screenshot
+timed out with GPU effects, so the dedicated visual capture disables backdrop blur only.
+Sound is checked as a bounded nonzero waveform with a clean ending. Subjective speaker
+playback is not claimed. Native Windows .cmd and PowerShell execution was unavailable;
+those files were inspected as text. Node startup and authenticated stop ran on Linux.

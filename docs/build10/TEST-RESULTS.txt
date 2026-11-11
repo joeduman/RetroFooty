@@ -1,0 +1,21 @@
+TEAMBALL BUILD 10 - VALIDATION
+
+73/73 Node tests passed (tests/unit-results.txt).
+Includes prior physics, practice, replay and gameplay checks plus the new
+multi-client co-op integration test and updated extracted-server test.
+
+66/66 existing browser checks passed (tests/browser-results.json).
+11/11 new co-op browser checks passed (tests/online-browser-results.json).
+Two separate browser contexts: create/join, distinct humans on one team,
+host-only start, movement/sprint, menu input clearing while clock runs,
+disconnect bot takeover, live rejoin, host transfer and local practice.
+No JavaScript runtime errors were reported. Online pitch screenshot inspected.
+
+Server integration covers identical match state at the same tick, wrong
+room code, full room rejection, host-only start, movement/stamina, stale-input
+neutralization, disconnect/rejoin, host transfer, and larger room creation.
+
+Tests ran on Linux with Node 24 and Chromium. Windows launcher and paths
+were reviewed; execution on a Windows PC was not available here.
+Internet port forwarding and real inter-location latency were not tested.
+Online uses basic local movement prediction, not full collision rollback.

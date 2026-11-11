@@ -1,0 +1,19 @@
+TEAMBALL 14.1 — HALFTIME + HUMAN-STYLE OPPONENTS + OPTIONAL VIDEO REVIEW
+
+- Preserve user's five newest renderer/park/online/CSS/prediction files.
+- Coral/red and blue names painted above player shirts for each team.
+- Regulation halftime is deferred until attack ends by returning over midfield or goal.
+- After 3-second halftime: teams swap which end to attack, same score and full stats.
+- Flip applies to game scoring, bot AI, neural feature orientation, learned action
+  orientation, shot-map goal coordinates, network prediction and stored replays.
+- `LAST ATTACK` indication when halftime is pending.
+- Replays from older versions retain compatibility with previous 13-field header.
+- Opt-in private-room human recording fixed; park recording was already present.
+- Python learns separate pressing / technical / patient human opponent models
+  from consented human actions; candidates face these opponents in self-play.
+- Optional video analyzer accepts local MP4 and exports conservative tactic profiles.
+  Only approved profiles influence training opponents; no raw video cloning.
+- Benchmark must finish its matches before promoting. Self-play can run long
+  enough for the new halftime rule to complete.
+- Existing ball physics, park, accounts and overnight training scripts preserved.
+- See README-BUILD14.1.md and README-VIDEO-AND-HUMAN-STYLES.md.

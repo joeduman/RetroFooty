@@ -1,0 +1,655 @@
+2026-11-09 07:40:00 Overnight run started: 8 hours, matches=10/10/20, modes=1v1-5v5
+2026-11-09 07:40:30 Training cycle started
+Cycle 16: 28000 human samples, champion=False, start=challenger.v1.json
+Benchmark: {"games": 20, "wins": 2, "draws": 10, "losses": 8, "winRate": 0.35, "goalDifference": -8, "averageRating": -0.4417999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-09 07:40:40 Training cycle completed. Total successful cycles=1
+2026-11-09 07:41:40 Training cycle started
+Cycle 17: 28000 human samples, champion=False, start=challenger.v1.json
+Benchmark: {"games": 20, "wins": 3, "draws": 11, "losses": 6, "winRate": 0.425, "goalDifference": -4, "averageRating": -0.19760000000000005, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-09 07:41:51 Training cycle completed. Total successful cycles=2
+2026-11-09 07:42:51 Training cycle started
+Cycle 18: 28000 human samples, champion=False, start=challenger.v1.json
+Benchmark: {"games": 20, "wins": 3, "draws": 8, "losses": 9, "winRate": 0.35, "goalDifference": -5, "averageRating": -0.2882, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-09 07:43:02 Training cycle completed. Total successful cycles=3
+2026-11-09 07:44:02 Training cycle started
+Cycle 19: 28000 human samples, champion=False, start=challenger.v1.json
+Benchmark: {"games": 20, "wins": 4, "draws": 10, "losses": 6, "winRate": 0.45, "goalDifference": -2, "averageRating": -0.10540000000000002, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-09 07:44:13 Training cycle completed. Total successful cycles=4
+2026-11-09 07:45:13 Training cycle started
+Cycle 20: 28000 human samples, champion=False, start=champion.v1.json
+Benchmark: {"games": 20, "wins": 0, "draws": 13, "losses": 7, "winRate": 0.325, "goalDifference": -10, "averageRating": -0.5312, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-09 07:45:24 Training cycle completed. Total successful cycles=5
+2026-11-09 07:45:38 Overnight run stopped: requested stop
+2026-11-10 23:23:59 Overnight run started: 8 hours, matches=10/10/20, modes=1v1-5v5
+2026-11-10 23:24:29 Training cycle started
+Training device: NumPy CPU fallback: No module named 'torch'
+Cycle 21: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.2s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.5s (CPU)
+benchmark simulation: 5.8s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 10, "losses": 8, "winRate": 0.35, "goalDifference": -10, "averageRating": -0.5756000000000002, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:24:44 Training cycle completed. Total successful cycles=1
+2026-11-10 23:25:44 Training cycle started
+Training device: NumPy CPU fallback: No module named 'torch'
+Cycle 22: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.9s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.4s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 7, "losses": 12, "winRate": 0.225, "goalDifference": -13, "averageRating": -0.6618, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:26:01 Training cycle completed. Total successful cycles=2
+2026-11-10 23:27:01 Training cycle started
+Training device: NumPy CPU fallback: No module named 'torch'
+Cycle 23: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.1s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 8, "losses": 10, "winRate": 0.3, "goalDifference": -15, "averageRating": -0.754, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:27:17 Training cycle completed. Total successful cycles=3
+2026-11-10 23:27:36 FAILED TO START: Another trainer is already running (PID 42144); did not alter models
+2026-11-10 23:27:37 Overnight run stopped: requested stop
+2026-11-10 23:31:16 Overnight run started: 8 hours, matches=10/10/20, modes=1v1-5v5
+2026-11-10 23:31:46 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 24: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.4s (CPU)
+benchmark simulation: 6.6s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 8, "losses": 10, "winRate": 0.3, "goalDifference": -9, "averageRating": -0.466, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:32:04 Training cycle completed. Total successful cycles=1
+2026-11-10 23:33:05 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 25: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 10, "losses": 7, "winRate": 0.4, "goalDifference": -8, "averageRating": -0.4173999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:33:23 Training cycle completed. Total successful cycles=2
+2026-11-10 23:34:23 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 26: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.2s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.1s (CPU)
+benchmark simulation: 6.5s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 8, "losses": 11, "winRate": 0.25, "goalDifference": -11, "averageRating": -0.5526, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:34:42 Training cycle completed. Total successful cycles=3
+2026-11-10 23:35:42 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 27: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.7s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 9, "losses": 8, "winRate": 0.375, "goalDifference": -10, "averageRating": -0.5325999999999997, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:36:01 Training cycle completed. Total successful cycles=4
+2026-11-10 23:37:01 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 28: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.0s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.3s (CPU)
+file:///C:/Users/jm65o/Downloads/Teamball-15/Teamball-15/train/rollout.mjs:53
+  if(steps%2000===0&&shouldStop())throw Error('Training stopped: player connected or overnight stop requested');}
+                                        ^
+
+Error: Training stopped: player connected or overnight stop requested
+    at file:///C:/Users/jm65o/Downloads/Teamball-15/Teamball-15/train/rollout.mjs:53:41
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.14.0
+Trainer error: Command '['node', 'train/rollout.mjs', '--mode', 'benchmark', '--matches', '20', '--seed', '12728', '--out', 'C:\\Users\\jm65o\\Downloads\\Teamball-15\\Teamball-15\\bot-memory\\models\\candidate-benchmark.json', '--candidate', 'C:\\Users\\jm65o\\Downloads\\Teamball-15\\Teamball-15\\bot-memory\\models\\candidate.v1.json']' returned non-zero exit status 1.
+2026-11-10 23:37:15 Training cycle exited 1; if a player joined, retry after they leave.
+2026-11-10 23:37:15 Overnight run stopped: requested stop
+2026-11-10 23:37:18 Overnight run started: 8 hours, matches=10/10/20, modes=1v1-5v5
+2026-11-10 23:37:23 FAILED TO START: Another trainer is already running (PID 38868); did not alter models
+2026-11-10 23:37:40 FAILED TO START: Another trainer is already running (PID 38868); did not alter models
+2026-11-10 23:37:48 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 28: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.0s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+file:///C:/Users/jm65o/Downloads/Teamball-15/Teamball-15/train/rollout.mjs:53
+  if(steps%2000===0&&shouldStop())throw Error('Training stopped: player connected or overnight stop requested');}
+                                        ^
+
+Error: Training stopped: player connected or overnight stop requested
+    at file:///C:/Users/jm65o/Downloads/Teamball-15/Teamball-15/train/rollout.mjs:53:41
+    at ModuleJob.run (node:internal/modules/esm/module_job:271:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:578:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:116:5)
+
+Node.js v22.14.0
+Trainer error: Command '['node', 'train/rollout.mjs', '--mode', 'selfplay', '--matches', '10', '--seed', '4028', '--out', 'C:\\Users\\jm65o\\Downloads\\Teamball-15\\Teamball-15\\bot-memory\\models\\selfplay-rollout.json', '--candidate', 'C:\\Users\\jm65o\\Downloads\\Teamball-15\\Teamball-15\\bot-memory\\models\\candidate.v1.json', '--opponent-pool', 'C:\\Users\\jm65o\\Downloads\\Teamball-15\\Teamball-15\\bot-memory\\models\\human-styles', '--video-profiles', 'C:\\Users\\jm65o\\Downloads\\Teamball-15\\Teamball-15\\bot-memory\\video-profiles']' returned non-zero exit status 1.
+2026-11-10 23:37:58 Training cycle exited 1; if a player joined, retry after they leave.
+2026-11-10 23:37:58 Overnight run stopped: requested stop
+2026-11-10 23:38:04 Overnight run started: 8 hours, matches=10/10/20, modes=1v1-5v5
+2026-11-10 23:38:08 FAILED TO START: Another trainer is already running (PID 42932); did not alter models
+2026-11-10 23:38:10 Overnight run stopped: requested stop
+2026-11-10 23:38:21 Overnight run started: 8 hours, matches=10/10/20, modes=1v1-5v5
+2026-11-10 23:38:51 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 28: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.0s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 7, "losses": 10, "winRate": 0.325, "goalDifference": -10, "averageRating": -0.532, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:39:09 Training cycle completed. Total successful cycles=1
+2026-11-10 23:40:09 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 29: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.8s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 8, "losses": 10, "winRate": 0.3, "goalDifference": -12, "averageRating": -0.6219999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:40:28 Training cycle completed. Total successful cycles=2
+2026-11-10 23:41:28 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 30: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.2s (CPU)
+benchmark simulation: 6.0s (CPU)
+Benchmark: {"games": 20, "wins": 5, "draws": 12, "losses": 3, "winRate": 0.55, "goalDifference": 4, "averageRating": 0.20660000000000006, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:41:46 Training cycle completed. Total successful cycles=3
+2026-11-10 23:42:46 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 31: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.7s (CPU)
+Benchmark: {"games": 20, "wins": 4, "draws": 8, "losses": 8, "winRate": 0.4, "goalDifference": -7, "averageRating": -0.38239999999999985, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:43:05 Training cycle completed. Total successful cycles=4
+2026-11-10 23:44:05 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 32: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.2s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 5.9s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 9, "losses": 8, "winRate": 0.375, "goalDifference": -8, "averageRating": -0.4305999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:44:23 Training cycle completed. Total successful cycles=5
+2026-11-10 23:45:23 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 33: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.1s (CPU)
+Benchmark: {"games": 20, "wins": 0, "draws": 9, "losses": 11, "winRate": 0.225, "goalDifference": -17, "averageRating": -0.8876000000000002, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:45:42 Training cycle completed. Total successful cycles=6
+2026-11-10 23:46:42 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 34: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.2s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 7, "losses": 12, "winRate": 0.225, "goalDifference": -14, "averageRating": -0.7224, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:47:01 Training cycle completed. Total successful cycles=7
+2026-11-10 23:48:01 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 35: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 9, "losses": 9, "winRate": 0.325, "goalDifference": -13, "averageRating": -0.6658, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:48:20 Training cycle completed. Total successful cycles=8
+2026-11-10 23:49:20 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 36: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.9s (CPU)
+benchmark simulation: 6.0s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 8, "losses": 9, "winRate": 0.35, "goalDifference": -8, "averageRating": -0.4395999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:49:39 Training cycle completed. Total successful cycles=9
+2026-11-10 23:50:39 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 37: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.5s (CPU)
+Benchmark: {"games": 20, "wins": 0, "draws": 7, "losses": 13, "winRate": 0.175, "goalDifference": -20, "averageRating": -1.0328000000000002, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:50:58 Training cycle completed. Total successful cycles=10
+2026-11-10 23:51:58 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 38: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.7s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.4s (CPU)
+Benchmark: {"games": 20, "wins": 0, "draws": 10, "losses": 10, "winRate": 0.25, "goalDifference": -12, "averageRating": -0.6426, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:52:17 Training cycle completed. Total successful cycles=11
+2026-11-10 23:53:17 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 39: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.2s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 10, "losses": 8, "winRate": 0.35, "goalDifference": -11, "averageRating": -0.5828000000000001, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:53:35 Training cycle completed. Total successful cycles=12
+2026-11-10 23:54:35 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 40: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.2s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.9s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 10, "losses": 9, "winRate": 0.3, "goalDifference": -14, "averageRating": -0.7391999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:54:54 Training cycle completed. Total successful cycles=13
+2026-11-10 23:55:54 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 41: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.5s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.6s (CPU)
+Benchmark: {"games": 20, "wins": 5, "draws": 7, "losses": 8, "winRate": 0.425, "goalDifference": -8, "averageRating": -0.4016, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:56:13 Training cycle completed. Total successful cycles=14
+2026-11-10 23:57:13 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 42: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.9s (CPU)
+benchmark simulation: 7.0s (CPU)
+Benchmark: {"games": 20, "wins": 5, "draws": 6, "losses": 9, "winRate": 0.4, "goalDifference": -9, "averageRating": -0.47299999999999986, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:57:33 Training cycle completed. Total successful cycles=15
+2026-11-10 23:58:33 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 43: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.7s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.9s (CPU)
+benchmark simulation: 6.1s (CPU)
+Benchmark: {"games": 20, "wins": 0, "draws": 7, "losses": 13, "winRate": 0.175, "goalDifference": -18, "averageRating": -0.9427999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-10 23:58:52 Training cycle completed. Total successful cycles=16
+2026-11-10 23:59:52 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 44: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.1s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.9s (CPU)
+benchmark simulation: 6.2s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 7, "losses": 11, "winRate": 0.275, "goalDifference": -10, "averageRating": -0.532, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:00:10 Training cycle completed. Total successful cycles=17
+2026-11-11 00:01:10 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 45: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.6s (CPU)
+benchmark simulation: 6.5s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 13, "losses": 6, "winRate": 0.375, "goalDifference": -9, "averageRating": -0.4877999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:01:29 Training cycle completed. Total successful cycles=18
+2026-11-11 00:02:29 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 46: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.7s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.2s (CPU)
+benchmark simulation: 6.5s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 8, "losses": 11, "winRate": 0.25, "goalDifference": -12, "averageRating": -0.6296000000000002, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:02:49 Training cycle completed. Total successful cycles=19
+2026-11-11 00:03:49 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 47: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.9s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 5, "losses": 14, "winRate": 0.175, "goalDifference": -18, "averageRating": -0.9304, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:04:08 Training cycle completed. Total successful cycles=20
+2026-11-11 00:05:08 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 48: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.8s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.2s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 13, "losses": 6, "winRate": 0.375, "goalDifference": -6, "averageRating": -0.32780000000000004, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:05:27 Training cycle completed. Total successful cycles=21
+2026-11-11 00:06:27 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 49: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.6s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 9, "losses": 10, "winRate": 0.275, "goalDifference": -12, "averageRating": -0.6292, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:06:46 Training cycle completed. Total successful cycles=22
+2026-11-11 00:07:47 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 50: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.9s (CPU)
+Benchmark: {"games": 20, "wins": 6, "draws": 9, "losses": 5, "winRate": 0.525, "goalDifference": 1, "averageRating": 0.04199999999999995, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:08:06 Training cycle completed. Total successful cycles=23
+2026-11-11 00:09:06 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 51: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.9s (CPU)
+benchmark simulation: 7.0s (CPU)
+Benchmark: {"games": 20, "wins": 4, "draws": 7, "losses": 9, "winRate": 0.375, "goalDifference": -5, "averageRating": -0.5178, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:09:25 Training cycle completed. Total successful cycles=24
+2026-11-11 00:10:25 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 52: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.9s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 11, "losses": 7, "winRate": 0.375, "goalDifference": -8, "averageRating": -0.4024, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:10:45 Training cycle completed. Total successful cycles=25
+2026-11-11 00:11:45 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 53: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 4, "losses": 13, "winRate": 0.25, "goalDifference": -11, "averageRating": -0.5882000000000001, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:12:03 Training cycle completed. Total successful cycles=26
+2026-11-11 00:13:03 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 54: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.9s (CPU)
+benchmark simulation: 6.2s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 12, "losses": 7, "winRate": 0.35, "goalDifference": -13, "averageRating": -0.7292, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:13:22 Training cycle completed. Total successful cycles=27
+2026-11-11 00:14:22 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 55: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.1s (CPU)
+benchmark simulation: 6.9s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 10, "losses": 8, "winRate": 0.35, "goalDifference": -10, "averageRating": -0.5248, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:14:42 Training cycle completed. Total successful cycles=28
+2026-11-11 00:15:42 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 56: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.5s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.1s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 6, "losses": 11, "winRate": 0.3, "goalDifference": -9, "averageRating": -0.5226000000000001, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:16:01 Training cycle completed. Total successful cycles=29
+2026-11-11 00:17:01 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 57: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.3s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 6.4s (CPU)
+Benchmark: {"games": 20, "wins": 4, "draws": 9, "losses": 7, "winRate": 0.425, "goalDifference": -2, "averageRating": -0.08700000000000004, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:17:20 Training cycle completed. Total successful cycles=30
+2026-11-11 00:18:20 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 58: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.1s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.4s (CPU)
+benchmark simulation: 6.2s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 9, "losses": 9, "winRate": 0.325, "goalDifference": -15, "averageRating": -0.7838, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:18:38 Training cycle completed. Total successful cycles=31
+2026-11-11 00:19:38 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 59: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.0s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.4s (CPU)
+benchmark simulation: 5.8s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 6, "losses": 11, "winRate": 0.3, "goalDifference": -12, "averageRating": -0.6512, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:19:55 Training cycle completed. Total successful cycles=32
+2026-11-11 00:20:55 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 60: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.3s (CPU)
+benchmark simulation: 6.3s (CPU)
+Benchmark: {"games": 20, "wins": 5, "draws": 7, "losses": 8, "winRate": 0.425, "goalDifference": -2, "averageRating": -0.11719999999999997, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:21:15 Training cycle completed. Total successful cycles=33
+2026-11-11 00:22:15 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 61: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.5s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 7.6s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 8, "losses": 11, "winRate": 0.25, "goalDifference": -12, "averageRating": -0.6178, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:22:35 Training cycle completed. Total successful cycles=34
+2026-11-11 00:23:35 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 62: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.7s (CPU)
+benchmark simulation: 6.9s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 10, "losses": 9, "winRate": 0.3, "goalDifference": -11, "averageRating": -0.587, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:23:54 Training cycle completed. Total successful cycles=35
+2026-11-11 00:24:54 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 63: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.8s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 3.8s (CPU)
+benchmark simulation: 5.7s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 11, "losses": 6, "winRate": 0.425, "goalDifference": -6, "averageRating": -0.3242, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:25:12 Training cycle completed. Total successful cycles=36
+2026-11-11 00:26:12 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 64: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.8s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.2s (CPU)
+benchmark simulation: 6.1s (CPU)
+Benchmark: {"games": 20, "wins": 0, "draws": 13, "losses": 7, "winRate": 0.325, "goalDifference": -7, "averageRating": -0.3653999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:26:32 Training cycle completed. Total successful cycles=37
+2026-11-11 00:27:32 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 65: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.8s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 9, "losses": 8, "winRate": 0.375, "goalDifference": -3, "averageRating": -0.20620000000000002, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:27:53 Training cycle completed. Total successful cycles=38
+2026-11-11 00:28:53 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 66: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.5s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.4s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 6, "losses": 13, "winRate": 0.2, "goalDifference": -14, "averageRating": -0.7272000000000001, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:29:12 Training cycle completed. Total successful cycles=39
+2026-11-11 00:30:12 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 67: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.7s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.4s (CPU)
+benchmark simulation: 6.7s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 12, "losses": 7, "winRate": 0.35, "goalDifference": -9, "averageRating": -0.829, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:30:32 Training cycle completed. Total successful cycles=40
+2026-11-11 00:31:32 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 68: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.5s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.1s (CPU)
+benchmark simulation: 6.4s (CPU)
+Benchmark: {"games": 20, "wins": 1, "draws": 9, "losses": 10, "winRate": 0.275, "goalDifference": -14, "averageRating": -0.7314, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:31:51 Training cycle completed. Total successful cycles=41
+2026-11-11 00:32:51 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 69: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 4.4s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 5.0s (CPU)
+benchmark simulation: 10.7s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 6, "losses": 12, "winRate": 0.25, "goalDifference": -9, "averageRating": -0.47520000000000007, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:33:19 Training cycle completed. Total successful cycles=42
+2026-11-11 00:34:19 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 70: 28000 human samples, champion=False, start=champion.v1.json
+expert simulation: 3.5s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 5.3s (CPU)
+benchmark simulation: 9.9s (CPU)
+Benchmark: {"games": 20, "wins": 2, "draws": 7, "losses": 11, "winRate": 0.275, "goalDifference": -15, "averageRating": -0.7903999999999998, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:34:45 Training cycle completed. Total successful cycles=43
+2026-11-11 00:35:45 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 71: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.4s (CPU)
+benchmark simulation: 8.8s (CPU)
+Benchmark: {"games": 20, "wins": 3, "draws": 7, "losses": 10, "winRate": 0.325, "goalDifference": -13, "averageRating": -0.6573999999999999, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:36:09 Training cycle completed. Total successful cycles=44
+2026-11-11 00:37:10 Training cycle started
+Training device: NVIDIA GeForce RTX 4080 SUPER
+Cycle 72: 28000 human samples, champion=False, start=challenger.v1.json
+expert simulation: 3.6s (CPU)
+Human-style opponent models: {"pressing": 20649, "technical": 3956, "patient": 3395}
+selfplay simulation: 4.0s (CPU)
+benchmark simulation: 6.2s (CPU)
+Benchmark: {"games": 20, "wins": 4, "draws": 7, "losses": 9, "winRate": 0.375, "goalDifference": -10, "averageRating": -0.5084, "passed": false}
+Candidate not promoted
+Rejected. Scripted/current champion preserved; best challenger retained for future cycles.
+2026-11-11 00:37:29 Training cycle completed. Total successful cycles=45
+2026-11-11 00:38:01 Overnight run stopped: requested stop

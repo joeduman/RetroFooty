@@ -1,0 +1,23 @@
+{
+  "name": "teamball-classic",
+  "version": "15.0.0",
+  "private": true,
+  "description": "Teamball online park with persistent neural imitation, self-play reinforcement training, strict benchmark promotion and backward-compatible Expert AI",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "stop": "node stop.js",
+    "test": "node --test tests/*.test.mjs",
+    "test:simulation": "node tests/simulate.mjs",
+    "test:online": "node --test tests/online.test.mjs",
+    "test:neural": "node --test tests/build14-neural.test.mjs",
+    "training": "python train/train.py --cycles 1",
+    "training:overnight": "python train/overnight.py --hours 8"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ws": "8.22.1"
+  }
+}

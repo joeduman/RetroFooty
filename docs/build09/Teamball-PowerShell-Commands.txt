@@ -1,0 +1,76 @@
+TEAMBALL BUILD 09 - COMMANDS TO KEEP IN NOTEPAD
+
+EASIEST START / STOP
+Double-click START-TEAMBALL.cmd to start and open the game.
+Double-click STOP-TEAMBALL.cmd in the same folder to stop it.
+
+POWERSHELL: EXISTING DESKTOP FOLDER
+Use this only after copying the full new build into that folder:
+
+cd "$HOME\OneDrive\Desktop\teamball-engine2"
+node server.js --open
+
+Or open the extracted Build 09 folder in File Explorer, click the address bar,
+type powershell and press Enter. Then run:
+
+node server.js --open
+
+There is no npm install step. Keep the server window open while playing.
+Open: http://localhost:3000/?build=09
+The menu and top-right corner MUST say BUILD 09.
+
+STOP BUILD 09 FROM A SECOND POWERSHELL WINDOW IN THE SAME FOLDER
+
+node stop.js
+
+This stops the matching server even when Ctrl+C is not working.
+If it says no Build 09 session was started from this folder, open the folder
+shown after "Serving:" in the running server window and run node stop.js there.
+
+STOP AN OLDER BUILD THAT DOES NOT HAVE stop.js
+
+1. Find the listening process:
+
+netstat -ano | findstr :3000
+
+2. Use the LAST NUMBER on a line containing LISTENING.
+TCP is the protocol label, not the process number. Do not type the word TCP.
+Ignore ESTABLISHED and TIME_WAIT lines.
+
+3. Check the process (replace 1234 with that last number):
+
+Get-CimInstance Win32_Process -Filter "ProcessId = 1234" | Select-Object ProcessId,Name,CommandLine
+
+4. If that is the Node server running your Teamball copy, stop it:
+
+taskkill /F /PID 1234
+
+If there is no LISTENING line, nothing is serving on port 3000.
+Do not use "taskkill /IM node.exe"; it would stop unrelated Node projects too.
+
+RELAUNCH AFTER EDITING / REPLACING FILES
+In a second PowerShell window in the game folder:
+
+node stop.js
+node server.js --open
+
+Then press Ctrl+F5 in the browser. Verify BUILD 09.
+All new files must be extracted together. public/js must remain inside public.
+Do not open index.html directly with a file:// URL.
+
+IF PORT 3000 BELONGS TO ANOTHER PROJECT
+Leave that project running and start Teamball on a different port:
+
+$env:PORT = "3001"
+node server.js --open
+
+Open http://localhost:3001/?build=09 instead.
+node stop.js still uses the correct port for this copy.
+To go back to the default next time:
+
+Remove-Item Env:PORT -ErrorAction SilentlyContinue
+
+TEST THE SOURCE CODE
+
+npm.cmd test
+npm.cmd run test:simulation

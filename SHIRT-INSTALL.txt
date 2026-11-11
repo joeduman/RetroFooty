@@ -1,0 +1,44 @@
+TEAMBALL BUILD 14 — SHIRT CUSTOMIZATION
+======================================
+
+1. Stop the Teamball Node server. Back up the existing project files.
+2. Copy the files from this package into the matching locations in your
+   Teamball project, preserving the public/js/ and public/images/shirts/
+   folders. Do not replace any other files or remove park.css.
+3. Start the server again. All connected browsers should reload the page.
+
+HOW TO USE
+----------
+* On the Park login screen, choose Plain White or Inferno before entering.
+* While walking, click Menu (or press Esc), then choose a shirt.
+* While playing on a field, open Match Menu (or press Esc) to change it.
+* On the separate online room page, the shirt picker also appears in its menu.
+* Your selection is saved in this browser and sent to the server. Everyone
+  should see the update within the next network snapshot.
+* Human players default to Plain White. Bots always wear the robot shirt.
+
+FILES
+-----
+Public UI: public/index.html, public/styles.css
+Client: public/js/input.mjs, public/js/shirt-picker.mjs,
+        public/js/renderer.mjs, public/js/park-client.mjs,
+        public/js/online-client.mjs
+Server: park.mjs, online.mjs
+Images: public/images/shirts/shirt1.png,
+        public/images/shirts/shirt_bot.png,
+        public/images/shirts/shirt_inferno.png
+
+The original shirt1.png upload contained WebP data despite the .png name.
+The bundled shirt1.png is a real 400 x 400 transparent PNG, preserving the
+original artwork. The other two images are also 400 x 400 PNGs.
+
+ADDING MORE SHIRTS LATER
+------------------------
+* Add an image to public/images/shirts/.
+* Add its id/name/path to SHIRT_OPTIONS in public/js/input.mjs.
+* Call registerShirt() for it in public/js/renderer.mjs.
+* Accept its id in the shirtOf() allowlist in both park.mjs and online.mjs.
+
+Validation completed: Node.js syntax checks for changed .mjs modules and
+PNG format/dimensions. Full live multiplayer testing needs the complete
+running Teamball project.

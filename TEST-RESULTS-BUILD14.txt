@@ -1,0 +1,36 @@
+TEAMBALL 14.0 — INTEGRATION AND REGRESSION TESTING
+
+1) Node.js regression suite: 118/118 passed.
+   All 112 previous Build 13.0 tests passed plus 6 new neural tests.
+   npm test, Node 22.16.0, Linux.
+
+2) Deterministic legacy gameplay parity: 12 matches compared tick-by-tick
+   (1v1, 2v2, 3v3 and 5v5; seeds 7/21/50).
+   12/12 produced identical match state, player positions/velocities/stamina,
+   ball positions/velocities and scores with neural champion absent.
+
+3) Python/JS neural sensor parity: all 24 features matched within 1e-7.
+
+4) Native Expert data collection: 2 simulated matches generated 1032 labeled
+   state/action samples. This is Expert imitation data, not human footage.
+
+5) Human capture pipeline integration: simulated one opted-in human match;
+   replay had 75 parseable 24-feature, 6-action samples.
+
+6) Python offline imitation + real-engine self-play + benchmark:
+   completed end-to-end. An early candidate benchmark of eight matches was
+   rejected (win-equivalent rate 0.25, goal difference -5). The existing
+   Expert champion was correctly preserved.
+
+7) Neural tests cover: normalized observations across 1v1–5v5, model schema,
+   bounded inference, physical shooting/clearance rules, one-team-only model,
+   portable memory, champion gates, and manual rollback.
+
+8) Live HTTP smoke test: server returned build=14.0 on port 31588 and shut
+   down cleanly with authenticated stop.js.
+
+9) Chromium graphical screenshot could not be completed in this container:
+   headless Chromium timed out. Windows launcher, real cross-Internet latency
+   and human top-player benchmarks have not been tested here.
+
+No claim is made that a superhuman neural champion exists at build release.

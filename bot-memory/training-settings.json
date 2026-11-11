@@ -1,0 +1,1 @@
+{"enabled":false,"neuralEnabled":true,"neuralIdleSeconds":30,"neuralCycleMinutes":15,"neuralTeacherMatches":10,"neuralSelfplayMatches":10,"neuralBenchmarkMatches":20,"neuralDevice":"auto"}

@@ -1,0 +1,8 @@
+{
+  "hours": 8,
+  "idleSeconds": 30,
+  "cooldownSeconds": 30,
+  "teacherMatches": 10,
+  "selfplayMatches": 10,
+  "benchmarkMatches": 20
+}
