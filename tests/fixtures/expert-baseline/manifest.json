@@ -1,0 +1,5 @@
+﻿{
+    "originalSha256":  "BC2F9D87E218C2D934B9A27EEB5FCDD3E5E844C5EAC391D1C146FD5BDD7A0EEA",
+    "change":  "Only relative import paths adjusted for frozen fixture",
+    "source":  "public/js/ai.mjs"
+}

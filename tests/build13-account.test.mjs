@@ -4,7 +4,7 @@ const root=fileURLToPath(new URL('..',import.meta.url));
 test('Build 13 account HTTP auth, stats endpoint and downloadable bot memory',async()=>{
  const dir=await mkdtemp(path.join(os.tmpdir(),'tb13-account-'));let child;
  try{
-  for(const f of ['server.js','stop.js','public','online.mjs','park.mjs','bot-learning.mjs','bot-model-store.mjs','neural-training-manager.mjs','train','bot-trainer.mjs','bot-trainer-worker.mjs','accounts.mjs','node_modules'])await cp(path.join(root,f),path.join(dir,f),{recursive:true});
+  for(const f of ['server.js','stop.js','public','online.mjs','park.mjs','bot-learning.mjs','active-match-store.mjs','bot-model-store.mjs','neural-training-manager.mjs','train','bot-trainer.mjs','bot-trainer-worker.mjs','accounts.mjs','node_modules'])await cp(path.join(root,f),path.join(dir,f),{recursive:true});
   child=spawn(process.execPath,['server.js'],{cwd:dir,env:{...process.env,PORT:'3158',TEAMBALL_TRAINING:'off'},stdio:['ignore','pipe','pipe']});
   await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('start timeout')),7000);child.stdout.on('data',b=>{if(b.toString().includes('BUILD 15')){clearTimeout(t);resolve();}});child.once('exit',c=>reject(Error('exit '+c)));});
   const url='http://127.0.0.1:3158';

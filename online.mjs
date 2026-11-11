@@ -9,15 +9,16 @@ const shirtOf=id=>['plain','inferno','barcelona','psg'].includes(id)?id:'plain';
 // Player.human marks an occupied human slot on the server. Send a separate
 // isBot flag so every client renders remote humans and AI distinctly.
 const playerState=players=>players.map(p=>({...p,isBot:!p.human}));
-export function attachOnline(server,{duration,goldenGoal=true,learning=null,accounts=null}={}){
+export function attachOnline(server,{duration,goldenGoal=true,learning=null,accounts=null,activeMemory=null}={}){
  const wss=new WebSocketServer({noServer:true,maxPayload:2048,perMessageDeflate:false});
  let room=null;const clients=new Set();
  const send=(c,m)=>{if(c.ws.readyState===1&&c.ws.bufferedAmount<128000){c.ws.send(JSON.stringify(m));return true;}return false;};
  const error=(c,message)=>send(c,{type:'error',message});
  const lobby=()=>{if(room)for(const c of room.members)send(c,{type:'lobby',code:room.code,host:c===room.host,team:room.team,size:room.size,running:room.running,members:room.members.map(x=>({name:x.name,id:x.id,team:x.team,host:x===room.host}))});};
  function setup(){
+  if(room.matchId)activeMemory?.complete(room.matchId,room.game,{reason:room.game.state==='ended'?'complete':'interrupted'});
   room.game=new Match({size:room.size,team:room.team,spectator:true,loop:false,goldenGoal,duration,aiPolicy:learning?.policy(),aiContexts:learning?.memory.contexts});
-  room.game.spectator=false;
+  room.game.spectator=false;activeMemory?.attach(room.game);
   room.matchId=randomUUID();room.reportAt=0;room.finalReport=false;room.trained=false;
   for(const c of room.members)assign(c); 
  }
@@ -33,9 +34,10 @@ export function attachOnline(server,{duration,goldenGoal=true,learning=null,acco
   for(const c of room.members)send(c,{type:'state',tick:room.tick,matchId:room.matchId,id:c.id,ack:c.applied,state,events:room.events});room.events=[];
  }
  function leave(c){clients.delete(c);if(!room||!room.members.includes(c))return;
+  activeMemory?.releasePlayer(room.matchId,c.id);
   const p=room.game.players.find(p=>p.id===c.id);if(p){p.human=false;p.name='Bot '+p.number;p.goalEffectId='classic';p.input=neutral();Object.assign(room.game.tracker.rows.get(p.id),{name:p.name,human:false});}
   room.members=room.members.filter(x=>x!==c);
-  if(!room.members.length){if(learning)learning.complete(room.matchId,room.game,{reason:room.game.state==='ended'?'complete':'interrupted'});room=null;return;}
+  if(!room.members.length){activeMemory?.complete(room.matchId,room.game,{reason:room.game.state==='ended'?'complete':'interrupted'});if(learning)learning.complete(room.matchId,room.game,{reason:room.game.state==='ended'?'complete':'interrupted'});room=null;return;}
   if(room.host===c)room.host=room.members[0];lobby();snapshot();
  }
  server.on('upgrade',(req,socket,head)=>{
@@ -46,7 +48,7 @@ export function attachOnline(server,{duration,goldenGoal=true,learning=null,acco
  });
  wss.on('connection',(ws,req)=>{
   const account=accounts?.get(req)||null;
-  const c={ws,name:account?.name||'Player',accountId:account?.id||null,shirtId:'plain',goalEffectId:'classic',trainingConsent:false,input:neutral(),seq:-1,lastInput:0,alive:true,window:performance.now(),count:0};clients.add(c);
+  const c={ws,participantKey:randomUUID(),name:account?.name||'Player',accountId:account?.id||null,shirtId:'plain',goalEffectId:'classic',trainingConsent:false,input:neutral(),seq:-1,lastInput:0,alive:true,window:performance.now(),count:0};clients.add(c);
   ws.on('pong',()=>c.alive=true);ws.on('error',()=>{});ws.on('close',()=>leave(c));
   ws.on('message',bytes=>{
    const now=performance.now();if(now-c.window>1000){c.window=now;c.count=0;}if(++c.count>160){ws.close(1008,'Too many messages');return;}
@@ -109,6 +111,10 @@ export function attachOnline(server,{duration,goldenGoal=true,learning=null,acco
   while(acc>=STEP){acc-=STEP;if(room?.running){
    for(const c of room.members){const p=room.game.players.find(p=>p.id===c.id);p.input=now-c.lastInput>250?neutral():{...c.input};c.applied=c.seq;}
    room.game.update(STEP);room.events.push(...room.game.events);room.tick++;
+   if(activeMemory){
+    activeMemory.capture(room.matchId,room.game,{eligibleIds:room.members.filter(c=>c.trainingConsent).map(c=>c.id),participantKeys:Object.fromEntries(room.members.map(c=>[c.id,c.participantKey]))});
+    if(room.game.state==='ended')activeMemory.complete(room.matchId,room.game);
+   }
    // Private-room human demonstrations use the same opt-in recorder as park games.
    if(learning){
     const eligibleIds=room.members.filter(c=>c.trainingConsent).map(c=>c.id);
@@ -123,5 +129,5 @@ export function attachOnline(server,{duration,goldenGoal=true,learning=null,acco
   if(room?.running&&(!room.finalReport)&&(now-room.reportAt>=1000||room.game.state==='ended')){room.reportAt=now;if(room.game.state==='ended')snapshot();const delivered=room.members.map(c=>report(c));room.finalReport=room.game.state==='ended'&&delivered.every(Boolean);}
  },4);
  const heartbeat=setInterval(()=>{for(const c of clients){if(!c.alive){c.ws.terminate();continue;}c.alive=false;c.ws.ping();}},5000);
- return ()=>{clearInterval(timer);clearInterval(heartbeat);for(const c of clients)c.ws.terminate();wss.close();};
+ return ()=>{if(room)activeMemory?.discard(room.matchId);clearInterval(timer);clearInterval(heartbeat);for(const c of clients)c.ws.terminate();wss.close();};
 }

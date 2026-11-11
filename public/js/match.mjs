@@ -1,12 +1,16 @@
 import {createPitch,clamp,seededRandom,MATCH_SECONDS,TUNING as C} from './config.mjs';
 import {Player,PhysicsEngine} from './physics.mjs';
 import {AIController} from './ai.mjs';
+import {AIController as TrainerAIController} from './ai-legacy.mjs';
 import {MatchStats} from './stats.mjs';
 import {PracticeSession,DRILLS} from './practice.mjs';
 import {RULES} from './customize.mjs';
 import {normalizeGoalEffect} from './goal-effects.mjs';
 
 const NAMES={red:['Rio','Jules','Milo','Ash','Remy'],blue:['Nico','Kai','Sage','Eli','Luca']};
+// Preserve the exact teacher/controller for existing offline entry points.
+const offlineEntry=typeof process!=='undefined'&&typeof process.argv?.[1]==='string'&&
+  /(?:^|[\\/])(?:bot-trainer-worker\.mjs|train[\\/]rollout\.mjs)$/.test(process.argv[1]);
 export class Match {
   constructor({size=4,team='red',name='Sam',spectator=false,seed=Date.now(),duration,loop=true,
     goldenGoal=true,practice=false,drill='free',unlimitedStamina=false,aiPolicy=null,aiContexts=null,aiDifficulty='expert',aiNeural=null,aiNeuralTeam=null,neuralTraining=false}={}){
@@ -24,7 +28,7 @@ export class Match {
       const human=!spectator&&color===team&&n===0;
       this.players.push(new Player(this.players.length+1,color,n+1,human?(name.trim().slice(0,16)||'Player'):NAMES[color][n],human));
     }
-    this.engine=new PhysicsEngine(this.pitch,this.players);this.ai=new AIController(this.engine,seed);
+    this.engine=new PhysicsEngine(this.pitch,this.players);this.ai=new (offlineEntry?TrainerAIController:AIController)(this.engine,seed);
     if(aiPolicy)this.ai.setPolicy(aiPolicy);if(aiContexts)this.ai.setLearningContexts(aiContexts);this.ai.setDifficulty(aiDifficulty);
     if(aiNeural)this.ai.setNeuralPolicy(aiNeural,aiNeuralTeam);this.ai.neuralTraining=neuralTraining;
     this.random=seededRandom(seed);this.human=this.players.find(p=>p.human);this.events=[];
@@ -164,7 +168,7 @@ export class Match {
       this.tracker.record(e);
       if(e.type==='kick'){
         this.stats.shots++;const type=this.ai.memory.get(e.player)?.aim?.type;
-        if(type==='pass')this.stats.passes++;if(type==='bank'||type==='bank-run')this.stats.banks++;
+        if(type==='pass')this.stats.passes++;if(type==='bank'||type==='bank-run'||type==='bank-shot')this.stats.banks++;
         this.ai.onKick(e.player);
       }
       if(e.type==='touch')this.stats.touches++;

@@ -8,10 +8,11 @@ import {ReplayRecorder,replayFrame,historyStore} from './replay.mjs';
 // Keep metadata for older saved practice replays; new games are matches only.
 import {DRILLS} from './practice.mjs';
 import {mountGoalEffectPicker} from './goal-effect-picker.mjs';
+import {exportCompletedHumanCandidate} from './ai-active-memory.mjs';
 
 const $=id=>document.getElementById(id),prefs=loadPreferences();
 const renderer=new Renderer($('field'));
-let serverBotPolicy=null,serverBotContexts={};fetch('/api/bots/policy').then(r=>r.json()).then(j=>{serverBotPolicy=j.policy;serverBotContexts=j.contexts||{};match?.ai?.setPolicy(serverBotPolicy);match?.ai?.setLearningContexts(serverBotContexts);}).catch(()=>{});
+let serverBotPolicy=null,serverBotContexts={},serverBotActiveReferences={};fetch('/api/bots/policy').then(r=>r.json()).then(j=>{serverBotPolicy=j.policy;serverBotContexts=j.contexts||{};serverBotActiveReferences=j.activeReferences||{};match?.ai?.setPolicy(serverBotPolicy);match?.ai?.setLearningContexts(serverBotContexts);}).catch(()=>{});
 let match=new Match({size:prefs.size,spectator:true,seed:5}),started=false,paused=true,accumulator=0,lastFrame=0,settingsFrom='menu';
 let recorder=null,replay=null,saveQueue=Promise.resolve(),nextCheckpoint=15;
 const gameAudio=new GameAudio();
@@ -111,6 +112,7 @@ function begin(spectator=false){
   prefs.name=$('player-name').value.trim().slice(0,16)||'Player';savePreferences(prefs);
   match=new Match({size:prefs.size,team:prefs.team,name:prefs.name,spectator,loop:false,goldenGoal:prefs.goldenGoal,
     aiPolicy:serverBotPolicy,aiContexts:serverBotContexts,aiDifficulty:$('bot-difficulty')?.value||'expert'});
+  match.ai.activeMemory?.setReference(serverBotActiveReferences[match.size]);
   if(match.human)match.human.goalEffectId=prefs.goalEffectId;
   recorder=new ReplayRecorder(match);nextCheckpoint=15;
   started=true;paused=false;accumulator=0;input.reset();
@@ -214,6 +216,6 @@ function frame(now){
 }
 syncMenu();$('build').textContent='BUILD '+BUILD;requestAnimationFrame(frame);
 // Read-only diagnostics keep bug reports concrete without altering gameplay.
-Object.defineProperty(window,'teamball',{value:Object.freeze({snapshot:()=>({build:BUILD,replay:replay?{time:replay.time,duration:replay.record.duration,playing:replay.playing,rate:replay.rate}:null,state:match.state,countdown:['kickoff','practice-ready'].includes(match.state)?Math.ceil(match.wait-1e-9):0,paused,round:match.round,half:match.half,sidesSwapped:match.sidesSwapped,halftimePending:match.halftimePending,size:match.size,remaining:match.remaining,practice:match.practice,drill:match.drill,unlimitedStamina:match.unlimitedStamina,overtime:match.overtime,elapsed:match.tracker.elapsed,duration:match.duration,movement:prefs.movement,aimGuide:prefs.aimGuide,score:{...match.score},ball:{x:match.engine.ball.x,y:match.engine.ball.y,vx:match.engine.ball.vx,vy:match.engine.ball.vy,radius:match.engine.ball.radius,spin:match.engine.ball.spin,lastPlayer:match.engine.ball.lastPlayer},players:match.players.map(p=>({id:p.id,name:p.name,human:p.human,team:p.team,x:p.x,y:p.y,vx:p.vx,vy:p.vy,stamina:p.stamina,recovery:p.recovery,sprinting:p.sprinting})),stats:{...match.stats},training:match.training?.snapshot()??null}),report:()=>match.report()})});
+Object.defineProperty(window,'teamball',{value:Object.freeze({learningCandidate:()=>exportCompletedHumanCandidate(match),ai:()=>[...(match.ai.diagnostics?.entries()||[])].map(([id,decision])=>({id,...JSON.parse(JSON.stringify(decision))})),snapshot:()=>({build:BUILD,replay:replay?{time:replay.time,duration:replay.record.duration,playing:replay.playing,rate:replay.rate}:null,state:match.state,countdown:['kickoff','practice-ready'].includes(match.state)?Math.ceil(match.wait-1e-9):0,paused,round:match.round,half:match.half,sidesSwapped:match.sidesSwapped,halftimePending:match.halftimePending,size:match.size,remaining:match.remaining,practice:match.practice,drill:match.drill,unlimitedStamina:match.unlimitedStamina,overtime:match.overtime,elapsed:match.tracker.elapsed,duration:match.duration,movement:prefs.movement,aimGuide:prefs.aimGuide,score:{...match.score},ball:{x:match.engine.ball.x,y:match.engine.ball.y,vx:match.engine.ball.vx,vy:match.engine.ball.vy,radius:match.engine.ball.radius,spin:match.engine.ball.spin,lastPlayer:match.engine.ball.lastPlayer},players:match.players.map(p=>({id:p.id,name:p.name,human:p.human,team:p.team,x:p.x,y:p.y,vx:p.vx,vy:p.vy,stamina:p.stamina,recovery:p.recovery,sprinting:p.sprinting})),stats:{...match.stats},training:match.training?.snapshot()??null}),report:()=>match.report()})});
 
 if(new URLSearchParams(location.search).has('history'))showHistory();

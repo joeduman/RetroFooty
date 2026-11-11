@@ -1,0 +1,885 @@
+{
+  "schema": "teamball.expert-performance.v1",
+  "measuredAt": "2026-11-11T07:58:49.100Z",
+  "sources": {
+    "expert-ai.mjs": "fab689cdf758c5a249852caf413b5e6b4a5ea646fd70edf6d6cb59887a5144e0",
+    "ai-prediction.mjs": "092c797be6a69d59484893e614036222a5a84b7a615d9f7a649af391a343d974",
+    "ai-legacy.mjs": "bc2f9d87e218c2d934b9a27eeb5fcdd3e5e844c5eac391d1c146fd5bdd7a0eea"
+  },
+  "environment": {
+    "node": "v26.13.0",
+    "platform": "win32",
+    "release": "10.0.26300",
+    "processor": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
+    "logicalProcessors": 12
+  },
+  "configuration": {
+    "seconds": 30,
+    "warmup": 8,
+    "seed": 117731,
+    "burstSamples": 120,
+    "tickMilliseconds": 8.333333333333334,
+    "models": "none",
+    "parkHumans": 0,
+    "parkBots": 30,
+    "activeMemoryService": false,
+    "networkSerialization": false
+  },
+  "methodology": [
+    "Deterministic seed and fixed 120Hz engine inputs; each baseline/candidate case starts independently.",
+    "Warmup is excluded. Controller distributions include actual calls made by Match.update, separated by whether a team plan is due.",
+    "Whole-tick measurements include physics and match state handling. Park uses the real ParkWorld.tick across all five courts.",
+    "No live server sockets, rendering, snapshot serialization, persistence service or human input is included.",
+    "Wall timings include scheduler and garbage-collection pauses; concurrent host load can affect tails.",
+    "The synchronized planner case forces refreshes for a worst-case burst; it does not represent normal planning frequency."
+  ],
+  "results": [
+    {
+      "case": "single-5v5",
+      "version": "frozen-previous-Expert",
+      "simulatedSeconds": 30,
+      "warmupSeconds": 8,
+      "wallMilliseconds": 493.3259,
+      "processCpuMilliseconds": 797,
+      "totalTick": {
+        "samples": 3600,
+        "meanMs": 0.13649,
+        "p50Ms": 0.1163,
+        "p95Ms": 0.2966,
+        "p99Ms": 0.4597,
+        "maxMs": 1.0187,
+        "overTickBudget": 0
+      },
+      "liveTick": {
+        "samples": 2640,
+        "meanMs": 0.15833,
+        "p50Ms": 0.1271,
+        "p95Ms": 0.3059,
+        "p99Ms": 0.4789,
+        "maxMs": 1.0187,
+        "overTickBudget": 0
+      },
+      "ticksByConcurrentPlannerCount": [
+        {
+          "count": 0,
+          "samples": 3268,
+          "meanMs": 0.13228,
+          "p50Ms": 0.1139,
+          "p95Ms": 0.2896,
+          "p99Ms": 0.4526,
+          "maxMs": 1.0187,
+          "overTickBudget": 0
+        },
+        {
+          "count": 1,
+          "samples": 332,
+          "meanMs": 0.17789,
+          "p50Ms": 0.1448,
+          "p95Ms": 0.3486,
+          "p99Ms": 0.5816,
+          "maxMs": 0.916,
+          "overTickBudget": 0
+        },
+        {
+          "count": 2,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 3,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 4,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 5,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        }
+      ],
+      "controllers": [
+        {
+          "size": 5,
+          "all": {
+            "samples": 2641,
+            "meanMs": 0.05518,
+            "p50Ms": 0.043,
+            "p95Ms": 0.1244,
+            "p99Ms": 0.2294,
+            "maxMs": 0.5499,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 332,
+            "meanMs": 0.07453,
+            "p50Ms": 0.0569,
+            "p95Ms": 0.1556,
+            "p99Ms": 0.3336,
+            "maxMs": 0.5499,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 2309,
+            "meanMs": 0.0524,
+            "p50Ms": 0.0386,
+            "p95Ms": 0.1216,
+            "p99Ms": 0.2063,
+            "maxMs": 0.5439,
+            "overTickBudget": 0
+          }
+        }
+      ],
+      "finalState": [
+        {
+          "size": 5,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 1
+          },
+          "liveSeconds": 32.01667
+        }
+      ]
+    },
+    {
+      "case": "single-5v5",
+      "version": "predictive-Expert",
+      "simulatedSeconds": 30,
+      "warmupSeconds": 8,
+      "wallMilliseconds": 1268.7108,
+      "processCpuMilliseconds": 1657,
+      "totalTick": {
+        "samples": 3600,
+        "meanMs": 0.35178,
+        "p50Ms": 0.1257,
+        "p95Ms": 3.0278,
+        "p99Ms": 4.4377,
+        "maxMs": 6.9333,
+        "overTickBudget": 0
+      },
+      "liveTick": {
+        "samples": 2640,
+        "meanMs": 0.45686,
+        "p50Ms": 0.1483,
+        "p95Ms": 3.2773,
+        "p99Ms": 4.7167,
+        "maxMs": 6.0563,
+        "overTickBudget": 0
+      },
+      "ticksByConcurrentPlannerCount": [
+        {
+          "count": 0,
+          "samples": 3394,
+          "meanMs": 0.15156,
+          "p50Ms": 0.1225,
+          "p95Ms": 0.3575,
+          "p99Ms": 0.5917,
+          "maxMs": 2.3903,
+          "overTickBudget": 0
+        },
+        {
+          "count": 1,
+          "samples": 206,
+          "meanMs": 3.65042,
+          "p50Ms": 3.4397,
+          "p95Ms": 5.1587,
+          "p99Ms": 5.8296,
+          "maxMs": 6.9333,
+          "overTickBudget": 0
+        },
+        {
+          "count": 2,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 3,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 4,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 5,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        }
+      ],
+      "controllers": [
+        {
+          "size": 5,
+          "all": {
+            "samples": 2641,
+            "meanMs": 0.36048,
+            "p50Ms": 0.0629,
+            "p95Ms": 3.1893,
+            "p99Ms": 4.5935,
+            "maxMs": 6.7546,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 206,
+            "meanMs": 3.54353,
+            "p50Ms": 3.3411,
+            "p95Ms": 5.004,
+            "p99Ms": 5.6541,
+            "maxMs": 6.7546,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 2435,
+            "meanMs": 0.0912,
+            "p50Ms": 0.0569,
+            "p95Ms": 0.2802,
+            "p99Ms": 0.4563,
+            "maxMs": 1.7071,
+            "overTickBudget": 0
+          }
+        }
+      ],
+      "finalState": [
+        {
+          "size": 5,
+          "state": "playing",
+          "score": {
+            "red": 1,
+            "blue": 0
+          },
+          "liveSeconds": 32.0125
+        }
+      ]
+    },
+    {
+      "case": "park-all-five-courts",
+      "version": "frozen-previous-Expert",
+      "simulatedSeconds": 30,
+      "warmupSeconds": 8,
+      "wallMilliseconds": 1714.5301,
+      "processCpuMilliseconds": 1953,
+      "totalTick": {
+        "samples": 3600,
+        "meanMs": 0.47459,
+        "p50Ms": 0.393,
+        "p95Ms": 0.8036,
+        "p99Ms": 1.0546,
+        "maxMs": 2.767,
+        "overTickBudget": 0
+      },
+      "liveTick": {
+        "samples": 3600,
+        "meanMs": 0.47459,
+        "p50Ms": 0.393,
+        "p95Ms": 0.8036,
+        "p99Ms": 1.0546,
+        "maxMs": 2.767,
+        "overTickBudget": 0
+      },
+      "ticksByConcurrentPlannerCount": [
+        {
+          "count": 0,
+          "samples": 2209,
+          "meanMs": 0.46996,
+          "p50Ms": 0.3873,
+          "p95Ms": 0.797,
+          "p99Ms": 1.0376,
+          "maxMs": 2.1665,
+          "overTickBudget": 0
+        },
+        {
+          "count": 1,
+          "samples": 981,
+          "meanMs": 0.47664,
+          "p50Ms": 0.3992,
+          "p95Ms": 0.7832,
+          "p99Ms": 1.0424,
+          "maxMs": 2.767,
+          "overTickBudget": 0
+        },
+        {
+          "count": 2,
+          "samples": 221,
+          "meanMs": 0.44343,
+          "p50Ms": 0.3674,
+          "p95Ms": 0.762,
+          "p99Ms": 0.9466,
+          "maxMs": 1.7697,
+          "overTickBudget": 0
+        },
+        {
+          "count": 3,
+          "samples": 174,
+          "meanMs": 0.55732,
+          "p50Ms": 0.474,
+          "p95Ms": 0.9324,
+          "p99Ms": 1.1283,
+          "maxMs": 1.2356,
+          "overTickBudget": 0
+        },
+        {
+          "count": 4,
+          "samples": 15,
+          "meanMs": 0.52285,
+          "p50Ms": 0.4274,
+          "p95Ms": 0.7502,
+          "p99Ms": 0.7502,
+          "maxMs": 0.8019,
+          "overTickBudget": 0
+        },
+        {
+          "count": 5,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        }
+      ],
+      "controllers": [
+        {
+          "size": 1,
+          "all": {
+            "samples": 2566,
+            "meanMs": 0.00868,
+            "p50Ms": 0.0059,
+            "p95Ms": 0.0209,
+            "p99Ms": 0.0373,
+            "maxMs": 0.3034,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 321,
+            "meanMs": 0.01362,
+            "p50Ms": 0.0101,
+            "p95Ms": 0.0309,
+            "p99Ms": 0.045,
+            "maxMs": 0.0857,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 2245,
+            "meanMs": 0.00797,
+            "p50Ms": 0.005,
+            "p95Ms": 0.0189,
+            "p99Ms": 0.0328,
+            "maxMs": 0.3034,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 2,
+          "all": {
+            "samples": 2641,
+            "meanMs": 0.01622,
+            "p50Ms": 0.0131,
+            "p95Ms": 0.0367,
+            "p99Ms": 0.0567,
+            "maxMs": 0.3147,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 330,
+            "meanMs": 0.0235,
+            "p50Ms": 0.0167,
+            "p95Ms": 0.0482,
+            "p99Ms": 0.0769,
+            "maxMs": 0.3147,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 2311,
+            "meanMs": 0.01518,
+            "p50Ms": 0.0113,
+            "p95Ms": 0.0341,
+            "p99Ms": 0.0516,
+            "maxMs": 0.1892,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 3,
+          "all": {
+            "samples": 3600,
+            "meanMs": 0.02522,
+            "p50Ms": 0.0197,
+            "p95Ms": 0.054,
+            "p99Ms": 0.088,
+            "maxMs": 0.6199,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 451,
+            "meanMs": 0.0337,
+            "p50Ms": 0.0283,
+            "p95Ms": 0.0639,
+            "p99Ms": 0.0884,
+            "maxMs": 0.2336,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 3149,
+            "meanMs": 0.024,
+            "p50Ms": 0.0169,
+            "p95Ms": 0.0492,
+            "p99Ms": 0.0858,
+            "maxMs": 0.6199,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 4,
+          "all": {
+            "samples": 3600,
+            "meanMs": 0.03406,
+            "p50Ms": 0.0273,
+            "p95Ms": 0.0686,
+            "p99Ms": 0.1108,
+            "maxMs": 0.7833,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 451,
+            "meanMs": 0.0449,
+            "p50Ms": 0.0365,
+            "p95Ms": 0.0783,
+            "p99Ms": 0.1369,
+            "maxMs": 0.7833,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 3149,
+            "meanMs": 0.0325,
+            "p50Ms": 0.0244,
+            "p95Ms": 0.0659,
+            "p99Ms": 0.1027,
+            "maxMs": 0.3383,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 5,
+          "all": {
+            "samples": 3600,
+            "meanMs": 0.04886,
+            "p50Ms": 0.04,
+            "p95Ms": 0.0958,
+            "p99Ms": 0.1711,
+            "maxMs": 0.6419,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 452,
+            "meanMs": 0.06108,
+            "p50Ms": 0.0506,
+            "p95Ms": 0.1214,
+            "p99Ms": 0.1816,
+            "maxMs": 0.4429,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 3148,
+            "meanMs": 0.0471,
+            "p50Ms": 0.0366,
+            "p95Ms": 0.0911,
+            "p99Ms": 0.1629,
+            "maxMs": 0.6419,
+            "overTickBudget": 0
+          }
+        }
+      ],
+      "finalState": [
+        {
+          "size": 1,
+          "state": "goal",
+          "score": {
+            "red": 1,
+            "blue": 1
+          },
+          "liveSeconds": 32.00833
+        },
+        {
+          "size": 2,
+          "state": "playing",
+          "score": {
+            "red": 1,
+            "blue": 0
+          },
+          "liveSeconds": 32.01667
+        },
+        {
+          "size": 3,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 0
+          },
+          "liveSeconds": 35.00833
+        },
+        {
+          "size": 4,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 0
+          },
+          "liveSeconds": 35.00833
+        },
+        {
+          "size": 5,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 0
+          },
+          "liveSeconds": 35.00833
+        }
+      ]
+    },
+    {
+      "case": "park-all-five-courts",
+      "version": "predictive-Expert",
+      "simulatedSeconds": 30,
+      "warmupSeconds": 8,
+      "wallMilliseconds": 5841.7497,
+      "processCpuMilliseconds": 6031,
+      "totalTick": {
+        "samples": 3600,
+        "meanMs": 1.6212,
+        "p50Ms": 0.5215,
+        "p95Ms": 6.7116,
+        "p99Ms": 9.6539,
+        "maxMs": 31.6069,
+        "overTickBudget": 68
+      },
+      "liveTick": {
+        "samples": 3600,
+        "meanMs": 1.6212,
+        "p50Ms": 0.5215,
+        "p95Ms": 6.7116,
+        "p99Ms": 9.6539,
+        "maxMs": 31.6069,
+        "overTickBudget": 68
+      },
+      "ticksByConcurrentPlannerCount": [
+        {
+          "count": 0,
+          "samples": 2705,
+          "meanMs": 0.49767,
+          "p50Ms": 0.4274,
+          "p95Ms": 0.886,
+          "p99Ms": 1.1836,
+          "maxMs": 26.7481,
+          "overTickBudget": 1
+        },
+        {
+          "count": 1,
+          "samples": 707,
+          "meanMs": 4.14679,
+          "p50Ms": 3.9126,
+          "p95Ms": 6.1328,
+          "p99Ms": 7.0328,
+          "maxMs": 19.4197,
+          "overTickBudget": 4
+        },
+        {
+          "count": 2,
+          "samples": 182,
+          "meanMs": 8.18136,
+          "p50Ms": 7.6804,
+          "p95Ms": 11.2482,
+          "p99Ms": 12.4388,
+          "maxMs": 31.6069,
+          "overTickBudget": 57
+        },
+        {
+          "count": 3,
+          "samples": 6,
+          "meanMs": 11.55443,
+          "p50Ms": 9.3203,
+          "p95Ms": 14.2676,
+          "p99Ms": 14.2676,
+          "maxMs": 18.1326,
+          "overTickBudget": 6
+        },
+        {
+          "count": 4,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        },
+        {
+          "count": 5,
+          "samples": 0,
+          "meanMs": null,
+          "p50Ms": null,
+          "p95Ms": null,
+          "p99Ms": null,
+          "maxMs": null,
+          "overTickBudget": 0
+        }
+      ],
+      "controllers": [
+        {
+          "size": 1,
+          "all": {
+            "samples": 1476,
+            "meanMs": 0.27955,
+            "p50Ms": 0.0082,
+            "p95Ms": 2.9785,
+            "p99Ms": 4.7251,
+            "maxMs": 27.4102,
+            "overTickBudget": 1
+          },
+          "planning": {
+            "samples": 115,
+            "meanMs": 3.39163,
+            "p50Ms": 3.1335,
+            "p95Ms": 5.2889,
+            "p99Ms": 5.5798,
+            "maxMs": 27.4102,
+            "overTickBudget": 1
+          },
+          "ordinary": {
+            "samples": 1361,
+            "meanMs": 0.01659,
+            "p50Ms": 0.0076,
+            "p95Ms": 0.0729,
+            "p99Ms": 0.1301,
+            "maxMs": 0.2591,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 2,
+          "all": {
+            "samples": 2641,
+            "meanMs": 0.30759,
+            "p50Ms": 0.016,
+            "p95Ms": 3.1829,
+            "p99Ms": 4.7615,
+            "maxMs": 7.1808,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 205,
+            "meanMs": 3.60241,
+            "p50Ms": 3.4573,
+            "p95Ms": 5.224,
+            "p99Ms": 5.8861,
+            "maxMs": 7.1808,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 2436,
+            "meanMs": 0.03032,
+            "p50Ms": 0.0148,
+            "p95Ms": 0.1234,
+            "p99Ms": 0.2198,
+            "maxMs": 0.7711,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 3,
+          "all": {
+            "samples": 3600,
+            "meanMs": 0.33345,
+            "p50Ms": 0.025,
+            "p95Ms": 3.3348,
+            "p99Ms": 4.9984,
+            "maxMs": 7.22,
+            "overTickBudget": 0
+          },
+          "planning": {
+            "samples": 281,
+            "meanMs": 3.77971,
+            "p50Ms": 3.5466,
+            "p95Ms": 5.5546,
+            "p99Ms": 6.0158,
+            "maxMs": 7.22,
+            "overTickBudget": 0
+          },
+          "ordinary": {
+            "samples": 3319,
+            "meanMs": 0.04167,
+            "p50Ms": 0.0233,
+            "p95Ms": 0.1525,
+            "p99Ms": 0.2714,
+            "maxMs": 0.9364,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 4,
+          "all": {
+            "samples": 3600,
+            "meanMs": 0.34762,
+            "p50Ms": 0.0342,
+            "p95Ms": 3.4072,
+            "p99Ms": 4.7219,
+            "maxMs": 8.3602,
+            "overTickBudget": 1
+          },
+          "planning": {
+            "samples": 282,
+            "meanMs": 3.79355,
+            "p50Ms": 3.5825,
+            "p95Ms": 5.2885,
+            "p99Ms": 6.1722,
+            "maxMs": 8.3602,
+            "overTickBudget": 1
+          },
+          "ordinary": {
+            "samples": 3318,
+            "meanMs": 0.05475,
+            "p50Ms": 0.0321,
+            "p95Ms": 0.1882,
+            "p99Ms": 0.3088,
+            "maxMs": 0.6355,
+            "overTickBudget": 0
+          }
+        },
+        {
+          "size": 5,
+          "all": {
+            "samples": 2641,
+            "meanMs": 0.3673,
+            "p50Ms": 0.0496,
+            "p95Ms": 3.367,
+            "p99Ms": 4.9862,
+            "maxMs": 17.6054,
+            "overTickBudget": 2
+          },
+          "planning": {
+            "samples": 206,
+            "meanMs": 3.86089,
+            "p50Ms": 3.6317,
+            "p95Ms": 5.5346,
+            "p99Ms": 6.2595,
+            "maxMs": 17.6054,
+            "overTickBudget": 2
+          },
+          "ordinary": {
+            "samples": 2435,
+            "meanMs": 0.07174,
+            "p50Ms": 0.0462,
+            "p95Ms": 0.2214,
+            "p99Ms": 0.3857,
+            "maxMs": 0.7158,
+            "overTickBudget": 0
+          }
+        }
+      ],
+      "finalState": [
+        {
+          "size": 1,
+          "state": "goal",
+          "score": {
+            "red": 2,
+            "blue": 1
+          },
+          "liveSeconds": 29.02083
+        },
+        {
+          "size": 2,
+          "state": "playing",
+          "score": {
+            "red": 1,
+            "blue": 0
+          },
+          "liveSeconds": 32.01667
+        },
+        {
+          "size": 3,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 0
+          },
+          "liveSeconds": 35.00833
+        },
+        {
+          "size": 4,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 0
+          },
+          "liveSeconds": 35.00833
+        },
+        {
+          "size": 5,
+          "state": "playing",
+          "score": {
+            "red": 0,
+            "blue": 1
+          },
+          "liveSeconds": 32.0125
+        }
+      ]
+    }
+  ],
+  "synchronizedBurst": {
+    "case": "forced-simultaneous-five-planner-refresh",
+    "description": "Each sampled tick forces all five actual field controllers to replan; ordinary cadence is measured separately.",
+    "samples": 120,
+    "meanMs": 13.84516,
+    "p50Ms": 12.9316,
+    "p95Ms": 17.7998,
+    "p99Ms": 18.8779,
+    "maxMs": 23.7725,
+    "overTickBudget": 120
+  }
+}

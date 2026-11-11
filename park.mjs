@@ -29,15 +29,16 @@ export function normalizeInput(i){
  return {x:i.x/len,y:i.y/len,aimX:i.aimX/aim,aimY:i.aimY/aim,sprint:i.sprint===true,shoot:i.shoot===true};
 }
 export class ParkWorld {
- constructor({duration,goldenGoal=true,learning=null,accounts=null,aiDifficulty='expert'}={}){
-  this.options={duration,goldenGoal};this.learning=learning;this.accounts=accounts;this.aiDifficulty=aiDifficulty;this.clients=new Map();this.time=0;this.nextAvatar=0;this.walkEngine=new ParkPhysics();
+ constructor({duration,goldenGoal=true,learning=null,accounts=null,aiDifficulty='expert',activeMemory=null}={}){
+  this.options={duration,goldenGoal};this.learning=learning;this.activeMemory=activeMemory;this.accounts=accounts;this.aiDifficulty=aiDifficulty;this.clients=new Map();this.time=0;this.nextAvatar=0;this.walkEngine=new ParkPhysics();
   this.fields=COURTS.map(c=>({...c,members:[],round:0,phase:'warmup',endedFor:0,events:[],tick:0}));
   for(const f of this.fields)this.restart(f,'warmup');
  }
  restart(f,phase){
+  if(f.matchId)this.activeMemory?.complete(f.matchId,f.game,{reason:f.game?.state==='ended'?'complete':'interrupted'});
   if(f.matchId&&this.learning)this.learning.complete(f.matchId,f.game,{reason:f.game?.state==='ended'?'complete':'interrupted'});
   f.phase=phase;f.matchId=randomUUID();f.round++;f.tick=0;f.events=[];f.endedFor=0;f.finalProcessed=false;
-  f.game=new Match({size:f.size,team:'red',spectator:true,loop:false,aiPolicy:this.learning?.policy(),aiContexts:this.learning?.memory.contexts,aiDifficulty:this.aiDifficulty,...this.options});f.game.spectator=false;f.game.round=f.round;
+  f.game=new Match({size:f.size,team:'red',spectator:true,loop:false,aiPolicy:this.learning?.policy(),aiContexts:this.learning?.memory.contexts,aiDifficulty:this.aiDifficulty,...this.options});f.game.spectator=false;f.game.round=f.round;this.activeMemory?.attach(f.game);
   for(const c of f.members){this.assign(f,c);c.finalSent=null;}
  }
  connect(name,account=null,trainingConsent=false,shirtId='plain',goalEffectId='classic'){
@@ -61,6 +62,7 @@ export class ParkWorld {
  leave(c){
   if(c.field===null)return;
   const f=this.fields.find(f=>f.size===c.field),p=f.game.players.find(p=>p.id===c.slot);
+  this.activeMemory?.releasePlayer(f.matchId,c.slot);
   p.human=false;p.name='Bot '+p.number;p.goalEffectId='classic';p.input=neutral();Object.assign(f.game.tracker.rows.get(p.id),{name:p.name,human:false});
   f.members=f.members.filter(m=>m!==c);c.field=null;c.team=null;c.slot=null;c.input=neutral();c.walk={x:0,y:0};c.x=f.x+f.w/2;c.y=f.y+f.h+65;Object.assign(c.avatar,{x:c.x,y:c.y,vx:0,vy:0,input:neutral()});
   // A missing player cancels only the initial full-roster countdown. Once
@@ -96,13 +98,15 @@ export class ParkWorld {
   for(const c of this.clients.values())if(c.field===null){c.x=c.avatar.x;c.y=c.avatar.y;}
   for(const f of this.fields){
    if(f.game.state==='ended'){
-    if(!f.finalProcessed){f.finalProcessed=true;this.learning?.complete(f.matchId,f.game);this.accounts?.record(f);}
+    if(!f.finalProcessed){f.finalProcessed=true;this.activeMemory?.complete(f.matchId,f.game);this.learning?.complete(f.matchId,f.game);this.accounts?.record(f);}
     f.endedFor+=dt;
     if(f.endedFor>=RULES.intermissionSeconds)this.restart(f,f.members.length===2*f.size?'match':'warmup');
     continue;
    }
    for(const c of f.members){const p=f.game.players.find(p=>p.id===c.slot);p.input=this.time-c.lastInput>.25?neutral():{...c.input};c.applied=c.seq;}
-   f.game.update(dt);if(this.learning){
+   f.game.update(dt);
+   this.activeMemory?.capture(f.matchId,f.game,{eligibleIds:f.members.filter(c=>c.trainingConsent).map(c=>c.slot),participantKeys:Object.fromEntries(f.members.map(c=>[c.slot,c.id]))});
+   if(this.learning){
      const eligibleIds=f.members.filter(c=>c.trainingConsent).map(c=>c.slot);
      if(eligibleIds.length)this.learning.capture(f.matchId,f.game,{eligibleIds});
      this.learning.eventsFor(f.matchId,f.game.events);
@@ -171,5 +175,5 @@ export function attachPark(server,options={}){
   if(now-reportAt>=1000){reportAt=now;for(const ws of sockets)if(ws.client?.field!==null&&ws.client)send(ws,world.report(ws.client));}
  },4);
  const heartbeat=setInterval(()=>{for(const ws of sockets){if(!ws.alive){ws.terminate();continue;}ws.alive=false;ws.ping();}},5000);
- const close=()=>{clearInterval(timer);clearInterval(heartbeat);for(const ws of sockets)ws.terminate();wss.close();};close.world=world;return close;
+ const close=()=>{for(const f of world.fields)world.activeMemory?.discard(f.matchId);clearInterval(timer);clearInterval(heartbeat);for(const ws of sockets)ws.terminate();wss.close();};close.world=world;return close;
 }

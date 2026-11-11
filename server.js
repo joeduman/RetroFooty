@@ -13,7 +13,7 @@ const statePath = path.join(__dirname, '.teamball-server.json');
 const port = Number(process.env.PORT) || 25568;
 
 const publicDir = path.join(__dirname, 'public');
-let accounts=null,learning=null,closeTrainer=()=>{},closeNeuralTrainer=()=>{};
+let accounts=null,learning=null,activeMemory=null,closeTrainer=()=>{},closeNeuralTrainer=()=>{};
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -29,9 +29,28 @@ const contentTypes = {
 const server = http.createServer((req, res) => {
   const local=['127.0.0.1','::1','::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
   if(accounts?.handle(req,res))return;
-  if(req.url.startsWith('/api/bots/policy')&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify({policy:learning?.policy()||null,contexts:learning?.memory.contexts||{}}));return;}
+  if(req.url.startsWith('/api/bots/policy')&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify({policy:learning?.policy()||null,contexts:learning?.memory.contexts||{},activeReferences:activeMemory?.memory.references||{}}));return;}
   if(req.url==='/api/bots/status'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify(learning?.status()||{}));return;}
   if (req.url.startsWith('/_teamball/') && !local) { res.writeHead(403).end('Local administration only'); return; }
+  if(req.url === '/_teamball/ai/active'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify({status:activeMemory?.status()||null,memory:activeMemory?.memory||null}));return;}
+  if(req.url === '/_teamball/ai/active'&&req.method==='POST'){
+    if(req.headers.authorization!=='Bearer '+token){res.writeHead(403).end('Invalid administration token');return;}
+    let body='',oversized=false;
+    req.on('data',chunk=>{body+=chunk;if(body.length>16000){oversized=true;req.destroy();}});
+    req.on('end',()=>{
+      if(oversized)return;
+      try{
+        if(!activeMemory)throw Error('Active match memory is starting');
+        const change=JSON.parse(body);let result;
+        if(change.action==='approve')result=activeMemory.approve(change.ids,{reviewed:change.reviewed,notes:change.notes});
+        else if(change.action==='import')result=activeMemory.importCandidate(change.candidate);
+        else if(change.action==='reject'){activeMemory.reject(change.ids,change.reason);result=activeMemory.status();}
+        else if(change.action==='rollback')result=activeMemory.rollback(change.version);
+        else throw Error('Unknown active memory action');
+        res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify(result));
+      }catch(error){res.writeHead(400,{'Content-Type':'application/json'}).end(JSON.stringify({error:error.message}));}
+    });return;
+  }
   if (req.url === '/_teamball/ai/export'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Content-Disposition':'attachment; filename=teamball-bot-memory.v1.json','Cache-Control':'no-store'}).end(JSON.stringify(learning?.memory||{}));return;}
   if (req.url === '/_teamball/health' && req.method === 'GET') {
     res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
@@ -87,9 +106,9 @@ server.on('error', error => {
   process.exit(1);
 });
 let closeOnline=()=>{};
-Promise.all([import('./online.mjs'),import('./park.mjs'),import('./accounts.mjs'),import('./bot-learning.mjs'),import('./bot-trainer.mjs'),import('./neural-training-manager.mjs')]).then(([{attachOnline},{attachPark},{Accounts},{BotMemoryStore},{startTrainer},{startNeuralTrainer}])=>{
-accounts=new Accounts();learning=new BotMemoryStore();
-const opts={learning,accounts};
+Promise.all([import('./online.mjs'),import('./park.mjs'),import('./accounts.mjs'),import('./bot-learning.mjs'),import('./bot-trainer.mjs'),import('./neural-training-manager.mjs'),import('./active-match-store.mjs')]).then(([{attachOnline},{attachPark},{Accounts},{BotMemoryStore},{startTrainer},{startNeuralTrainer},{ActiveMatchStore}])=>{
+accounts=new Accounts();learning=new BotMemoryStore();activeMemory=new ActiveMatchStore();
+const opts={learning,accounts,activeMemory};
 const closeRooms=attachOnline(server,opts),closePark=attachPark(server,opts);
 closeTrainer=startTrainer(learning,closePark,closeRooms);
 closeNeuralTrainer=startNeuralTrainer(learning,closePark,closeRooms);

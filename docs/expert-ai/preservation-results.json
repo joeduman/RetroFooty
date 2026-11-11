@@ -1,0 +1,172 @@
+{
+  "protected": [
+    {
+      "path": "bot-trainer.mjs",
+      "sha256": "709703C8E1EBDCD9B39DFDE0025EE23F762ED95E4E534B9AE9F14B8087011EF5",
+      "unchanged": true
+    },
+    {
+      "path": "bot-trainer-worker.mjs",
+      "sha256": "87F49B29B9CBC4774C4B5EBF6637B3741206D241BD840BAF4918CB9A08DF3B8D",
+      "unchanged": true
+    },
+    {
+      "path": "bot-learning.mjs",
+      "sha256": "5DF5C8EA8AA1A636E5C15989B3D4157773DEB936F60468CAE02185300ADDFED8",
+      "unchanged": true
+    },
+    {
+      "path": "bot-model-store.mjs",
+      "sha256": "72271F6C4122E62CE5CBA7850563BB6474E080CC9FBAEEC7FBBE5AB94060878D",
+      "unchanged": true
+    },
+    {
+      "path": "neural-training-manager.mjs",
+      "sha256": "9F9ABC9C1A8DAC7F2E7CB06A3532908F4DD42292639661FFE33BCC5422D193FC",
+      "unchanged": true
+    },
+    {
+      "path": "public/js/physics.mjs",
+      "sha256": "3D00616F3DC46B53314B361EBEB8DA94822FE52BCA9CEFAF104C2E9E9DD9F25D",
+      "unchanged": true
+    },
+    {
+      "path": "public/js/config.mjs",
+      "sha256": "E62CF69A1BC33CE19ED14223FFEB8F4B19134BFFA283E92AF3B9626B84A1D023",
+      "unchanged": true
+    },
+    {
+      "path": "public/js/input.mjs",
+      "sha256": "A3E32D5D72FE3398670A17876CE092B36717A9FA4C349766CFBB400BB9259E5B",
+      "unchanged": true
+    },
+    {
+      "path": "train/__pycache__/training_lock.cpython-313.pyc",
+      "sha256": "0D20D690DB6B01768CD3B27DA7AB94B74098458AEB168179B5443BC80F5C618A",
+      "unchanged": true
+    },
+    {
+      "path": "train/__pycache__/torch_backend.cpython-313.pyc",
+      "sha256": "4B8F5C8DA65CBE25DC1AAB77F3EAE73FB9A4E064EB22804C692DF0C269C7C1A3",
+      "unchanged": true
+    },
+    {
+      "path": "train/training_lock.py",
+      "sha256": "EFE4F4D70240808C65D9469651A8B192047C3DE8A0304728F42A56BD49B3E327",
+      "unchanged": true
+    },
+    {
+      "path": "train/train.py",
+      "sha256": "7DDD399D1F1F2D5C11683672D926CE441605C3D9D4AADB11425440E954213736",
+      "unchanged": true
+    },
+    {
+      "path": "train/torch_backend.py",
+      "sha256": "13BCBA77B916F73768439ED1B2E3EDBA6D174CEDB9372053F9B027315D941338",
+      "unchanged": true
+    },
+    {
+      "path": "train/start-overnight.ps1",
+      "sha256": "E9C49D69EC87C9AEC27D38FE58310FDBDEE5CE79642015E97EFA52C11C8A4F56",
+      "unchanged": true
+    },
+    {
+      "path": "train/rollout.mjs",
+      "sha256": "34C8D3E901BF5222547F6549A9D5FA7F56315DDBF36FD04318E917DCC1DAB00A",
+      "unchanged": true
+    },
+    {
+      "path": "train/requirements.txt",
+      "sha256": "BF7B26C4DA979CEDDFAB749091066030CB412BBB91C8D45E458D7C0000DBF872",
+      "unchanged": true
+    },
+    {
+      "path": "train/promote.mjs",
+      "sha256": "79AA7F755D217B321181E0C79E9A050E153B435D2F82E4FF27C9559CC020251B",
+      "unchanged": true
+    },
+    {
+      "path": "train/overnight.py",
+      "sha256": "7485DA1AC537581354AC104E676F7543B73DA0EE6274EE4B44C1E304D5C10A5F",
+      "unchanged": true
+    },
+    {
+      "path": "train/overnight-status.mjs",
+      "sha256": "5CF1098FC3AA4D88598E72EC31A0812D641C668E071E48B7DD9CE0E4CC4F5E2F",
+      "unchanged": true
+    },
+    {
+      "path": "train/mode-schedule.mjs",
+      "sha256": "2A7616998E28D922668CDE111BA4556FD899B7BC61A83093462530A9B4154E58",
+      "unchanged": true
+    },
+    {
+      "path": "train/check_device.py",
+      "sha256": "9CBD8306B7A368FD0D122BD0626C04143B9B940B0BAEBEBDE74A3323D0A73278",
+      "unchanged": true
+    },
+    {
+      "path": "train/analyze_video.py",
+      "sha256": "CF40F62EE04FA94D03F8C0A481F0C1CF60E1DBA79789F2B712A5DBCA4DBCFA41",
+      "unchanged": true
+    }
+  ],
+  "benchmarkSources": [
+    {
+      "file": "public/js/ai.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/match.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/physics.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/config.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/ai-policy.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/neural-policy.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/stats.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/customize.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/ai-active-memory.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/ai-legacy.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/ai-prediction.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "public/js/expert-ai.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "tests/fixtures/expert-baseline/ai.mjs",
+      "unchanged": true
+    },
+    {
+      "file": "tests/expert-benchmark.mjs",
+      "unchanged": true
+    }
+  ]
+}
