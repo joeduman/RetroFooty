@@ -15,7 +15,7 @@ test('bot memory is portable across game versions and rejects incompatible files
 test('park authoritative human replay is recorded only when explicitly enabled',()=>{
  const dir=temp();try{const store=new BotMemoryStore({directory:dir}),w=new ParkWorld({duration:.06,goldenGoal:false,learning:store});
  const r=w.connect('R',null,true),b=w.connect('B',null,false);w.join(r,1,'red');w.join(b,1,'blue');const f=w.fields[0];
- for(let i=0;i<366;i++)w.tick(STEP);assert.equal(f.game.state,'playing');
+ for(let i=0;i<606;i++)w.tick(STEP);assert.equal(f.game.state,'playing');
  for(let i=0;i<100;i++)w.tick(STEP);w.tick(STEP);assert.ok(store.memory.games>=1);assert.ok(store.memory.humanGames>=1);
  const file=readFileSync(path.join(dir,'teamball-bot-memory.v1.json'),'utf8');assert.doesNotMatch(file,/"email"/);
  }finally{rmSync(dir,{recursive:true,force:true});}

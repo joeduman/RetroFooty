@@ -12,7 +12,7 @@ const NAMES={red:['Rio','Jules','Milo','Ash','Remy'],blue:['Nico','Kai','Sage','
 const offlineEntry=typeof process!=='undefined'&&typeof process.argv?.[1]==='string'&&
   /(?:^|[\\/])(?:bot-trainer-worker\.mjs|train[\\/]rollout\.mjs)$/.test(process.argv[1]);
 export class Match {
-  constructor({size=4,team='red',name='Sam',spectator=false,seed=Date.now(),duration,loop=true,
+  constructor({size=4,team='red',name='Player',spectator=false,seed=Date.now(),duration,loop=true,
     goldenGoal=true,practice=false,drill='free',unlimitedStamina=false,aiPolicy=null,aiContexts=null,aiDifficulty='expert',aiNeural=null,aiNeuralTeam=null,neuralTraining=false}={}){
     this.size=clamp(Math.round(size),1,5);this.spectator=spectator;this.loop=loop;this.seed=seed;
     this.practice=practice;this.drill=Object.hasOwn(DRILLS,drill)?drill:'free';

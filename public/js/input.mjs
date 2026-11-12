@@ -9,7 +9,7 @@ export const DEFAULTS={movement:'mouse',volume:.2,showNames:true,aimGuide:true,s
   bindings:{shoot:'Mouse0',alternate:'Space',sprint:'Shift',up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD'}};
 export function loadPreferences(){
   let data={};try{data=JSON.parse(localStorage.getItem('teamball05')||'{}');}catch{}
-  return {name:typeof data.name==='string'?data.name.slice(0,16):'Sam',team:data.team==='blue'?'blue':'red',
+  return {name:typeof data.name==='string'?data.name.slice(0,16):'',team:data.team==='blue'?'blue':'red',
     size:clamp(Number(data.size)||4,1,5),movement:data.movement==='keys'?'keys':'mouse',
     volume:clamp(Number.isFinite(data.volume)?data.volume:.2,0,1),showNames:data.showNames!==false,
     aimGuide:data.aimGuide!==false,goldenGoal:data.goldenGoal!==false,

@@ -1,3 +1,5 @@
+import {drawChatBubbles} from './chat-bubbles.mjs';
+import {grassPattern} from './grass-texture.mjs';
 import {LOOK,TEXT} from './customize.mjs';
 import {normalizeGoalEffect,BLACK_HOLE_TIMING} from './goal-effects.mjs';
 import {kickDirection} from './physics.mjs';
@@ -79,9 +81,9 @@ export class Renderer {
   pitchArt(p,sidesSwapped=false){
     const c=this.ctx,L=p.left,R=p.right,T=p.top,B=p.bottom,W=R-L,H=B-T,cy=p.height/2;
     // New grass-colored background behind the pitch.
-    c.fillStyle='#1b6341';c.fillRect(0,0,p.width,p.height);
-    c.fillStyle='#1b6341';c.fillRect(L,T,W,H);
-    for(let i=0;i<10;i++){c.fillStyle=i%2?'#216e49':'#1d6643';c.fillRect(L+W*i/10,T,W/10,H);}
+    c.fillStyle='#425c38';c.fillRect(0,0,p.width,p.height);
+    c.fillStyle=grassPattern(c)||'#527443';c.fillRect(L,T,W,H);
+    for(let i=0;i<10;i++){c.fillStyle=i%2?'#ffffff03':'#132a0b05';c.fillRect(L+W*i/10,T,W/10,H);}
     // Subtle mowing grain stays still; no moving texture behind the ball.
     c.strokeStyle='#ffffff03';c.lineWidth=1;
     for(let y=T+4;y<B;y+=8){c.beginPath();c.moveTo(L,y);c.lineTo(R,y);c.stroke();}
@@ -136,6 +138,7 @@ export class Renderer {
       c.fillStyle=p.exhausted?'#ff9b72':p.sprinting?'#f9df85':'#a7f0bd';c.fillRect(p.x-17,p.y+r+7,34*p.stamina/100,4);
     }
   }
+  chatBubbles(players){drawChatBubbles(this,players);}
   trainingArt(match){
     const t=match.training;if(!t)return;const c=this.ctx,p=match.pitch;c.save();
     for(const cone of match.engine.obstacles??[]){this.circle(cone.x,cone.y,cone.radius+3,'#09130f70');this.circle(cone.x,cone.y,cone.radius,'#f9a04b','#ffe0b1',1.5);this.circle(cone.x,cone.y,cone.radius*.43,'#ffe3b7');}
@@ -160,6 +163,7 @@ export class Renderer {
     this.aimGuide(match,prefs,pointer,paused);
     for(const q of match.players)this.player(q,prefs);
     if(match.state!=='kickoff')this.drawMatchBall(match,b);
+    this.chatBubbles(match.players);
     this.overlay(match,paused);
   }
   aimGuide(match,prefs,pointer,paused=false){

@@ -4,7 +4,7 @@ const run=(command,args,options)=>new Promise((resolve,reject)=>{const child=spa
 test('an extracted copy serves modules, refuses unauthorised stop and stops its own server',async()=>{
  const dir=await mkdtemp(path.join(os.tmpdir(),'teamball-server-test-'));let child;
  try{
-  for(const f of ['server.js','stop.js','public','online.mjs','park.mjs','bot-learning.mjs','active-match-store.mjs','bot-model-store.mjs','neural-training-manager.mjs','train','bot-trainer.mjs','bot-trainer-worker.mjs','accounts.mjs','node_modules'])await cp(path.join(root,f),path.join(dir,f),{recursive:true});
+  for(const f of ['chat.mjs','economy.mjs','match-coins.mjs','ranked.mjs','ranked-session.mjs','server.js','stop.js','public','online.mjs','park.mjs','bot-learning.mjs','active-match-store.mjs','bot-model-store.mjs','neural-training-manager.mjs','train','bot-trainer.mjs','bot-trainer-worker.mjs','accounts.mjs','node_modules'])await cp(path.join(root,f),path.join(dir,f),{recursive:true});
   child=spawn(process.execPath,['server.js'],{cwd:dir,env:{...process.env,PORT:'3157'},stdio:['ignore','pipe','pipe']});
   await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(new Error('Server startup timed out')),5000);child.stdout.on('data',b=>{if(b.toString().includes('BUILD 15')){clearTimeout(timeout);resolve();}});child.on('exit',code=>reject(new Error('Server exited '+code)));});
   const base='http://127.0.0.1:3157';const health=await (await fetch(base+'/_teamball/health')).json();assert.equal(health.build,'15');assert.equal(health.root,dir);
@@ -16,7 +16,7 @@ test('an extracted copy serves modules, refuses unauthorised stop and stops its 
   assert.equal((await (await fetch(base+'/_teamball/ai/active')).json()).status.policyVersion,0);
   const duplicate=await run(process.execPath,['server.js'],{cwd:dir,env:{...process.env,PORT:'3157'},stdio:['ignore','pipe','pipe']});assert.equal(duplicate.code,1);assert.match(duplicate.out,/already in use/);
   const before=JSON.parse(await readFile(path.join(dir,'.teamball-server.json'),'utf8'));assert.equal(before.pid,child.pid);
-  const stopping=await run(process.execPath,['stop.js'],{cwd:dir,stdio:['ignore','pipe','pipe']});assert.equal(stopping.code,0);assert.match(stopping.out,/Teamball stopped/);
+  const stopping=await run(process.execPath,['stop.js'],{cwd:dir,stdio:['ignore','pipe','pipe']});assert.equal(stopping.code,0);assert.match(stopping.out,/RetroFooty stopped/);
   await new Promise(resolve=>child.exitCode!==null?resolve():child.once('exit',resolve));
   const again=await run(process.execPath,['stop.js'],{cwd:dir,stdio:['ignore','pipe','pipe']});assert.equal(again.code,0);assert.match(again.out,/No Build 15 session/);
  }finally{child?.kill('SIGTERM');await rm(dir,{recursive:true,force:true});}

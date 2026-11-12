@@ -5,7 +5,7 @@ const crypto = require('node:crypto');
 const { spawn } = require('node:child_process');
 
 if (Number(process.versions.node.split('.')[0]) < 20) {
-  console.error('Teamball requires Node.js 20 or later. Install the current LTS from https://nodejs.org.');
+  console.error('RetroFooty requires Node.js 20 or later. Install the current LTS from https://nodejs.org.');
   process.exit(1);
 }
 const token = crypto.randomBytes(24).toString('hex');
@@ -13,7 +13,7 @@ const statePath = path.join(__dirname, '.teamball-server.json');
 const port = Number(process.env.PORT) || 25568;
 
 const publicDir = path.join(__dirname, 'public');
-let accounts=null,learning=null,activeMemory=null,closeTrainer=()=>{},closeNeuralTrainer=()=>{};
+let economy=null,ranked=null,accounts=null,learning=null,activeMemory=null,closeTrainer=()=>{},closeNeuralTrainer=()=>{};
 const contentTypes = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -29,6 +29,11 @@ const contentTypes = {
 const server = http.createServer((req, res) => {
   const local=['127.0.0.1','::1','::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
   if(accounts?.handle(req,res))return;
+  if(req.url==='/api/ranked/leaderboard'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify({season:ranked?.db.season,players:ranked?.leaderboard()||[]}));return;}
+  if(req.url==='/_teamball/ranked/season'&&req.method==='POST'){
+   if(!local||req.headers.authorization!=='Bearer '+token){res.writeHead(403).end('Local administration token required');return;}
+   let body='';req.on('data',b=>{body+=b;if(body.length>1024)req.destroy();});req.on('end',()=>{try{const result=ranked.rollover(JSON.parse(body).season);res.writeHead(200,{'Content-Type':'application/json'}).end(JSON.stringify(result));}catch(e){res.writeHead(400,{'Content-Type':'application/json'}).end(JSON.stringify({error:e.message}));}});return;
+  }
   if(req.url.startsWith('/api/bots/policy')&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify({policy:learning?.policy()||null,contexts:learning?.memory.contexts||{},activeReferences:activeMemory?.memory.references||{}}));return;}
   if(req.url==='/api/bots/status'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'}).end(JSON.stringify(learning?.status()||{}));return;}
   if (req.url.startsWith('/_teamball/') && !local) { res.writeHead(403).end('Local administration only'); return; }
@@ -59,7 +64,7 @@ const server = http.createServer((req, res) => {
   }
   if (req.url === '/_teamball/stop' && req.method === 'POST') {
     if (req.headers.authorization !== 'Bearer ' + token) { res.writeHead(403).end('Invalid stop token'); return; }
-    res.writeHead(200).end('Teamball stopped.');
+    res.writeHead(200).end('RetroFooty stopped.');
     setTimeout(shutdown, 30);
     return;
   }
@@ -106,9 +111,9 @@ server.on('error', error => {
   process.exit(1);
 });
 let closeOnline=()=>{};
-Promise.all([import('./online.mjs'),import('./park.mjs'),import('./accounts.mjs'),import('./bot-learning.mjs'),import('./bot-trainer.mjs'),import('./neural-training-manager.mjs'),import('./active-match-store.mjs')]).then(([{attachOnline},{attachPark},{Accounts},{BotMemoryStore},{startTrainer},{startNeuralTrainer},{ActiveMatchStore}])=>{
-accounts=new Accounts();learning=new BotMemoryStore();activeMemory=new ActiveMatchStore();
-const opts={learning,accounts,activeMemory};
+Promise.all([import('./online.mjs'),import('./park.mjs'),import('./accounts.mjs'),import('./bot-learning.mjs'),import('./bot-trainer.mjs'),import('./neural-training-manager.mjs'),import('./active-match-store.mjs'),import('./ranked.mjs'),import('./economy.mjs')]).then(([{attachOnline},{attachPark},{Accounts},{BotMemoryStore},{startTrainer},{startNeuralTrainer},{ActiveMatchStore},{RankedStore},{EconomyStore}])=>{
+economy=new EconomyStore();ranked=new RankedStore();accounts=new Accounts();learning=new BotMemoryStore();activeMemory=new ActiveMatchStore();
+const opts={learning,accounts,activeMemory,ranked,economy};
 const closeRooms=attachOnline(server,opts),closePark=attachPark(server,opts);
 closeTrainer=startTrainer(learning,closePark,closeRooms);
 closeNeuralTrainer=startNeuralTrainer(learning,closePark,closeRooms);
@@ -116,7 +121,7 @@ closeOnline=()=>{closeRooms();closePark();};
 server.on('upgrade',(req,socket)=>{if(!['/park','/online'].includes(req.url))socket.destroy();});
 server.listen(port, '0.0.0.0', () => {
   fs.writeFileSync(statePath, JSON.stringify({ app: 'teamball', build: '15', pid: process.pid, port, root: __dirname, token }), { mode: 0o600 });
-  console.log(`\nTEAMBALL - BUILD 15 OVERNIGHT TRAINING\nhttp://localhost:${port}\nServing: ${publicDir}\nStop: double-click STOP-TEAMBALL.cmd, or run node stop.js\n`);
+  console.log(`\nRETROFOOTY - BUILD 15 OVERNIGHT TRAINING\nhttp://localhost:${port}\nServing: ${publicDir}\nStop: double-click STOP-TEAMBALL.cmd, or run node stop.js\n`);
   if (process.argv.includes('--open')) {
     const url = `http://localhost:${port}/?build=15`;
     if (process.platform === 'win32') spawn('cmd.exe', ['/d', '/c', 'start', '""', url], { stdio: 'ignore' });

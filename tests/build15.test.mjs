@@ -2,15 +2,15 @@ import test from 'node:test';import assert from 'node:assert/strict';
 import {ParkWorld} from '../park.mjs';import {Match} from '../public/js/match.mjs';import {STEP,distance,TUNING as C} from '../public/js/config.mjs';import {COURTS} from '../public/js/park-layout.mjs';
 test('kickoff taker starts outside kick range even with button held at countdown end',()=>{const m=new Match({size:1,seed:7});const t=m.players.find(p=>p.id===m.kickoffPlayer);assert.ok(distance(t,m.engine.ball)>t.radius+m.engine.ball.radius+C.shotReach+20);assert.equal(m.engine.shoot(t),false);});
 test('winning bots pulse their kick ring while conceding bots do not',()=>{const m=new Match({size:3,spectator:true,seed:7});m.state='playing';m.engine.ball.x=m.pitch.right+15;m.engine.ball.y=m.pitch.height/2;m.update(STEP);assert.equal(m.state,'goal');const winners=m.players.filter(p=>p.celebrating);assert.ok(winners.length);const observed=new Set();for(let i=0;i<100;i++){m.update(STEP);observed.add(winners[0].input.shoot);assert.ok(m.players.filter(p=>p.team==='blue').every(p=>!p.input.shoot));}assert.deepEqual(observed,new Set([true,false]));});
-test('park exposes exactly the five match courts with normal team capacity',()=>{
+test('park exposes the thirteen dedicated match courts with normal team capacity',()=>{
  const w=new ParkWorld(),player=w.connect('Player');
- assert.deepEqual(COURTS.map(f=>f.size),[1,2,3,4,5]);
- assert.deepEqual(w.fields.map(f=>f.size),[1,2,3,4,5]);
- assert.deepEqual(w.overview().fields.map(f=>f.size),[1,2,3,4,5]);
+ assert.deepEqual(COURTS.map(f=>f.size),[1,2,3,4,5,1,1,2,2,3,3,4,5]);
+ assert.deepEqual(w.fields.map(f=>f.size),[1,2,3,4,5,1,1,2,2,3,3,4,5]);
+ assert.deepEqual(w.overview().fields.map(f=>f.size),[1,2,3,4,5,1,1,2,2,3,3,4,5]);
  for(const field of w.fields){
   assert.equal(field.game.practice,false);assert.equal(field.game.training,null);
   assert.equal(field.game.players.length,field.size*2);
-  assert.equal(w.join(player,field.size,'red'),null);
+  assert.equal(w.join(player,field.id,'red'),null);
   assert.equal(w.state(player).state.players.filter(p=>p.team==='red').length,field.size);
   w.leave(player);assert.equal(player.field,null);
  }
@@ -26,5 +26,5 @@ test('removed practice court IDs cannot be joined or create hidden fields',()=>{
   assert.equal(player.field,null);assert.equal(w.state(player),null);
  }
  assert.deepEqual(w.fields.map(f=>f.matchId),rounds);
- assert.equal(w.fields.length,5);assert.ok(w.fields.every(f=>!f.members.length));
+ assert.equal(w.fields.length,13);assert.ok(w.fields.every(f=>!f.members.length));
 });

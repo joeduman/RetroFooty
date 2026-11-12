@@ -30,7 +30,7 @@ test('park client walks, joins a live field, gets full-roster kickoff and final 
  for(const host of ['goal-effect-picker-login','goal-effect-picker-park','goal-effect-picker-match'])assert.equal(effectButton(host,'fire').getAttribute('aria-pressed'),'true');
  $('login-settings').onclick();assert.equal($('settings-panel').hidden,false);$('settings-names').checked=false;$('settings-names').onchange();$('settings-close').onclick();assert.equal($('settings-panel').hidden,true);$('username').value='Park tester';$('movement').value='keys';$('login-form').onsubmit({preventDefault(){}});await until(()=>window.teamballPark.snapshot().park);
  const me=()=>window.teamballPark.snapshot().park.players.find(p=>p.id===window.teamballPark.snapshot().id),before=me().x;assert.equal(me().shirtId,'barcelona');assert.equal(me().goalEffectId,'fire');
- assert.equal($('court-list').children.length,5);
+ assert.equal($('court-list').children.length,13);
  window.dispatchEvent(Object.assign(new Event('keydown'),{code:'KeyM'}));assert.equal(window.teamballPark.snapshot().mapOpen,true);assert.equal($('court-list').hidden,true);
  window.dispatchEvent(Object.assign(new Event('keydown'),{code:'KeyM',repeat:true}));assert.equal(window.teamballPark.snapshot().mapOpen,true);
  window.dispatchEvent(Object.assign(new Event('keydown'),{code:'KeyM'}));assert.equal(window.teamballPark.snapshot().mapOpen,false);

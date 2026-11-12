@@ -47,6 +47,6 @@ test('roaming park spectators see a clock update without joining a field',()=>{
   labels.length=0;park.fields[0].remaining=134;renderer.draw(park,'watcher',null,1050);
   assert.ok(labels.includes('2:14 · HALF 2'));
   assert.equal(park.players[0].field,null);
-  assert.equal(PARK.width,5400);assert.equal(PARK.height,3200);
+  assert.equal(PARK.width,10400);assert.equal(PARK.height,4800);
  }finally{if(previous===undefined)delete globalThis.window;else globalThis.window=previous;}
 });

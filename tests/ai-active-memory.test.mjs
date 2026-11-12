@@ -100,7 +100,7 @@ test('park captures consent-scoped active candidates independently of the offlin
     const activeMemory=new ActiveMatchStore({directory}),world=new ParkWorld({duration:.06,goldenGoal:false,activeMemory});
     const red=world.connect('Consenting human',null,true),blue=world.connect('Unapproved human');
     world.join(red,1,'red');world.join(blue,1,'blue');
-    for(let i=0;i<470;i++)world.tick(STEP);
+    for(let i=0;i<710;i++)world.tick(STEP);
     assert.equal(activeMemory.memory.candidates.length,1);assert.equal(activeMemory.memory.candidates[0].participants,1);
     assert.equal(activeMemory.reference(1),null);assert.equal(activeMemory.sessions.size,0);
   }finally{rmSync(directory,{recursive:true,force:true});}
@@ -169,7 +169,7 @@ test('park disconnect removes prior data before a replacement occupies the slot'
   const directory=temporary();try{
     const activeMemory=new ActiveMatchStore({directory}),world=new ParkWorld({duration:30,goldenGoal:false,activeMemory});
     const red=world.connect('First human',null,true),blue=world.connect('Other human');world.join(red,1,'red');world.join(blue,1,'blue');
-    for(let i=0;i<400;i++)world.tick(STEP);
+    for(let i=0;i<640;i++)world.tick(STEP);
     assert.equal(activeMemory.sessions.size,1);world.disconnect(red);assert.equal(activeMemory.sessions.size,0);
     const replacement=world.connect('Second human',null,true);world.join(replacement,1,'red');world.tick(STEP);
     assert.equal(activeMemory.sessions.get(world.fields[0].matchId).model.tendency(replacement.slot).samples,1);

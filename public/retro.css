@@ -1,0 +1,27 @@
+/* Flat, quiet surfaces shared by the park, private rooms and local menus. */
+:root{--retro-panel:#252d27;--retro-line:#687461;--retro-text:#ecead9;--retro-accent:#d5bd76}
+body{background:#34472e;color:var(--retro-text);font-family:Arial,Helvetica,sans-serif}
+.park-overlay,#online-panel,.modal{background:#182018a8;backdrop-filter:none}
+.park-card,.online-card,.panel,.menu-card,.card{background:var(--retro-panel);border:1px solid var(--retro-line);border-radius:5px;box-shadow:none}
+.park-card h1,.park-card h2,.online-card h1{letter-spacing:0;font-weight:700}
+.park-header{background:#252d27e8;border-bottom:1px solid #56634d;padding-top:16px;padding-bottom:16px}
+.wordmark{letter-spacing:0;font-size:23px}.wordmark span{color:var(--retro-accent)}
+.park-card .primary,button.primary{background:#d5bd76;color:#272b22;border-radius:3px;box-shadow:none}
+.quiet,.secondary,.team-choice{border-radius:3px;box-shadow:none;background:#343f32}
+.team-choice.red{background:#46322f}.team-choice.blue{background:#2d3b45}
+.park-label input,.park-label select,.online-card input,.online-card select{background:#1c241e;color:#ecead9;border:1px solid #687461;border-radius:3px}
+.park-leaderboards,.ranked-vote{background:#252d27ed;border-color:#687461;border-radius:4px}
+.hud{background:#252d27ed;border:1px solid #687461;border-radius:4px;box-shadow:none;backdrop-filter:none}
+.park-leaderboards{width:min(365px,calc(100vw - 32px));max-height:35vh;font-size:11px}
+#court-list{width:205px;top:92px;max-height:calc(100dvh - 170px)}
+#court-list button{border:1px solid #687461;background:#252d27ed;border-radius:3px;box-shadow:none;backdrop-filter:none;padding:8px 10px}
+#court-list strong{font-size:12px}#court-list button span{font-size:10px}
+#park-guide,#toast{border-radius:3px}#toast{background:#ddd1a4;color:#252d27}
+.shop-panel{position:fixed;inset:0;z-index:38;display:grid;place-items:center;background:#101810b8;padding:18px}
+.shop-card{width:min(760px,100%);max-height:90dvh;overflow:auto;background:#252d27;border:1px solid #687461;padding:24px;border-radius:4px}
+.shop-header{display:flex;align-items:center;justify-content:space-between;gap:12px}.shop-header h2{margin:0}.gold-balance{color:#e4c66c;font-weight:700}
+.shop-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.shop-item{border:1px solid #56634d;padding:12px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}.shop-item img{width:50px;height:50px;object-fit:contain}.shop-item button{margin-top:auto;font-size:12px}.shop-empty{color:#a9b2a0;font-size:13px}
+.shop-card button{border:1px solid #83906f;background:#3b4b35;color:#ecead9;padding:7px 10px;border-radius:2px}.shop-card button:disabled{opacity:.45}
+.account-card,.metric{background:#252d27;border-color:#687461;border-radius:4px}
+.coin-reward{color:#e4c66c;font-weight:700}
+@media(max-width:700px){#court-list{left:auto;right:10px;top:86px;bottom:auto;width:146px;max-height:42vh;flex-direction:column;flex-wrap:nowrap}#court-list button{min-width:0!important;text-align:left;flex:none}#court-list strong{font-size:10px}#court-list span{font-size:9px}.park-leaderboards{max-height:22vh;bottom:80px}.park-card{padding:22px}.park-header{padding:15px 12px}.wordmark{font-size:18px}.shop-card{padding:16px}}

@@ -1,8 +1,8 @@
 {
-  "name": "teamball-classic",
+  "name": "retrofooty",
   "version": "15.0.0",
   "private": true,
-  "description": "Teamball online park with persistent neural imitation, self-play reinforcement training, strict benchmark promotion and backward-compatible Expert AI",
+  "description": "RetroFooty online park with persistent neural imitation, self-play reinforcement training, strict benchmark promotion and backward-compatible Expert AI",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

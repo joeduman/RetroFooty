@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0c1611">
-  <title>Teamball · Build 15</title>
+  <title>RetroFooty · Build 15</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/styles.css">
-</head>
+<link rel="stylesheet" href="/retro.css"></head>
 <body>
 <main id="game">
-  <canvas id="field" tabindex="0" aria-label="Teamball pitch. Choose mouse or keyboard movement. Tap or hold Space or left click to shoot on contact. Hold Shift to sprint."></canvas>
+  <canvas id="field" tabindex="0" aria-label="RetroFooty pitch. Choose mouse or keyboard movement. Tap or hold Space or left click to shoot on contact. Hold Shift to sprint."></canvas>
   <div class="hud" aria-label="Scoreboard"><span class="score red"><i></i><span id="red-score">0</span></span><div class="time"><span id="clock">03:00</span><small id="match-label">4v4 · LOCAL</small></div><span class="score blue"><span id="blue-score">0</span><i></i></span></div>
   <button id="options" class="quiet top-button" type="button">Settings <kbd>Esc</kbd></button>
   <button id="toggle-guide" class="quiet guide-button" type="button" aria-pressed="true" title="Show or hide the dashed aiming line">Aim line: ON</button>
@@ -18,10 +18,10 @@
   <div id="hint" class="hint">Mouse to move · Hold Click / Space to shoot · Shift to sprint</div>
   <section id="menu" class="modal" aria-labelledby="game-title">
     <div class="card">
-      <div class="card-top"><p class="eyebrow">TEAMBALL</p><span class="badge">BUILD 15</span></div>
-      <h1 id="game-title">TEAMBALL<span class="title-dot">.</span></h1>
+      <div class="card-top"><p class="eyebrow">RETROFOOTY</p><span class="badge">BUILD 15</span></div>
+      <h1 id="game-title">RETROFOOTY<span class="title-dot">.</span></h1>
       <p class="sub"></p>
-      <label class="group"><span class="label">Your name</span><input id="player-name" maxlength="16" autocomplete="off" spellcheck="false" value="Sam"></label>
+      <label class="group"><span class="label">Your name</span><input id="player-name" maxlength="16" autocomplete="off" spellcheck="false" placeholder="Your username"></label>
       <fieldset class="group"><legend class="label">Match size</legend><div class="pills modes">
         <button type="button" data-size="1" aria-pressed="false">1v1</button><button type="button" data-size="2" aria-pressed="false">2v2</button><button type="button" data-size="3" aria-pressed="false">3v3</button><button type="button" data-size="4" aria-pressed="true">4v4</button><button type="button" data-size="5" aria-pressed="false">5v5</button>
       </div></fieldset>
@@ -79,8 +79,8 @@
     <div class="replay-row"><button id="replay-play" class="quiet">Pause</button><label>Speed <select id="replay-speed" aria-label="Replay speed"><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option></select></label><span class="fine">Recorded play · controls disabled</span></div>
   </div>
   <p id="storage-notice" class="storage-notice" role="status" hidden></p>
-  <section id="fatal" class="modal" hidden><div class="card"><p class="eyebrow">TEAMBALL · BUILD 15</p><h2>The game couldn’t load</h2><p class="sub">Extract the complete ZIP, including the public folder, then use START-TEAMBALL.cmd.</p><pre id="error-message"></pre><button class="primary" onclick="location.reload()">TRY AGAIN</button></div></section>
-  <noscript><div class="modal"><div class="card">Enable JavaScript to play Teamball.</div></div></noscript>
+  <section id="fatal" class="modal" hidden><div class="card"><p class="eyebrow">RETROFOOTY · BUILD 15</p><h2>The game couldn’t load</h2><p class="sub">Extract the complete ZIP, including the public folder, then use START-RETROFOOTY.cmd.</p><pre id="error-message"></pre><button class="primary" onclick="location.reload()">TRY AGAIN</button></div></section>
+  <noscript><div class="modal"><div class="card">Enable JavaScript to play RetroFooty.</div></div></noscript>
 </main>
 <script>
   function showGameError(message){document.getElementById('fatal').hidden=false;document.getElementById('error-message').textContent=String(message);}

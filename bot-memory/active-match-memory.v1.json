@@ -123,6 +123,198 @@
       },
       "status": "candidate",
       "source": "authoritative-server"
+    },
+    {
+      "id": "1449dd20-8882-4449-8554-bf96f45f329d",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 27,
+        "boost": 0.2222222222222222,
+        "turn": 0.29629629629629634,
+        "reverse": 0.07407407407407408,
+        "lateralBias": -0.016983056936846052,
+        "straight": 0.5925925925925927,
+        "wall": 0,
+        "challenge": 0.25925925925925936,
+        "kick": 0
+      },
+      "score": {
+        "red": 5,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "0bbcf19e-d14b-4178-a560-08e5f7fbe9ed",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1374,
+        "boost": 0.013383463716410084,
+        "turn": 0.008163778725957485,
+        "reverse": 0.0012171084896374946,
+        "lateralBias": 0.0014076717889070821,
+        "straight": 0.0628411055243184,
+        "wall": 0.00793847098492576,
+        "challenge": 0.023266036331676794,
+        "kick": 0.0008177105251315355
+      },
+      "score": {
+        "red": 3,
+        "blue": 4
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "93f52eb1-574a-46fc-a4a4-dea3d5d0deaa",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1082,
+        "boost": 0.28708755022347654,
+        "turn": 0.14558119500909752,
+        "reverse": 0.03911713903259792,
+        "lateralBias": -0.12792976936732753,
+        "straight": 0.5853846597317276,
+        "wall": 0.1335118101380989,
+        "challenge": 0.4780884242707464,
+        "kick": 0.11983020090809245
+      },
+      "score": {
+        "red": 5,
+        "blue": 4
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "24b78f53-402c-4f91-896c-4b436d8f8476",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 735,
+        "boost": 0.28835254868950505,
+        "turn": 0.15431500705713272,
+        "reverse": 0.09932480445165165,
+        "lateralBias": 0.17797148006198032,
+        "straight": 0.7703135268808411,
+        "wall": 0.16844655697696645,
+        "challenge": 0.6653364120323414,
+        "kick": 0.059474286871852175
+      },
+      "score": {
+        "red": 1,
+        "blue": 5
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "333ccc2f-87e9-4ec0-9c90-cc40fc992842",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 7,
+        "boost": 0,
+        "turn": 0,
+        "reverse": 0,
+        "lateralBias": -0.4040481603048893,
+        "straight": 0.42857142857142855,
+        "wall": 0.28571428571428575,
+        "challenge": 0.28571428571428575,
+        "kick": 0
+      },
+      "score": {
+        "red": 1,
+        "blue": 0
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "2e12f9b3-6ddf-44a7-a920-5427b783e29d",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1150,
+        "boost": 0.0014428895701135587,
+        "turn": 0.0008677248250168537,
+        "reverse": 0.0004515081660015473,
+        "lateralBias": 0.0007677940098641407,
+        "straight": 0.004751932079209431,
+        "wall": 0.00013487123411285028,
+        "challenge": 0.00521665962839126,
+        "kick": 0.0003391886293255778
+      },
+      "score": {
+        "red": 6,
+        "blue": 9
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "71a864c0-b5cb-4fb5-8360-45c2ac4ee886",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1179,
+        "boost": 0.4279055756097002,
+        "turn": 0.13692548926478545,
+        "reverse": 0.07148677157404405,
+        "lateralBias": -0.018806498397672042,
+        "straight": 0.7867346955266518,
+        "wall": 0.45188695222883196,
+        "challenge": 0.6842012662421801,
+        "kick": 0.10434368731191576
+      },
+      "score": {
+        "red": 7,
+        "blue": 2
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "415bda17-1511-4506-b59f-269d069c73c1",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 901,
+        "boost": 0.18707296443939228,
+        "turn": 0.14643008295258444,
+        "reverse": 0.11620345020119972,
+        "lateralBias": -0.09217860027277967,
+        "straight": 0.7752108091556278,
+        "wall": 0.1597645834635174,
+        "challenge": 0.40345683472598975,
+        "kick": 0.05676010201269359
+      },
+      "score": {
+        "red": 3,
+        "blue": 7
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
     }
   ],
   "rejected": [],

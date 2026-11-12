@@ -5,7 +5,9 @@ const WALKS=[
  [[120,120],[PARK.width-120,120],[PARK.width-120,PARK.height-130],[120,PARK.height-130],[120,120]],
  [[120,1600],[PARK.width-120,1600]],
  [[1472,120],[1472,1200],[PARK.spawn.x,PARK.spawn.y],[PARK.spawn.x,PARK.height-130]],
- [[3060,120],[3060,1600],[4100,1600],[4100,PARK.height-130]]
+ [[3060,120],[3060,1600],[PARK.width-120,1600]],
+ [[120,3230],[PARK.width-120,3230]],
+ [[5300,120],[5300,3230]],[[9100,120],[9100,PARK.height-130]]
 ];
 const clock=seconds=>{const value=Number.isFinite(seconds)?Math.max(0,Math.ceil(seconds)):0;return `${Math.floor(value/60)}:${String(value%60).padStart(2,'0')}`;};
 // Spectators read the same authoritative match time as field participants.
@@ -64,16 +66,16 @@ export class ParkRenderer {
  }
  landscape(){
   const c=this.c;
-  c.fillStyle='#345740';c.fillRect(0,0,PARK.width,PARK.height);
+  c.fillStyle='#485d3d';c.fillRect(0,0,PARK.width,PARK.height);
   // Restrained lawn texture keeps the moving players and field lines clear.
   for(let x=0;x<PARK.width;x+=240){c.fillStyle='#a2c68c06';c.fillRect(x,0,120,PARK.height);}
   c.fillStyle='#b5d69c19';for(let x=55;x<PARK.width;x+=120)for(let y=45;y<PARK.height;y+=120){c.fillRect(x+(y%7)*4,y,2,5);}
-  this.paths(156,'#1f3c2e');this.paths(142,'#a69d7d');this.paths(128,'#c4bea2');this.paths(2,'#ded6b569');
+  this.paths(144,'#9e987d');this.paths(128,'#bcb698');
   c.fillStyle='#a69d7d';c.beginPath();c.arc(PARK.spawn.x,PARK.spawn.y,184,0,Math.PI*2);c.fill();
   c.fillStyle='#d0c9ad';c.beginPath();c.arc(PARK.spawn.x,PARK.spawn.y,170,0,Math.PI*2);c.fill();
   c.strokeStyle='#aaa488';c.lineWidth=2;
   for(const radius of [92,150]){c.beginPath();c.arc(PARK.spawn.x,PARK.spawn.y,radius,0,Math.PI*2);c.stroke();}
-  this.text('THE COMMONS',PARK.spawn.x,PARK.spawn.y-95,16,'#536653',800);this.text('TEAMBALL',PARK.spawn.x,PARK.spawn.y-70,25,'#50634e',850);
+  this.text('THE COMMONS',PARK.spawn.x,PARK.spawn.y-95,16,'#536653',800);this.text('RETROFOOTY',PARK.spawn.x,PARK.spawn.y-70,25,'#50634e',850);
   // A garden loop and seating give the eastern end a destination without
   // introducing another play area or blocking the walking promenade.
   c.save();c.translate(320,340);
@@ -95,7 +97,7 @@ export class ParkRenderer {
   const c=this.c,availableH=Math.max(140,height-184),panelW=Math.min(440,width-32,(availableH-86)*PARK.width/PARK.height+32),panelH=(panelW-32)*PARK.height/PARK.width+86;
   const x=width-panelW-16,y=Math.max(12,height-panelH-86),mapX=x+16,mapY=y+48,mapW=panelW-32,scale=mapW/PARK.width;
   c.save();c.setTransform(this.canvas.width/width,0,0,this.canvas.height/height,0,0);
-  c.shadowColor='#071b1566';c.shadowBlur=24;c.shadowOffsetY=8;c.fillStyle='#10271ff2';c.beginPath();c.roundRect(x,y,panelW,panelH,15);c.fill();
+  c.shadowColor='#071b1566';c.shadowBlur=0;c.shadowOffsetY=0;c.fillStyle='#10271ff2';c.beginPath();c.roundRect(x,y,panelW,panelH,15);c.fill();
   c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#8ca68766';c.lineWidth=1;c.stroke();
   c.textAlign='left';c.fillStyle='#dce6cc';c.font=`800 11px ${LOOK.font}`;c.fillText('PARK OVERVIEW',x+17,y+26);
   c.textAlign='right';c.fillStyle='#afc29d';c.font=`500 10px ${LOOK.font}`;c.fillText('M  CLOSE',x+panelW-17,y+26);
@@ -103,22 +105,22 @@ export class ParkRenderer {
   c.fillStyle='#34533b';c.fillRect(0,0,PARK.width,PARK.height);this.paths(110,'#a39d7d');
   c.fillStyle='#c9c2a0';c.beginPath();c.arc(PARK.spawn.x,PARK.spawn.y,150,0,Math.PI*2);c.fill();
   for(const f of COURTS){
-   const live=park?.fields.find(q=>q.size===f.size);c.fillStyle='#203d2b';c.fillRect(f.x,f.y,f.w,f.h);c.strokeStyle=f.color;c.lineWidth=12;c.strokeRect(f.x,f.y,f.w,f.h);
+   const live=park?.fields.find(q=>(q.id??q.size)===f.id);c.fillStyle='#203d2b';c.fillRect(f.x,f.y,f.w,f.h);c.strokeStyle=f.color;c.lineWidth=12;c.strokeRect(f.x,f.y,f.w,f.h);
    c.strokeStyle='#b8cf9a88';c.lineWidth=7;c.beginPath();c.moveTo(f.x+f.w/2,f.y+25);c.lineTo(f.x+f.w/2,f.y+f.h-25);c.stroke();
    c.beginPath();c.arc(f.x+f.w/2,f.y+f.h/2,85,0,Math.PI*2);c.stroke();
-   this.text(f.name,f.x+f.w/2,f.y+f.h/2-10/scale,13/scale,'#eef1d9',800);
+   this.text(`${f.size}v${f.size} ${f.mode==='ranked'?'R':'U'}${f.mode==='ranked'?f.number:''}`,f.x+f.w/2,f.y+f.h/2-10/scale,10/scale,'#eef1d9',800);
    this.text(`${live?.members.length??0}/${f.size*2}`,f.x+f.w/2,f.y+f.h/2+4/scale,9/scale,'#b4c9a8',600);
    this.text(live?spectatorClock(live,true):'--:--',f.x+f.w/2,f.y+f.h/2+16/scale,8/scale,'#e4dbac',600);
   }
   for(const player of park?.players||[]){if(player.field!==null||player.id===id)continue;c.fillStyle='#c8d3bd';c.beginPath();c.arc(player.x,player.y,2.6/scale,0,Math.PI*2);c.fill();}
   const me=park?.players.find(p=>p.id===id);
   if(me){c.strokeStyle='#ecd69a88';c.lineWidth=1.5/scale;c.beginPath();c.arc(me.x,me.y,(8+Math.sin(now/300))/scale,0,Math.PI*2);c.stroke();c.fillStyle='#f1d692';c.beginPath();c.arc(me.x,me.y,4/scale,0,Math.PI*2);c.fill();}
-  c.restore();c.textAlign='left';c.font=`500 10px ${LOOK.font}`;c.fillStyle='#ead298';c.fillText('\u25cf  You',x+18,y+panelH-14);c.fillStyle='#b4c7aa';c.fillText('Five pitches \u00b7 live player counts',x+83,y+panelH-14);c.restore();
+  c.restore();c.textAlign='left';c.font=`500 10px ${LOOK.font}`;c.fillStyle='#ead298';c.fillText('\u25cf  You',x+18,y+panelH-14);c.fillStyle='#b4c7aa';c.fillText('13 pitches · Ranked / Unranked',x+83,y+panelH-14);c.restore();
  }
  draw(park,id,destination,now,{field=null,view=null,pointer=null,overview=false,prefs={showNames:true,aimGuide:true}}={}){
   const c=this.c,r=this.canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),dt=Math.min(.05,(now-(this.last||now-16))/1000);this.last=now;
   if(this.canvas.width!==Math.round(r.width*dpr)||this.canvas.height!==Math.round(r.height*dpr)){this.canvas.width=Math.round(r.width*dpr);this.canvas.height=Math.round(r.height*dpr);}
-  this.focus=COURTS.find(f=>f.size===field)||null;
+  this.focus=COURTS.find(f=>f.id===field)||null;
   const me=park?.players.find(p=>p.id===id);
   // Near a sideline, frame the live court and watcher together. Walking away
   // returns to the following camera; the avatar remains under your control.
@@ -133,29 +135,30 @@ const zoom=framed
   const ease=1-Math.exp(-dt*12);this.camera.x+=(target.x-this.camera.x)*ease;this.camera.y+=(target.y-this.camera.y)*ease;this.scale+=(zoom-this.scale)*ease;
   this.ox=r.width/2-this.camera.x*this.scale;this.oy=r.height/2+25-this.camera.y*this.scale;
   c.setTransform(dpr,0,0,dpr,0,0);c.fillStyle='#172d23';c.fillRect(0,0,r.width,r.height);c.translate(this.ox,this.oy);c.scale(this.scale,this.scale);
-  this.landscape();
+  this.art.scale=this.scale;this.landscape();
   for(const f of COURTS){
    const left=(f.x-this.camera.x)*this.scale+r.width/2,top=(f.y-this.camera.y)*this.scale+r.height/2;
    if(left>r.width+250||left+f.w*this.scale< -250||top>r.height+200||top+f.h*this.scale< -200)continue;
-   const live=park?.fields.find(q=>q.size===f.size);if(!live)continue;
-   const focused=field===f.size&&view;
+   const live=park?.fields.find(q=>(q.id??q.size)===f.id);if(!live)continue;
+   const focused=field===f.id&&view;
    const match=focused?view:{pitch:live.pitch,round:live.matchId,sidesSwapped:live.sidesSwapped,players:live.players,engine:{ball:live.ball,obstacles:live.obstacles||[]},training:live.training,score:live.score,state:live.practice&&!live.members.length?'idle':live.state,wait:live.wait,goalTeam:live.goalTeam,goalInfo:live.goalInfo,kickoffTeam:live.kickoffTeam,kickoffPlayer:live.kickoffPlayer};
    c.save();c.translate(f.x,f.y);this.art.pitchArt(match.pitch,match.sidesSwapped);if(focused)this.art.aimGuide(match,prefs,pointer);
-   for(const player of match.players){const p=focused?player:this.pose(`f${f.size}-${player.id}`,player,dt);this.art.player({...p,human:Boolean(focused&&p.id===view.human.id)},prefs);}
-   this.art.drawMatchBall(match,focused?match.engine.ball:this.pose(`ball${f.size}`,match.engine.ball,dt),now);
+   for(const player of match.players){const p=focused?player:this.pose(`f${f.id}-${player.id}`,player,dt);this.art.player({...p,human:Boolean(focused&&p.id===view.human.id)},prefs);}
+   this.art.drawMatchBall(match,focused?match.engine.ball:this.pose(`ball${f.id}`,match.engine.ball,dt),now);
    // A nearby watcher sees the same goal scorer and countdown as participants.
-   this.art.overlay(match,false);
+   this.art.chatBubbles(match.players);this.art.overlay(match,false);
    c.restore();
-   c.fillStyle='#18372bf2';c.beginPath();c.roundRect(f.x+f.w/2-150,f.y-108,300,102,12);c.fill();c.strokeStyle=f.color+'77';c.lineWidth=1;c.stroke();
-   this.text(f.name,f.x+f.w/2,f.y-77,25,f.color,850);
+   if(!focused){c.fillStyle='#252d27f2';c.beginPath();c.roundRect(f.x+f.w/2-150,f.y-108,300,102,4);c.fill();c.strokeStyle=f.color+'77';c.lineWidth=1;c.stroke();
+   this.text(f.name,f.x+f.w/2,f.y-77,18,f.color,850);
    this.text(`${live.score.red} \u2014 ${live.score.blue}   \u00b7   ${live.members.length}/${2*f.size} players`,f.x+f.w/2,f.y-48,16,'#d6e0c5',600);
-   this.text(spectatorClock(live),f.x+f.w/2,f.y-22,16,'#eee0b3',700);
+   this.text(spectatorClock(live),f.x+f.w/2,f.y-22,16,'#eee0b3',700);}
    // Benches are visual sideline landmarks. Watchers remain controllable avatars.
    for(const x of [f.x+f.w*.25,f.x+f.w*.75])this.bench(x,f.y+f.h+70);
   }
   for(const p of park?.players||[]){if(p.field!==null)continue;const shown=this.pose('roam'+p.id,p,dt);
    this.art.player({...shown,number:p.name.slice(0,1).toUpperCase(),human:p.id===id},prefs);
   }
+  this.art.chatBubbles((park?.players||[]).filter(p=>p.field===null).map(p=>({...p,...this.shown.get('roam'+p.id)})));
   if(destination){c.strokeStyle='#f1d590';c.lineWidth=2;c.beginPath();c.arc(destination.x,destination.y,12+Math.sin(now/180)*2,0,Math.PI*2);c.stroke();}
   const active=new Set((park?.players||[]).map(p=>'roam'+p.id));for(const k of this.shown.keys())if(k.startsWith('roam')&&!active.has(k))this.shown.delete(k);
   if(overview&&!this.focus)this.drawOverview(park,id,r.width,r.height,now);

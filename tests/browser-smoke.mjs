@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';import {spawn} from 'node:child_process';import fs from 'node:fs/promises';import path from 'node:path';import os from 'node:os';import {fileURLToPath} from 'node:url';
 const {chromium}=await import(process.env.TEAMBALL_PLAYWRIGHT_MODULE||'playwright');
 const root=fileURLToPath(new URL('..',import.meta.url)),scratch=await fs.mkdtemp(path.join(os.tmpdir(),'teamball-browser-test-'));
-for(const f of ['server.js','stop.js','public','online.mjs','park.mjs','bot-learning.mjs','active-match-store.mjs','bot-model-store.mjs','neural-training-manager.mjs','train','bot-trainer.mjs','bot-trainer-worker.mjs','accounts.mjs','node_modules'])await fs.cp(path.join(root,f),path.join(scratch,f),{recursive:true});
+for(const f of ['chat.mjs','economy.mjs','match-coins.mjs','ranked.mjs','ranked-session.mjs','server.js','stop.js','public','online.mjs','park.mjs','bot-learning.mjs','active-match-store.mjs','bot-model-store.mjs','neural-training-manager.mjs','train','bot-trainer.mjs','bot-trainer-worker.mjs','accounts.mjs','node_modules'])await fs.cp(path.join(root,f),path.join(scratch,f),{recursive:true});
 const server=spawn(process.execPath,['server.js'],{cwd:scratch,env:{...process.env,PORT:'3161'},stdio:['ignore','pipe','pipe']});
 await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(d.toString().includes('BUILD 15'))resolve();});server.on('error',reject);server.on('exit',c=>reject(new Error('Server exit '+c)));});
 let browser;const results=[],errors=[];

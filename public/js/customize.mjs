@@ -17,6 +17,7 @@ export const LOOK={
   fieldZoomMax:1.5,
 };
 export const RULES={
+  fullRosterCountdownSeconds:5,
   kickoffTakerGap:48, // Empty space between taker and ball edges.
   botCelebrationChance:.65, // Winning bots sometimes pulse their kick ring.
   botCelebrationPulse:.15, // Seconds per on/off cycle.

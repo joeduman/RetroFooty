@@ -5,25 +5,25 @@ import {Player,PhysicsEngine} from '../public/js/physics.mjs';
 import {createPitch,STEP,TUNING as C,distance} from '../public/js/config.mjs';
 const idle={x:0,y:0,aimX:1,aimY:0,shoot:false,sprint:false};
 const advance=(world,seconds)=>{for(let i=0;i<Math.round(seconds/STEP);i++)world.tick(STEP);};
-for(const size of [1,2,3,4,5])test(`park ${size}v${size}: bots run, humans replace slots, full roster gets a fresh 3-second start`,()=>{
+for(const size of [1,2,3,4,5])test(`park ${size}v${size}: bots run, humans replace slots, full roster gets a fresh 5-second start`,()=>{
  const w=new ParkWorld({duration:30,goldenGoal:false}),f=w.fields[size-1];advance(w,3.3);assert.equal(f.game.state,'playing');assert.ok(f.game.tracker.elapsed>0);const untouched=w.fields.find(g=>g!==f),otherId=untouched.matchId;
  for(let i=0;i<size*2;i++){
   const c=w.connect('Human'+i),prior=f.matchId;assert.equal(w.join(c,size,i<size?'red':'blue'),null);assert.equal(f.game.players.filter(p=>p.human).length,i+1);
   if(i<size*2-1){assert.equal(f.phase,'warmup');assert.equal(f.matchId,prior);}else assert.notEqual(f.matchId,prior);
  }
- assert.equal(f.phase,'match');assert.equal(f.game.state,'kickoff');assert.equal(f.game.wait,3);assert.deepEqual(f.game.score,{red:0,blue:0});assert.equal(f.game.tracker.elapsed,0);assert.equal(untouched.matchId,otherId);
- const starts=f.game.players.map(p=>({x:p.x,y:p.y}));advance(w,2.9);assert.equal(f.game.state,'kickoff');assert.deepEqual(f.game.players.map(p=>({x:p.x,y:p.y})),starts);advance(w,.1);assert.equal(f.game.state,'playing');
+ assert.equal(f.phase,'match');assert.equal(f.game.state,'kickoff');assert.equal(f.game.wait,5);assert.deepEqual(f.game.score,{red:0,blue:0});assert.equal(f.game.tracker.elapsed,0);assert.equal(untouched.matchId,otherId);
+ const starts=f.game.players.map(p=>({x:p.x,y:p.y}));advance(w,4.9);assert.equal(f.game.state,'kickoff');assert.deepEqual(f.game.players.map(p=>({x:p.x,y:p.y})),starts);advance(w,.1);assert.equal(f.game.state,'playing');
  const extra=w.connect('Extra');assert.match(w.join(extra,size,'red'),/full/);assert.equal(extra.field,null);
 });
-test('park cancels an incomplete first countdown, but preserves active scores after disconnect',()=>{
- const w=new ParkWorld(),a=w.connect('A'),b=w.connect('B');w.join(a,1,'red');w.join(b,1,'blue');const f=w.fields[0],countdown=f.matchId;
- w.leave(b);assert.equal(f.phase,'warmup');assert.notEqual(f.matchId,countdown);w.join(b,1,'blue');advance(w,3.1);f.game.score.red=2;const official=f.matchId;
- w.disconnect(b);assert.equal(f.matchId,official);assert.equal(f.game.score.red,2);assert.equal(f.game.players.filter(p=>p.human).length,1);
- const substitute=w.connect('Sub');w.join(substitute,1,'blue');assert.equal(f.matchId,official);assert.equal(f.game.players.find(p=>p.id===substitute.slot).name,'Sub');
- w.leave(a);w.leave(substitute);assert.equal(f.phase,'warmup');assert.deepEqual(f.game.score,{red:0,blue:0});assert.equal(w.clients.size,2);
+test('park countdown continues after departure, with temporary bot replacement',()=>{
+ const w=new ParkWorld(),a=w.connect('A'),b=w.connect('B');w.join(a,1,'red');w.join(b,1,'blue');const f=w.fields[0],match=f.matchId;advance(w,1);
+ const remaining=f.game.wait;w.leave(b);assert.equal(f.phase,'match');assert.equal(f.matchId,match);assert.equal(f.game.wait,remaining);assert.equal(f.game.players.filter(p=>p.human).length,1);
+ w.join(b,1,'blue');assert.equal(f.matchId,match);advance(w,4.1);f.game.score.red=2;w.disconnect(b);assert.equal(f.matchId,match);assert.equal(f.game.score.red,2);
+ const substitute=w.connect('Sub');w.join(substitute,1,'blue');assert.equal(f.matchId,match);assert.equal(f.game.players.find(p=>p.id===substitute.slot).name,'Sub');
+ w.leave(a);w.leave(substitute);assert.equal(f.matchId,match);assert.equal(f.game.players.filter(p=>p.human).length,0);
 });
 test('park full time retains report then restarts independently; returning allows another field',()=>{
- const w=new ParkWorld({duration:.2,goldenGoal:false}),a=w.connect('A'),b=w.connect('B');w.join(a,1,'red');w.join(b,1,'blue');advance(w,3.3);
+ const w=new ParkWorld({duration:.2,goldenGoal:false}),a=w.connect('A'),b=w.connect('B');w.join(a,1,'red');w.join(b,1,'blue');advance(w,5.3);
  const f=w.fields[0],id=f.matchId;assert.equal(f.game.state,'ended');const report=w.report(a);assert.equal(report.ended,true);assert.ok(report.report.elapsed>=.2-1e-8);
  advance(w,7.7);assert.equal(f.matchId,id);advance(w,.4);assert.notEqual(f.matchId,id);assert.equal(f.game.state,'kickoff');assert.equal(f.phase,'match');
  assert.match(w.join(a,2,'red'),/Return/);w.leave(a);assert.equal(w.join(a,2,'blue'),null);assert.equal(w.fields[1].members[0],a);assert.equal(w.fields[0].members.length,1);

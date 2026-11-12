@@ -50,7 +50,7 @@ try{
  await page.fill('#username','Park reviewer');await page.selectOption('#movement','keys');await page.click('#play');
  await page.waitForFunction(()=>window.teamballPark?.snapshot().park);
  const snap=()=>page.evaluate(()=>window.teamballPark.snapshot());
- check('only the five match fields appear in the park',(await snap()).park.fields.map(f=>f.size).join(',')==='1,2,3,4,5');
+ check('all thirteen dedicated fields appear in the park',(await snap()).park.fields.map(f=>f.id).length===13);
  await page.waitForTimeout(350);await page.screenshot({path:path.join(screenshotRoot,'park15-desktop.png')});
  await page.keyboard.press('KeyM');await page.waitForFunction(()=>window.teamballPark.snapshot().mapOpen);
  check('M opens the park overview',await page.getAttribute('#park-map-toggle','aria-pressed')==='true');

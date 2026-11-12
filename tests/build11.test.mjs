@@ -16,7 +16,7 @@ for(const size of [1,2,3,4,5])test(`${size}v${size}: selectable teams, capacity 
  const host=await f.client();host.send({type:'create',name:'Host',size,team:'red'});const lobby=await host.wait(m=>m.type==='lobby');
  const initial=await host.wait(m=>m.type==='state');assert.equal(initial.state.players.length,2*size);assert.equal(initial.state.players.filter(p=>!p.human).length,2*size-1);
  for(let i=1;i<2*size;i++){const c=await f.client();const team=i<size?'red':'blue';c.send({type:'join',name:'Player'+i,code:lobby.code,team});const state=await c.wait(m=>m.type==='state');assert.equal(state.state.players.find(p=>p.id===state.id).team,team);assert.equal(state.state.players.filter(p=>p.human).length,i+1);}
- const extra=await f.client();extra.send({type:'join',code:lobby.code,team:'blue'});assert.match((await extra.wait(m=>m.type==='error')).message,/full/);
+ const extra=await f.client();extra.send({type:'join',name:'Overflow',code:lobby.code,team:'blue'});assert.match((await extra.wait(m=>m.type==='error')).message,/full/);
  host.send({type:'team',team:'blue'});assert.match((await host.wait(m=>m.type==='error')).message,/full/);
  }finally{await f.close();}
 });

@@ -5,9 +5,9 @@ import {createPitch} from '../public/js/config.mjs';
 import {ParkPhysics} from '../public/js/park-physics.mjs';
 import {ParkRenderer} from '../public/js/park-renderer.mjs';
 
-test('the park contains five enlarged match courts with open walking lanes',()=>{
- assert.deepEqual(COURTS.map(f=>f.size),[1,2,3,4,5]);
- assert.ok(PARK.width*PARK.height<8800*4000*.5);
+test('the park contains thirteen dedicated match courts with open walking lanes',()=>{
+ assert.deepEqual(COURTS.map(f=>f.size),[1,2,3,4,5,1,1,2,2,3,3,4,5]);
+ assert.equal(new Set(COURTS.map(f=>f.id)).size,13);
  for(const f of COURTS){
   const p=createPitch(f.size);assert.equal(f.w,p.width);assert.equal(f.h,p.height);
   assert.ok(!f.practice&&!f.drill);
@@ -30,7 +30,7 @@ test('the overview draws all court labels and player counts inside desktop and m
   const renderer=Object.assign(Object.create(ParkRenderer.prototype),{c:context,canvas:{width:width*2,height:height*2}});
   const park={fields:COURTS.map(f=>({size:f.size,members:[]})),players:[{id:'me',field:null,...PARK.spawn}]};
   renderer.drawOverview(park,'me',width,height,1000);
-  assert.ok(COURTS.every(f=>labels.includes(f.name)));
+  assert.ok(COURTS.every(f=>labels.includes(`${f.size}v${f.size} ${f.mode==='ranked'?'R':'U'}${f.mode==='ranked'?f.number:''}`)));
   assert.ok(labels.includes('0/10'));assert.ok(labels.includes('PARK OVERVIEW'));
   assert.equal(panels.length,1);const panel=panels[0];assert.ok(panel.x>=0&&panel.y>=0&&panel.x+panel.w<=width&&panel.y+panel.h<=height);
  }
