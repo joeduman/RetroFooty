@@ -1,4 +1,4 @@
-# RetroFooty Build 15.1
+# RetroFooty Build 16
 
 ## Running
 
@@ -32,7 +32,7 @@ The eventual match result cannot charge a second penalty. A completed result
 can still be recovered with the valid token before expiry. Pending decisions
 remain persisted across server restarts.
 
-Ranked slots are human-only again, as requested in the 15.1 notes. This
+Ranked slots are human-only again, as requested in the 16 notes. This
 supersedes Build 15's temporary rated-bot rule:
 
 - Ranked waits for complete human teams; waiting courts contain no AI bodies.
@@ -181,6 +181,6 @@ Updated integrations:
 - Multiplayer clients/HTML, park and shared renderers, shop/rank UI: connect the
   new menus and result controls while preserving existing gameplay visuals.
 - `server.js`, version metadata and `public/js/config.mjs`: shared profile
-  initialization, Build 15.1 labels; physics/duration constants unchanged.
+  initialization, Build 16 labels; physics/duration constants unchanged.
 - Existing regression fixtures/tests: include the new modules and assert the
   newly confirmed human-only, equipment-lock and empty-chat behavior.
