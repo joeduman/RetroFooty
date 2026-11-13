@@ -1,7 +1,7 @@
 # RetroFooty
 
 Current build: **16**. A browser football game with a shared park, private
-rooms, local play, human-only Ranked, Casual bots, chat, player profiles,
+rooms, local play, Ranked, Casual bots, chat, player profiles,
 Gold and cosmetic inventory.
 
 Install Node.js 20 or later, then run `npm.cmd ci` once to install dependencies.
