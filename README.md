@@ -1,6 +1,6 @@
 # RetroFooty
 
-Current build: **15.1**. A browser football game with a shared park, private
+Current build: **16**. A browser football game with a shared park, private
 rooms, local play, human-only Ranked, Casual bots, chat, player profiles,
 Gold and cosmetic inventory.
 
