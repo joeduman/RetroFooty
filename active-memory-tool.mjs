@@ -6,7 +6,7 @@ const [command='status',...args]=process.argv.slice(2);
 // applied to future matches, so a CLI cannot overwrite newly completed evidence.
 let live=null;
 try{
-  const state=JSON.parse(fs.readFileSync(path.join(process.cwd(),'.teamball-server.json'),'utf8'));
+  const state=JSON.parse(fs.readFileSync(path.join(process.cwd(),'.retrofooty-server.json'),'utf8'));
   if(state.app==='teamball'&&state.root===process.cwd()&&Number.isInteger(state.port)&&state.port>0&&state.port<65536&&typeof state.token==='string')live=state;
 }catch{}
 const store=live?null:new ActiveMatchStore();

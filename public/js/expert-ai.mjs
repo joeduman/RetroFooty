@@ -5,7 +5,7 @@ import {forecastBall, reachTime, interceptBall, evaluateKick, bankTarget} from '
 import {ActiveOpponentMemory} from './ai-active-memory.mjs';
 import {DIFFICULTIES} from './ai-policy.mjs';
 
-export const EXPERT_VERSION='expert-predictive-2';
+export const EXPERT_VERSION='expert-predictive-3';
 const arrival=race=>race.reachable?race.t:race.arrival;
 
 // The frozen controller retains difficulty/model/trainer contracts. Expert
@@ -274,7 +274,7 @@ export class AIController extends LegacyController {
       const policy=this.teamPolicy[player.team],reserve=(target.rivalStamina<25?26:40)*policy.boostReserve/DIFFICULTIES.expert.boostSense;
       const committed=target.commitRun&&!target.protect,minimum=(committed?6:16)*policy.boostReserve/DIFFICULTIES.expert.boostSense;
       if(allowed&&target.emergency&&player.stamina>0){player.input.sprint=true;m.expertSprinting=true;}
-      else if(allowed&&(committed||target.shieldDuel)&&
+      else if(allowed&&(committed||target.shieldDuel||target.boostUseful)&&
         (m.expertSprinting?player.stamina>minimum:player.stamina>(committed?Math.max(10,reserve*.45):reserve))){
         player.input.sprint=true;m.expertSprinting=true;
       }else{

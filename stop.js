@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
-const statePath = path.join(__dirname, '.teamball-server.json');
+const statePath = path.join(__dirname, '.retrofooty-server.json');
 function request(port, route, token) {
   return new Promise((resolve, reject) => {
     const req = http.request({ hostname: '127.0.0.1', port, path: route, method: token ? 'POST' : 'GET',
@@ -14,18 +14,18 @@ function request(port, route, token) {
 }
 (async () => {
   if (!fs.existsSync(statePath)) {
-    console.log('No Build 15 session was started from this folder.\nIf an older build is still running, use the older-build stop instructions in Teamball-PowerShell-Commands.txt.');
+    console.log('No RetroFooty session was started from this folder.');
     return;
   }
   const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
   let live;
   try { live = JSON.parse(await request(state.port, '/_teamball/health')); }
   catch (error) {
-    if (error.code === 'ECONNREFUSED') { console.log('This Teamball session is already stopped.'); fs.unlinkSync(statePath); return; }
+    if (error.code === 'ECONNREFUSED') { console.log('This RetroFooty session is already stopped.'); fs.unlinkSync(statePath); return; }
     throw error;
   }
   if (live.app !== 'teamball' || live.root !== __dirname || live.pid !== state.pid) {
-    throw new Error('The port belongs to another session. Nothing was stopped. Run STOP-TEAMBALL.cmd from the running copy’s folder.');
+    throw new Error('The port belongs to another session. Nothing was stopped. Run STOP-RETROFOOTY.cmd from the running copy’s folder.');
   }
   console.log(await request(state.port, '/_teamball/stop', state.token));
 })().catch(error => { console.error(error.message); process.exitCode = 1; });

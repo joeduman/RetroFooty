@@ -1,8 +1,8 @@
 // Outcome evaluation of saved runtime situations. No trainer/model writes.
-import {writeFileSync,readFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {resolve} from 'node:path';
+import {resolve,dirname} from 'node:path';
 import {performance} from 'node:perf_hooks';
 import {AIController as BaselineAI} from './fixtures/expert-baseline/ai.mjs';
 import {EXPERT_SCENARIOS,loadScenario} from './fixtures/expert-scenarios.mjs';
@@ -143,6 +143,6 @@ export function evaluateScenarios({seeds=2,horizon=8}={}){
 
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const args=Object.fromEntries(process.argv.slice(2).map(a=>a.replace(/^--/,'').split('='))),seeds=Math.max(1,Number(args.seeds)||2),horizon=Math.max(1,Number(args.horizon)||8);
-  const result=evaluateScenarios({seeds,horizon});writeFileSync(args.output||'docs/expert-ai/scenario-results.json',JSON.stringify(result,null,2)+'\n');
+  const result=evaluateScenarios({seeds,horizon});const output=args.output||'reports/scenario-results.json';mkdirSync(dirname(output),{recursive:true});writeFileSync(output,JSON.stringify(result,null,2)+'\n');
   console.log(`Saved ${result.trials.length} physical scenario trials; ${(result.wallMilliseconds/1000).toFixed(2)}s wall.`);
 }

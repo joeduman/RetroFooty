@@ -1,8 +1,13 @@
+import {mountPersonalMenu,mountPublicProfile} from './personal-menu.mjs';
+import {renderCompactResult,renderCountdown} from './result-ui.mjs';
+import {reconnectToken as tokenFor,saveReconnectToken,migrateReconnectToken} from './reconnect-client.mjs';
+import {completedRecent} from './recent-matches.mjs';
 import {mountChat} from './chat-client.mjs';
 import {mountShop} from './shop-ui.mjs';
 import {renderLeaderboard,renderRanked} from './ranked-ui.mjs';
 import {LOOK,TEXT} from './customize.mjs';
 import {PARK,COURTS,courtAt} from './park-layout.mjs';
+import {nearbySpectateCourt} from './park-spectating.mjs';
 import {ParkRenderer} from './park-renderer.mjs';
 import {Renderer} from './renderer.mjs';
 import {InputController,loadPreferences,savePreferences,bindingName} from './input.mjs';
@@ -14,18 +19,21 @@ import {renderReport} from './report.mjs';
 import {ReplayRecorder,historyStore} from './replay.mjs';
 // Store screen coordinates so walking remains correct as the camera moves.
 let parkPointer=null;
-let mapOpen=false;
+let mapOpen=false,spectating=null;
 const $=id=>document.getElementById(id),prefs=loadPreferences(),parkRenderer=new ParkRenderer($('park-canvas')),renderer=new ParkRenderer($('field')),audio=new GameAudio();
+// The help strip can be omitted from the park layout.
+const parkGuide=$('park-app').querySelector('#park-guide'),parkHelp=$('park-app').querySelector('#park-help');
 let leaderboardSignature='';
-let reconnectToken='';try{reconnectToken=sessionStorage.getItem('teamball-park-reconnect')||'';}catch{}
+migrateReconnectToken(prefs.name,'park');let reconnectToken=tokenFor(prefs.name,'park');
+let personal=null;const publicProfile=mountPublicProfile($('public-profile-panel'));let lastRanked=null,lastGold=null;
 let ws=null,id=null,park=null,selected=null,destination=null,latest=null,view=null,phase=null,field=null,matchId=null,report=null,finalReport=false;
 let predictor=new OnlinePrediction(),seq=0,rtt=0,pingAt=0,lastStateAt=0,lastParkAt=0,last=0,sendAt=0,recorder=null,recordTick=0,nextSave=15,saveQueue=Promise.resolve(),toastUntil=0;
 const keys=new Set(),idle=()=>({x:0,y:0,aimX:1,aimY:0,shoot:false,sprint:false});
-const chat=mountChat($('chat-widget'),{send,active:()=>Boolean(id)&&$('settings-panel').hidden&&$('shop-panel').hidden&&$('court-dialog').hidden&&$('park-options').hidden&&(!latest||$('match-panel').hidden),resetControls:()=>{resetWalk();input.reset();if(latest)inputSend(idle());},focusGame:()=>$(latest?'field':'park-canvas').focus()});
+const chat=mountChat($('chat-widget'),{send,active:()=>Boolean(id)&&!personal?.opened&&!publicProfile.opened&&$('settings-panel').hidden&&$('shop-panel').hidden&&$('court-dialog').hidden&&$('park-options').hidden&&(!latest||$('match-panel').hidden),resetControls:()=>{resetWalk();input.reset();if(latest)inputSend(idle());},focusGame:()=>$(latest?'field':'park-canvas').focus()});
 parkRenderer.art.chat=renderer.art.chat=chat;
-const settingsOpen=()=>!$('settings-panel').hidden||!$('shop-panel').hidden||chat.editing;
+const settingsOpen=()=>!$('settings-panel').hidden||!$('shop-panel').hidden||chat.editing||Boolean(personal?.opened)||publicProfile.opened;
 const playing=()=>latest&&['playing','goal'].includes(latest.state);
-const input=new InputController($('field'),renderer,prefs,{pause:()=>menu(),changed:()=>savePreferences(prefs),onBound:()=>refreshBindings(),isActive:()=>Boolean(playing()&&$('match-panel').hidden&&!settingsOpen())});
+const input=new InputController($('field'),renderer,prefs,{pause:()=>menu(),changed:()=>savePreferences(prefs),onBound:()=>{refreshBindings();personal?.refreshSettings();},isActive:()=>Boolean(playing()&&$('match-panel').hidden&&!settingsOpen())});
 $('username').value=prefs.name;$('movement').value=prefs.movement;$('volume').value=prefs.volume;
 function refreshBindings(){
  $('settings-bindings').replaceChildren();$('binding-status').textContent='';
@@ -34,13 +42,13 @@ function refreshBindings(){
   b.onclick=()=>{input.rebinding=action;$('binding-status').textContent='Press a key or mouse button. Esc cancels.';};$('settings-bindings').append(b);
  }
 }
-function openSettings(){resetWalk();input.reset();if(latest)inputSend(idle());
+function openSettings(){personal?.open('settings');resetWalk();input.reset();if(latest)inputSend(idle());
  setMapOpen(false);
  $('settings-movement').value=prefs.movement;$('settings-volume').value=prefs.volume;
  $('settings-names').checked=prefs.showNames;$('settings-aim').checked=prefs.aimGuide;
- refreshBindings();$('settings-panel').hidden=false;
+ refreshBindings();$('settings-panel').hidden=true;
 }
-function closeSettings(){input.rebinding=null;input.reset();$('settings-panel').hidden=true;}
+function closeSettings(){personal?.close();input.rebinding=null;input.reset();$('settings-panel').hidden=true;}
 for(const id of ['login-settings','park-settings','match-settings'])$(id).onclick=openSettings;
 $('settings-close').onclick=closeSettings;
 $('settings-movement').onchange=()=>{prefs.movement=$('settings-movement').value;$('movement').value=prefs.movement;savePreferences(prefs);resetWalk();input.reset();};
@@ -66,6 +74,9 @@ const goalEffectPickers=['goal-effect-picker-login','goal-effect-picker-park','g
    send({type:'goal-effect',goalEffectId});
    for(const picker of goalEffectPickers)picker.refresh(goalEffectId);
  }));
+personal=mountPersonalMenu($('personal-menu'),{prefs,request:send,equip:item=>send(item.kind==='shirt'?{type:'shirt',shirtId:item.value}:{type:'goal-effect',goalEffectId:item.value}),changed:()=>{savePreferences(prefs);resetWalk();input.reset();$('movement').value=prefs.movement;},rebind:action=>input.rebinding=action,leave:()=>send({type:'leave'}),inMatch:()=>Boolean(latest),report:openStoredReport,recentFallback:async()=>completedRecent(await historyStore.list(),prefs.name)});
+function openStoredReport(value){if(!value)return;value={...value,players:value.players.map(p=>({...p,human:p.name.toLowerCase()===prefs.name.toLowerCase()}))};personal.close();$('park-summary').hidden=true;$('match-panel').hidden=false;$('match-heading').textContent='Match Report';$('match-report').hidden=false;renderReport($('stats-table'),$('heatmap'),$('heatmap-player'),value,value.players.find(p=>p.name.toLowerCase()===prefs.name.toLowerCase())?.id);}
+function compactSummary(){if(latest?.state==='ended')$('park-summary-title').textContent=renderCompactResult($('compact-result'),{score:latest.score,team:latest.human.team,ranked:lastRanked,name:prefs.name,gold:lastGold});}
 function inputSend(value,at=performance.now()){const n=seq++;send({type:'input',seq:n,input:value});predictor.input(n,value,at);}
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;toastUntil=performance.now()+LOOK.toastMs;}
 function store(data){
@@ -75,21 +86,46 @@ function store(data){
 function archive(status='interrupted'){if(recorder&&!recorder.finalized&&report){store(recorder.finish(status));}}
 function complete(){if(finalReport&&latest?.state==='ended')archive(phase==='warmup'?'warmup':recorder?.meta.joinedLate?'joined late':'complete');}
 function showReport(){
- if(!report||!latest)return;
+ if(!report||!latest||latest.state!=='ended')return;
  const preferred=Number($('heatmap-player').value)||latest.human.id;
  renderReport($('stats-table'),$('heatmap'),$('heatmap-player'),{...report,players:report.players.map(p=>({...p,human:p.id===latest.human.id}))},preferred);
  $('match-report').hidden=false;
 }
+function spectateBlocked(){return !id||Boolean(latest)||mapOpen||settingsOpen()||!$('court-dialog').hidden||!$('park-options').hidden;}
+function syncSpectatePrompt(){
+ const court=spectating!==null?COURTS.find(f=>f.id===spectating):nearbySpectateCourt(park,park?.players.find(p=>p.id===id));
+ const hidden=spectateBlocked()||!court||performance.now()-lastParkAt>1500;
+ $('spectate-toggle').hidden=hidden;
+ if(court){const text=spectating!==null?'Return to park · '+court.name:'Spectate · '+court.name;
+  if($('spectate-label').textContent!==text)$('spectate-label').textContent=text;
+  $('spectate-toggle').setAttribute('aria-label',spectating!==null?'Press E to stop spectating and return to your park character':'Press E to spectate '+court.name);
+ }
+ $('spectate-toggle').setAttribute('aria-pressed',String(spectating!==null));
+ $('court-list').hidden=!id||mapOpen||spectating!==null;
+ $('park-leaderboards').hidden=!id||spectating!==null;
+ if(parkGuide)parkGuide.hidden=!id||Boolean(latest)||mapOpen||!hidden;
+}
+function toggleSpectating(){
+ if(spectateBlocked())return;
+ const court=spectating!==null?null:nearbySpectateCourt(park,park?.players.find(p=>p.id===id));
+ if(spectating===null&&(!court||performance.now()-lastParkAt>1500))return;
+ spectating=court?.id??null;resetWalk();
+ $('spectate-status').textContent=court?'Watching '+court.name+'. Press E again to return to your park character.':'Spectating stopped. Camera follows your park character.';
+ syncSpectatePrompt();$('park-canvas').focus();
+}
+$('spectate-toggle').onclick=toggleSpectating;
 function setMapOpen(open){
  mapOpen=Boolean(open&&id&&!latest);
+ if(mapOpen&&spectating!==null){spectating=null;resetWalk();}
+ syncSpectatePrompt();
  $('park-map-toggle').setAttribute('aria-pressed',String(mapOpen));
- $('court-list').hidden=!id||mapOpen;
+ $('court-list').hidden=!id||mapOpen||spectating!==null;
  $('map-status').textContent=mapOpen?'Park overview open. Press M or Escape to close.':'';
 }
 function showSummary(){
  if(!latest||latest.state!=='ended')return;
  const own=latest.score[latest.human.team],other=latest.score[latest.human.team==='red'?'blue':'red'];
- $('park-summary-title').textContent=`${own===other?'Draw':own>other?'Win':'Loss'} ${own}-${other}`;
+ compactSummary();
  $('park-summary').hidden=false;
  updateNextMatch(performance.now());
 }
@@ -103,22 +139,20 @@ function updateNextMatch(now){
  return stale?'--:--':timer;
 }
 function clearField(){
+ spectating=null;$('spectate-toggle').hidden=true;
  parkPointer=null;
  audio.reset();
  archive();latest=view=field=phase=matchId=report=recorder=null;finalReport=false;predictor=new OnlinePrediction();input.reset();keys.clear();destination=null;
  $('match-screen').hidden=true;$('match-panel').hidden=true;$('park-app').hidden=false;$('match-report').hidden=true;$('park-summary').hidden=true;setMapOpen(false);$('park-canvas').focus();
 }
 function menu(){
- if(settingsOpen()){closeSettings();return;}
- if(mapOpen){setMapOpen(false);return;}
- parkPointer=null;
- if(latest){$('match-panel').hidden=!$('match-panel').hidden;input.reset();inputSend(idle());showReport();}
- else if(id){$('court-dialog').hidden=true;$('park-options').hidden=!$('park-options').hidden;keys.clear();destination=null;send({type:'walk',x:0,y:0});}
+ if(publicProfile.opened){publicProfile.close();return;}if(personal.opened){personal.close();return;}if(mapOpen){setMapOpen(false);return;}
+ if(id){resetWalk();input.reset();if(latest)inputSend(idle());personal.open('profile');}
 }
 function disconnect(message){
- chat.setConnected(false);
+ chat.setConnected(false);personal.close();publicProfile.close();$('match-countdown').hidden=true;
  clearField();$('park-leaderboards').hidden=true;$('ranked-vote').hidden=true;id=null;park=null;$('login').hidden=false;$('park-options').hidden=true;$('court-dialog').hidden=true;
- $('park-menu').hidden=$('park-map-toggle').hidden=$('court-list').hidden=$('park-guide').hidden=true;$('play').disabled=false;$('login-status').textContent=message;
+ $('park-menu').hidden=$('park-map-toggle').hidden=$('court-list').hidden=true;if(parkGuide)parkGuide.hidden=true;$('play').disabled=false;$('login-status').textContent=message;
 }
 function updateCourts(){
  if(!park)return;
@@ -134,7 +168,7 @@ function describeCourt(){
  $('join-red-label').textContent='RED';
  $('ranked-mode').disabled=true;$('ranked-mode').value=f.mode||'casual';
  $('court-status').textContent=(f.mode==='ranked'?'Ranked · ':'Casual · ')+(f.phase==='match'?TEXT.liveScore(f.score):TEXT.pickUp);
- for(const team of ['red','blue']){const members=f.members.filter(p=>p.team===team);$(team+'-slots').textContent=members.map(p=>{const rating=f.ranked?.members.find(r=>r.key===p.name.toLowerCase());return p.name+(rating?' · '+rating.elo+' '+rating.rank.name:'');}).join('\n')+(members.length?'\n':'')+TEXT.slots(f.size-members.length);$('join-'+team).disabled=members.length>=f.size;}
+ for(const team of ['red','blue']){const members=f.members.filter(p=>p.team===team);$(team+'-slots').textContent=members.map(p=>{const rating=f.ranked?.members?.find(r=>r.key===p.name.toLowerCase());return p.name+(rating?' · '+rating.elo+' '+rating.rank.name:'');}).join('\n')+(members.length?'\n':'')+TEXT.slots(f.size-members.length);$('join-'+team).disabled=members.length>=f.size;}
 }
 function choose(size){parkPointer=null;if(!id||latest)return;setMapOpen(false);selected=size;destination=null;keys.clear();send({type:'walk',x:0,y:0});describeCourt();$('court-dialog').hidden=false;}
 for(const f of COURTS){const button=document.createElement('button');button.id='court-'+f.id;const strong=document.createElement('strong'),span=document.createElement('span');strong.textContent=f.name;button.append(strong,span);button.onclick=()=>choose(f.id);$('court-list').append(button);}
@@ -143,9 +177,10 @@ $('park-map-toggle').onclick=()=>setMapOpen(!mapOpen);
 $('court-back').onclick=()=>{$('court-dialog').hidden=true;selected=null;$('park-canvas').focus();};
 for(const team of ['red','blue'])$('join-'+team).onclick=()=>{send({type:'join',field:selected,team});};
 $('park-menu').onclick=menu;$('match-menu').onclick=menu;$('park-resume').onclick=()=>{$('park-options').hidden=true;$('park-canvas').focus();};
-$('resume-match').onclick=()=>{$('match-panel').hidden=true;input.reset();$('field').focus();};
+$('resume-match').onclick=()=>{$('match-panel').hidden=true;input.reset();if(latest?.state==='ended')showSummary();$('field').focus();};
+$('report-close').onclick=$('resume-match').onclick;
 $('return-park').onclick=()=>{input.reset();inputSend(idle());send({type:'leave'});};
-$('park-summary-details').onclick=()=>{$('match-panel').hidden=false;input.reset();inputSend(idle());showReport();};
+$('park-summary-details').onclick=()=>{if(latest?.state!=='ended')return;$('park-summary').hidden=true;$('match-panel').hidden=false;input.reset();inputSend(idle());showReport();};
 $('park-summary-leave').onclick=$('return-park').onclick;
 $('volume').oninput=()=>{prefs.volume=Number($('volume').value);savePreferences(prefs);};
 $('sign-out').onclick=()=>{const old=ws;ws=null;old?.close();disconnect(TEXT.signedOut);};
@@ -154,30 +189,35 @@ $('login-form').onsubmit=event=>{
  if(ws)ws.close();$('play').disabled=true;$('login-status').textContent=TEXT.entering;
  const socket=ws=new WebSocket(`${location.protocol==='https:'?'wss:':'ws:'}//${location.host}/park`);
  const timeout=setTimeout(()=>{if(socket===ws&&socket.readyState!==1){socket.close();disconnect(TEXT.timeout);}},8000);
- socket.onopen=()=>{clearTimeout(timeout);seq=0;rtt=0;pingAt=0;send({type:'login',reconnectToken,name:prefs.name,shirtId:prefs.shirtId,goalEffectId:prefs.goalEffectId,trainingConsent:$('training-consent').checked});};
+ socket.onopen=()=>{clearTimeout(timeout);seq=0;rtt=0;pingAt=0;send({type:'login',reconnectToken:tokenFor(prefs.name,'park'),name:prefs.name,shirtId:prefs.shirtId,goalEffectId:prefs.goalEffectId,trainingConsent:$('training-consent').checked});};
  socket.onclose=()=>{clearTimeout(timeout);if(socket===ws){ws=null;disconnect(TEXT.disconnected);}};
  socket.onerror=()=>{if(socket===ws)$('login-status').textContent=TEXT.connectionFailed;};
  socket.onmessage=event=>{
   if(socket!==ws)return;const m=JSON.parse(event.data),now=performance.now();
-  if(m.type==='wallet'){updateWallet(m.wallet);return;}
+  if(m.type==='profile-self'){personal.update(m.profile);if(m.profile)shop.setCanEquip(m.profile.canEquip);return;}
+  if(m.type==='profile-public'){publicProfile.show(m.profile);return;}
+  if(m.type==='recent-matches'){personal.recent(m.matches);return;}
+  if(m.type==='match-report'){personal.report(m.report);return;}
+  if(m.type==='wallet'){updateWallet(m.wallet);send({type:'profile-self'});return;}
   if(chat.receive(m))return;
-  if(m.type==='welcome'){chat.setConnected(true);updateWallet(m.wallet);reconnectToken=m.reconnectToken||'';try{sessionStorage.setItem('teamball-park-reconnect',reconnectToken);}catch{}$('park-leaderboards').hidden=false;id=m.id;$('login').hidden=true;$('park-menu').hidden=$('park-map-toggle').hidden=$('court-list').hidden=$('park-guide').hidden=false;$('park-canvas').focus();return;}
+  if(m.type==='welcome'){chat.setConnected(true);updateWallet(m.wallet);reconnectToken=m.reconnectToken||'';saveReconnectToken(prefs.name,'park',reconnectToken);send({type:'profile-self'});if(m.pending?.pending)toast('Your previous Ranked slot is reserved while its reconnect shield runs. You can still use the park.');$('park-leaderboards').hidden=false;id=m.id;$('login').hidden=true;$('park-menu').hidden=$('park-map-toggle').hidden=$('court-list').hidden=false;if(parkGuide)parkGuide.hidden=false;$('park-canvas').focus();return;}
   if(m.type==='park'){park=m;lastParkAt=now;updateCourts();return;}
   if(m.type==='error'){toast(m.message);$('login-status').textContent=m.message;$('play').disabled=false;return;}
   if(m.type==='pong'){const measured=now-m.at;if(Number.isFinite(measured)&&measured>=0&&measured<10000)rtt=rtt?rtt*.7+measured*.3:measured;return;}
-  if(m.type==='joined'){$('court-dialog').hidden=true;selected=null;keys.clear();destination=null;return;}
-  if(m.type==='returned'){clearField();toast(TEXT.returned);return;}
-  if(m.type==='report'&&m.matchId===matchId){updateWallet(m.wallet,m.gold);renderRanked($('ranked-summary'),m.ranked,prefs.name);report=m.report;finalReport=m.ended;if(!$('match-panel').hidden)showReport();complete();if(recorder&&!recorder.finalized&&recorder.time>=nextSave){nextSave=recorder.time+15;store(recorder.snapshot('interrupted'));}return;}
-  if(m.type==='state'){renderRanked($('ranked-match'),m.ranked,prefs.name);renderRanked($('ranked-live'),m.ranked,prefs.name);renderRanked($('ranked-summary'),m.ranked,prefs.name);$('ranked-vote').hidden=!m.ranked?.vote?.deadline;
+  if(m.type==='joined'){send({type:'profile-self'});$('court-dialog').hidden=true;selected=null;keys.clear();destination=null;return;}
+  if(m.type==='returned'){send({type:'profile-self'});clearField();toast(TEXT.returned);return;}
+  if(m.type==='report'&&m.matchId===matchId){lastRanked=m.ranked;lastGold=m.gold;compactSummary();updateWallet(m.wallet,m.gold);report=m.report;finalReport=m.ended;if(!$('match-panel').hidden)showReport();complete();if(recorder&&!recorder.finalized&&recorder.time>=nextSave){nextSave=recorder.time+15;store(recorder.snapshot('interrupted'));}return;}
+  if(m.type==='state'){lastRanked=m.ranked;renderRanked($('ranked-match'),m.ranked,prefs.name);renderRanked($('ranked-live'),m.ranked,prefs.name);renderRanked($('ranked-summary'),m.ranked,prefs.name);$('ranked-vote').hidden=!m.ranked?.vote?.deadline;
    const previous=latest,changed=matchId!==m.matchId;
-   if(changed){$('coin-summary').textContent='';audio.reset();archive(phase==='warmup'?'warmup':'interrupted');recorder=null;report=null;finalReport=false;nextSave=15;matchId=m.matchId;view=null;input.reset();$('match-report').hidden=true;$('match-panel').hidden=true;$('park-summary').hidden=true;
+   if(changed){lastGold=null;send({type:'profile-self'});$('coin-summary').textContent='';audio.reset();archive(phase==='warmup'?'warmup':'interrupted');recorder=null;report=null;finalReport=false;nextSave=15;matchId=m.matchId;view=null;input.reset();$('match-report').hidden=true;$('match-panel').hidden=true;$('park-summary').hidden=true;
     if(m.phase==='match')toast(TEXT.ready);}
-   latest=m.state;latest.human=latest.players.find(p=>p.id===m.id);phase=m.phase;field=m.field;lastStateAt=now;
+   spectating=null;$('spectate-toggle').hidden=true;
+   latest=m.state;renderCountdown($('match-countdown'),latest);latest.human=latest.players.find(p=>p.id===m.id);phase=m.phase;field=m.field;lastStateAt=now;
    setMapOpen(false);
    predictor.receive(m,now,rtt);$('park-app').hidden=true;$('match-screen').hidden=false;
-   const recorded={...latest,online:true,joinedLate:latest.tracker.elapsed>0,players:latest.players.map(p=>({...p,human:p.id===m.id})),report:()=>({...report,players:(report?.players||[]).map(p=>({...p,human:p.id===m.id}))})};
-   if(!recorder){recorder=new ReplayRecorder(recorded,{id:`park-${matchId}-${m.id}-${Date.now()}`});recordTick=m.tick;$('field').focus();}
-   else if(!recorder.finalized){recorder.match=recorded;recorder.step(Math.max(0,m.tick-recordTick)/120);recordTick=m.tick;}
+   const recorded={...latest,mode:m.ranked?.mode||'casual',matchId:m.matchId,online:true,joinedLate:latest.tracker.elapsed>0,players:latest.players.map(p=>({...p,human:p.id===m.id})),report:()=>({...report,players:(report?.players||[]).map(p=>({...p,human:p.id===m.id}))})};
+   if(!recorder&&!['lobby','voting'].includes(latest.state)){recorder=new ReplayRecorder(recorded,{id:`park-${matchId}-${m.id}-${Date.now()}`});recordTick=m.tick;$('field').focus();}
+   else if(recorder&&!recorder.finalized){recorder.match=recorded;recorder.step(Math.max(0,m.tick-recordTick)/120);recordTick=m.tick;}
    $('match-eyebrow').textContent=COURTS.find(f=>f.id===field)?.name||'';
    $('match-heading').textContent=latest.state==='ended'?TEXT.fullTime:TEXT.matchMenu;
    $('park-final-score').hidden=latest.state!=='ended';if(latest.state==='ended'){$('park-final-score').replaceChildren();
@@ -185,13 +225,13 @@ $('login-form').onsubmit=event=>{
     red.textContent='RED '+latest.score.red;blue.textContent='BLUE '+latest.score.blue;const dash=document.createElement('span');dash.textContent=' — ';$('park-final-score').append(red,dash,blue);}
    $('match-status').textContent=latest.state==='ended'?'':TEXT.matchMenuHelp;
    updateNextMatch(now);
-   if(latest.state==='ended'&&(changed||previous?.state!=='ended')){$('match-panel').hidden=true;input.reset();inputSend(idle());showSummary();}
+   if(latest.state==='ended'&&(changed||previous?.state!=='ended')){$('toast').hidden=true;toastUntil=0;$('match-panel').hidden=true;input.reset();inputSend(idle());showSummary();}
    complete();audio.play(m.events,prefs.volume,{team:latest.human?.team??null});
   }
  };
 };
 $('park-canvas').addEventListener('pointermove',e=>{
-  if(!id || latest || settingsOpen() ||
+  if(!id || latest || spectating!==null || settingsOpen() ||
      !$('court-dialog').hidden ||
      !$('park-options').hidden)return;
 
@@ -210,7 +250,8 @@ $('park-canvas').addEventListener('pointerdown',e=>{
   keys.add('Mouse'+e.button);
   if(e.button!==0)return;
   const p=parkRenderer.point(e.clientX,e.clientY);
-  const court=courtAt(p.x,p.y);
+  const avatar=parkRenderer.avatarAt(park,p.x,p.y,prefs.name);if(avatar){resetWalk();send({type:'profile-public',name:avatar.name});return;}
+  publicProfile.close();const court=courtAt(p.x,p.y);
 
   if(court){
     parkPointer=null;
@@ -218,6 +259,7 @@ $('park-canvas').addEventListener('pointerdown',e=>{
     return;
   }
 
+  if(spectating!==null)return;
   parkPointer={x:e.clientX,y:e.clientY};
 
   // Keep click-to-walk available when keyboard movement is selected.
@@ -233,15 +275,18 @@ $('park-canvas').addEventListener('pointerdown',e=>{
 window.addEventListener('keydown',e=>{
  if(!id||latest||settingsOpen()||!$('court-dialog').hidden||!$('park-options').hidden||e.target instanceof Element&&e.target.closest('input,select,textarea'))return;
  const code=e.code.startsWith('Shift')?'Shift':e.code;
+ if(code==='KeyE'){e.preventDefault();if(!e.repeat)toggleSpectating();return;}
  if(code==='KeyM'){e.preventDefault();if(!e.repeat)setMapOpen(!mapOpen);return;}
+ if(spectating!==null)return;
+ if(e.target instanceof Element&&e.target.closest('button,a'))return;
  if(Object.values(prefs.bindings).includes(code)||code.startsWith('Arrow')){e.preventDefault();keys.add(code);destination=null;}
 });
 window.addEventListener('pointerup',e=>keys.delete('Mouse'+e.button));
 window.addEventListener('pointercancel',resetWalk);
 $('park-canvas').addEventListener('contextmenu',e=>e.preventDefault());
 window.addEventListener('keyup',e=>keys.delete(e.code.startsWith('Shift')?'Shift':e.code));
-// Mouse wheel changes walking/spectating zoom; field framing stays automatic.
-$('park-canvas').addEventListener('wheel',e=>{if(id&&!latest){e.preventDefault();parkRenderer.setZoom(e.deltaY);}},{passive:false});
+// Walking and explicit spectator cameras keep separate zoom levels.
+$('park-canvas').addEventListener('wheel',e=>{if(id&&!latest){e.preventDefault();parkRenderer.setZoom(e.deltaY,spectating!==null);}},{passive:false});
 // Scroll while on a field to change the match camera zoom.
 $('field').addEventListener('wheel',e=>{
   if(!latest || !$('match-panel').hidden)return;
@@ -264,7 +309,7 @@ window.addEventListener('pagehide',()=>{archive();ws?.close();});
 function frame(now){
  chat.tick(now);
  const dt=Math.min(.05,(now-(last||now))/1000);last=now;
- if(!latest)parkRenderer.draw(park,id,destination,now,{prefs,overview:mapOpen});
+ if(!latest){syncSpectatePrompt();parkRenderer.draw(park,id,destination,now,{prefs,overview:mapOpen,spectating});}
  if(toastUntil&&now>toastUntil){$('toast').hidden=true;toastUntil=0;}
  if(ws?.readyState===1&&now-pingAt>1000){pingAt=now;send({type:'ping',at:now});}
  if(id&&!latest){
@@ -272,7 +317,7 @@ function frame(now){
    sendAt=now;
    let x=0,y=0;
 
-   const active=$('court-dialog').hidden&&$('park-options').hidden&&!settingsOpen();
+   const active=spectating===null&&$('court-dialog').hidden&&$('park-options').hidden&&!settingsOpen();
    const me=park?.players.find(p=>p.id===id);
 
    if(active&&me){
@@ -315,8 +360,8 @@ function frame(now){
    });
   }
 
-  $('park-guide').hidden=mapOpen;
-  $('park-help').textContent=
+  if(parkGuide)parkGuide.hidden=mapOpen||!$('spectate-toggle').hidden;
+  if(parkHelp)parkHelp.textContent=
     now-lastParkAt>1500?TEXT.parkWaiting:TEXT.walkHelp;
  }
  if(latest){
@@ -331,4 +376,4 @@ function frame(now){
  requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-Object.defineProperty(window,'teamballPark',{value:{snapshot:()=>structuredClone({id,park,field,phase,matchId,state:latest,report,rtt,mapOpen})}});
+Object.defineProperty(window,'teamballPark',{value:{snapshot:()=>structuredClone({id,park,field,phase,matchId,state:latest,report,rtt,mapOpen,spectating})}});

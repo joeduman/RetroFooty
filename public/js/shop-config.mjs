@@ -1,6 +1,5 @@
 export const SHOP_CATEGORIES=['Shirts','Goal explosions','Goal music','Soccer balls','Boost trails'];
 export const SHOP_ITEMS=[
- {id:'shirt:plain',category:'Shirts',name:'Plain White',price:0,kind:'shirt',value:'plain',image:'/images/shirts/shirt1.png'},
  {id:'shirt:inferno',category:'Shirts',name:'Inferno',price:100,kind:'shirt',value:'inferno',image:'/images/shirts/shirt_inferno.png'},
  {id:'shirt:barcelona',category:'Shirts',name:'Barcelona',price:250,kind:'shirt',value:'barcelona',image:'/images/shirts/barcelona.png'},
  {id:'shirt:psg',category:'Shirts',name:'PSG',price:250,kind:'shirt',value:'psg',image:'/images/shirts/psg.png'},

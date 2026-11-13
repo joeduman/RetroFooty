@@ -34,7 +34,7 @@ export function mountChat(host,{send,active,resetControls,focusGame}){
   setConnected(value){if(value===connected)return;connected=value;host.hidden=!value;if(!value){endTyping();messages.length=0;bubbles.clear();typing.clear();renderLog();status.textContent='';}},
   close,
   receive(m){const now=performance.now();
-   if(m.type==='chat-history'){messages.length=0;messages.push(...m.messages.slice(-CHAT.historyLimit));typing.clear();for(const p of m.typing||[])typing.set(p.sender,{name:p.name,until:now+p.remaining});renderLog();return true;}
+   if(m.type==='chat-history'){typing.clear();for(const p of m.typing||[])typing.set(p.sender,{name:p.name,until:now+p.remaining});return true;}
    if(m.type==='chat-line'){const line=m.message;if(!messages.some(x=>x.id===line.id)){messages.push(line);if(messages.length>CHAT.historyLimit)messages.shift();renderLog();}bubbles.set(line.sender,{text:line.text,until:now+CHAT.bubbleMs});typing.delete(line.sender);return true;}
    if(m.type==='chat-typing'){if(m.typing)typing.set(m.sender,{name:m.name,until:now+CHAT.typingMs});else typing.delete(m.sender);return true;}
    if(m.type==='chat-error'){error.textContent=m.message;return true;}return false;

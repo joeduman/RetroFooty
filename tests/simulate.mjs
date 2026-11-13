@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync} from 'node:fs';
 import {Match} from '../public/js/match.mjs';
 import {STEP,distance} from '../public/js/config.mjs';
 const gamesPerSize=Number(process.argv[2])||10,results=[],failures=[];
@@ -29,8 +29,9 @@ for(let size=1;size<=5;size++){
  }
  const group=results.filter(r=>r.size===size);console.log(`${size}v${size}: ${group.length} rounds, ${group.reduce((n,r)=>n+r.score.red+r.score.blue,0)} goals, longest stationary interval ${Math.max(...group.map(r=>r.maxStallSeconds))}s`);
 }
-const summary={build:'15',testedAt:new Date().toISOString(),games:results.length,simulatedMinutes:+(results.reduce((n,r)=>n+r.liveSeconds,0)/60).toFixed(3),
+const summary={build:'15.1',testedAt:new Date().toISOString(),games:results.length,simulatedMinutes:+(results.reduce((n,r)=>n+r.liveSeconds,0)/60).toFixed(3),
  goals:results.reduce((n,r)=>n+r.score.red+r.score.blue,0),completedPasses:results.reduce((n,r)=>n+r.completedPasses,0),ownGoals:results.reduce((n,r)=>n+r.ownGoals,0),passes:results.reduce((n,r)=>n+r.passes,0),banks:results.reduce((n,r)=>n+r.banks,0),
  worstStallSeconds:Math.max(...results.map(r=>r.maxStallSeconds)),maximumBallStep:Math.max(...results.map(r=>r.maxBallStep)),worstPenetration:Math.max(...results.map(r=>r.maxPenetration)),failures,results};
-writeFileSync(new URL('./simulation-results.json',import.meta.url),JSON.stringify(summary,null,2));
-console.log(JSON.stringify({...summary,results:undefined}));assert.equal(failures.length,0,'Simulation regressions; see tests/simulation-results.json');
+mkdirSync(new URL('../reports/',import.meta.url),{recursive:true});
+writeFileSync(new URL('../reports/simulation-results.json',import.meta.url),JSON.stringify(summary,null,2));
+console.log(JSON.stringify({...summary,results:undefined}));assert.equal(failures.length,0,'Simulation regressions; see reports/simulation-results.json');

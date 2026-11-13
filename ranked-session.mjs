@@ -4,6 +4,7 @@ export function sessionRoster(session,slotKey='slot'){
 }
 export function voteState(session){const yes=session.members.filter(c=>c.vote===true&&!c.disconnected).length;return {yes,required:Number.isFinite(overtimeThreshold(session.size))?overtimeThreshold(session.size):null,deadline:session.voteDeadline??null,approved:yes>=overtimeThreshold(session.size)};}
 export function startRanked(session,store,slotKey='slot'){
+ if(session.members.length!==session.size*2||session.members.some(c=>c.disconnected)||session.game.players.length!==session.size*2||session.game.players.some(p=>!p.human))throw Error('Ranked requires complete human teams');
  const m=store.begin(session.matchId,sessionRoster(session,slotKey),session.game.duration);
  session.game.goldenGoal=voteState(session).approved;
  session.rankedStarted=true;session.voteDeadline=null;if('phase' in session)session.phase='match';return m;

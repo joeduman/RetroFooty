@@ -23,7 +23,7 @@ test('singularity swallows a frozen visual ball in either goal without changing 
   const {renderer,match,balls}=fixture({team,swapped});const original=structuredClone(match);
   renderer.drawMatchBall(match,match.engine.ball,0);assert.equal(balls.length,0,'the ordinary ball must not leak through the effect');
   renderer.goalConfetti(match,0);assert.equal(balls.length,1);assert.equal(balls[0].x,match.engine.ball.x);assert.equal(balls[0].radius,8);
-  balls.length=0;renderer.goalConfetti(structuredClone(match),450);
+  balls.length=0;renderer.goalConfetti(structuredClone(match),BLACK_HOLE_TIMING.swallowEnd*500);
   assert.equal(balls.length,1);assert.ok(balls[0].radius>0&&balls[0].radius<8,'the scored ball visibly shrinks into the hole');
   const burst=[...renderer.goalBursts.values()][0];
   assert.ok(Math.hypot(balls[0].x-burst.holeX,balls[0].y-burst.holeY)<Math.hypot(original.engine.ball.x-burst.holeX,original.engine.ball.y-burst.holeY));
@@ -35,9 +35,9 @@ test('singularity swallows a frozen visual ball in either goal without changing 
 
 test('the dark core contracts and disappears, with the swallowed ball hidden until normal play',()=>{
  const {renderer,match,calls,balls}=fixture();renderer.drawMatchBall(match,match.engine.ball,0);
- renderer.goalConfetti(match,1200);
+ renderer.goalConfetti(match,BLACK_HOLE_TIMING.collapseStart*.85*1000);
  const radius=calls.find(call=>call.type==='fill'&&call.color==='#02030a').path.radius;
- calls.length=0;renderer.goalConfetti(match,1950);
+ calls.length=0;renderer.goalConfetti(match,(BLACK_HOLE_TIMING.collapseStart+BLACK_HOLE_TIMING.collapseEnd)*500);
  const collapsed=calls.find(call=>call.type==='fill'&&call.color==='#02030a').path.radius;
  assert.ok(collapsed>0&&collapsed<radius,'the black core must visibly implode');
  calls.length=balls.length=0;

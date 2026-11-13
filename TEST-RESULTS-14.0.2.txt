@@ -1,9 +1,0 @@
-BUILD 14.0.2 OVERNIGHT TRAINING VALIDATION
-- Node test suite: 127/127 passed, including three new overnight checks.
-- 10-match Expert rollout: 1v1-5v5 each covered twice, once on each team.
-- Full offline supervisor training smoke: one completed cycle (10 Expert,
-  10 candidate self-play, 10 benchmark), exit 0, no model promotion for rejected candidate.
-- Connected player pause: no training cycle started while client count was nonzero.
-- Stop flag: supervisor exited after requested stop and released lock.
-- Python source compilation and Node JS syntax checks passed.
-- Windows hidden-process launch and real online latency NOT tested in Linux.

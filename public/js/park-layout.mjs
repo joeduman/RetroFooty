@@ -11,4 +11,8 @@ export const COURTS=[...casual,...ranked].map(f=>({...f,
  name:`${f.size}v${f.size} · ${f.mode==='ranked'?'Ranked':'Unranked'}${f.mode==='ranked'&&f.size<=3?' '+f.number:''}`,
  color:f.mode==='ranked'?'#d8b56a':'#b5c5ad',w:createPitch(f.size).width,h:createPitch(f.size).height}));
 export const courtById=id=>COURTS.find(f=>f.id===id);
-export const courtAt=(x,y)=>COURTS.find(f=>x>=f.x-20&&x<=f.x+f.w+20&&y>=f.y-110&&y<=f.y+f.h+55);
+// Match the marked playing surface; runoff, nets and signs are walking space.
+export const courtAt=(x,y)=>COURTS.find(f=>{
+ const p=createPitch(f.size);
+ return x>=f.x+p.left&&x<=f.x+p.right&&y>=f.y+p.top&&y<=f.y+p.bottom;
+});

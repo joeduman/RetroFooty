@@ -1,3 +1,4 @@
+import {COURTS} from '../public/js/park-layout.mjs';
 // Runtime/controller integration with real WebSockets and a small DOM adapter.
 // Canvas calls and persistence are adapters; this is not a visual browser test.
 import test from 'node:test';import assert from 'node:assert/strict';import http from 'node:http';import {readFile} from 'node:fs/promises';
@@ -28,9 +29,20 @@ test('park client walks, joins a live field, gets full-roster kickoff and final 
  const effectButton=(host,id)=>$(host).children[1].children.find(button=>button.getAttribute('data-goal-effect')===id);
  effectButton('goal-effect-picker-login','fire').dispatchEvent(new Event('click'));
  for(const host of ['goal-effect-picker-login','goal-effect-picker-park','goal-effect-picker-match'])assert.equal(effectButton(host,'fire').getAttribute('aria-pressed'),'true');
- $('login-settings').onclick();assert.equal($('settings-panel').hidden,false);$('settings-names').checked=false;$('settings-names').onchange();$('settings-close').onclick();assert.equal($('settings-panel').hidden,true);$('username').value='Park tester';$('movement').value='keys';$('login-form').onsubmit({preventDefault(){}});await until(()=>window.teamballPark.snapshot().park);
+ $('login-settings').onclick();assert.equal($('personal-menu').hidden,false);$('settings-names').checked=false;$('settings-names').onchange();$('settings-close').onclick();assert.equal($('settings-panel').hidden,true);$('username').value='Park tester';$('movement').value='keys';$('login-form').onsubmit({preventDefault(){}});await until(()=>window.teamballPark.snapshot().park);
  const me=()=>window.teamballPark.snapshot().park.players.find(p=>p.id===window.teamballPark.snapshot().id),before=me().x;assert.equal(me().shirtId,'barcelona');assert.equal(me().goalEffectId,'fire');
  assert.equal($('court-list').children.length,13);
+ const own=[...stop.world.clients.values()].find(c=>c.name==='Park tester'),start={x:own.x,y:own.y},court=COURTS[0];
+ const key=(code,repeat=false)=>window.dispatchEvent(Object.assign(new Event('keydown'),{code,repeat}));
+ key('KeyE');assert.equal(window.teamballPark.snapshot().spectating,null);
+ Object.assign(own.avatar,{x:court.x+court.w/2,y:court.y+court.h+80});own.x=own.avatar.x;own.y=own.avatar.y;
+ await until(()=>!$('spectate-toggle').hidden);assert.equal(window.teamballPark.snapshot().spectating,null,'approaching a field never activates spectating');
+ key('KeyE');assert.equal(window.teamballPark.snapshot().spectating,1);key('KeyE',true);assert.equal(window.teamballPark.snapshot().spectating,1);
+ const stopped=own.x;key('KeyD');await sleep(150);assert.equal(own.x,stopped,'watching pauses park movement');key('KeyE');assert.equal(window.teamballPark.snapshot().spectating,null);
+ $('park-menu').onclick();key('KeyE');assert.equal(window.teamballPark.snapshot().spectating,null,'menu typing must not activate spectating');$('personal-menu').children[0].children[0].children[1].onclick();
+ $('spectate-toggle').onclick();assert.equal(window.teamballPark.snapshot().spectating,1);key('KeyM');assert.equal(window.teamballPark.snapshot().spectating,null);key('KeyM');
+ Object.assign(own.avatar,start);Object.assign(own,start);await until(()=>Math.abs(me().x-start.x)<1);
+
  window.dispatchEvent(Object.assign(new Event('keydown'),{code:'KeyM'}));assert.equal(window.teamballPark.snapshot().mapOpen,true);assert.equal($('court-list').hidden,true);
  window.dispatchEvent(Object.assign(new Event('keydown'),{code:'KeyM',repeat:true}));assert.equal(window.teamballPark.snapshot().mapOpen,true);
  window.dispatchEvent(Object.assign(new Event('keydown'),{code:'KeyM'}));assert.equal(window.teamballPark.snapshot().mapOpen,false);
@@ -40,10 +52,10 @@ test('park client walks, joins a live field, gets full-roster kickoff and final 
  friend=new WebSocket(`ws://${location.host}/park`);await new Promise(r=>friend.on('open',r));friend.send(JSON.stringify({type:'login',name:'Opponent'}));friend.send(JSON.stringify({type:'join',size:1,team:'blue'}));
  await until(()=>window.teamballPark.snapshot().phase==='match');assert.equal(window.teamballPark.snapshot().state.state,'kickoff');assert.equal(window.teamballPark.snapshot().state.score.red,0);
  assert.equal(window.teamballPark.snapshot().state.human.goalEffectId,'fire');
- effectButton('goal-effect-picker-match','classic').dispatchEvent(new Event('click'));await until(()=>window.teamballPark.snapshot().state.human.goalEffectId==='classic');
+ effectButton('goal-effect-picker-match','classic').dispatchEvent(new Event('click'));await sleep(50);assert.equal(window.teamballPark.snapshot().state.human.goalEffectId,'fire');
  effectButton('goal-effect-picker-match','fire').dispatchEvent(new Event('click'));await until(()=>window.teamballPark.snapshot().state.human.goalEffectId==='fire');
  await until(()=>saves.some(s=>s.summary.status==='complete'));
- const saved=saves.find(s=>s.summary.status==='complete');assert.equal($('park-summary').hidden,false);assert.match($('park-summary-title').textContent,/^(Win|Loss|Draw) \d+-\d+$/);assert.equal($('match-panel').hidden,true);assert.equal($('match-report').hidden,true);
+ const saved=saves.find(s=>s.summary.status==='complete');assert.equal($('park-summary').hidden,false);assert.match($('park-summary-title').textContent,/^(Victory|Defeat|Draw) — \d+–\d+$/);assert.equal($('match-panel').hidden,true);assert.equal($('match-report').hidden,true);
  assert.match($('park-summary-caption').textContent,/^Next match in 0:0[78]$/);const firstCountdown=$('park-summary-caption').textContent;
  $('park-summary-details').onclick();assert.equal($('match-panel').hidden,false);assert.equal($('match-report').hidden,false);assert.equal($('heatmap-player').children.length,2);assert.equal(saved.summary.report.players.filter(p=>p.human).length,1);assert.equal(replayFrame(saved.replay,saved.replay.duration).state,'ended');assert.match($('save-status').textContent,/saved/);
  await until(()=>$('park-summary-caption').textContent!==firstCountdown);assert.equal($('match-status').textContent,$('park-summary-caption').textContent);assert.equal($('match-label').textContent,'NEXT MATCH');assert.match($('clock').textContent,/^0:0\d$/);

@@ -6,7 +6,7 @@ import {GOAL_EFFECT_OPTIONS,normalizeGoalEffect} from '../public/js/goal-effects
 
 function fixture({team='red',swapped=false,size=3}={}){
   const calls=[],renderer=new Renderer({getContext:()=>({save(){},restore(){},rotate(){},translate(x,y){calls.push({type:'position',x,y});},fillRect(){calls.push({type:'paper',color:this.fillStyle});},
-    beginPath(){},arc(...values){calls.push({type:'arc',values});},ellipse(...values){calls.push({type:'ellipse',values});},
+    beginPath(){},closePath(){},arc(...values){calls.push({type:'arc',values});},ellipse(...values){calls.push({type:'ellipse',values});},
     moveTo(...values){calls.push({type:'move',values});},lineTo(...values){calls.push({type:'line',values});},
     fill(){calls.push({type:'fill',color:this.fillStyle});},stroke(){calls.push({type:'stroke',color:this.strokeStyle});},
     createRadialGradient(){return {addColorStop(offset,color){calls.push({type:'glow',offset,color});}};}

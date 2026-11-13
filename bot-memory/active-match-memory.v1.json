@@ -315,6 +315,390 @@
       },
       "status": "candidate",
       "source": "authoritative-server"
+    },
+    {
+      "id": "4d881c23-b2b5-41b7-a46b-046cc28b8e99",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 595,
+        "boost": 0.26927319547272766,
+        "turn": 0.0931552349205446,
+        "reverse": 0.0426365626745034,
+        "lateralBias": -0.012261695777838495,
+        "straight": 0.8333374849995491,
+        "wall": 0.06166433741219196,
+        "challenge": 0.5184164229082626,
+        "kick": 0.05077985481677682
+      },
+      "score": {
+        "red": 7,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "7470306e-4145-4ad2-8485-f3c12716882e",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1231,
+        "boost": 0.20310375747089066,
+        "turn": 0.15453103914505364,
+        "reverse": 0.04105000780017093,
+        "lateralBias": -0.07899717324924263,
+        "straight": 0.6712352068534617,
+        "wall": 0.1535910766765333,
+        "challenge": 0.7117333533031404,
+        "kick": 0.05366363783450521
+      },
+      "score": {
+        "red": 3,
+        "blue": 8
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "1a44304a-ed33-4b2a-856c-24c0eca8939d",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 223,
+        "boost": 0.0005853583849606282,
+        "turn": 0.0003125360181135802,
+        "reverse": 0.00009775614478377808,
+        "lateralBias": -0.01147045739023454,
+        "straight": 0.10437735081278396,
+        "wall": 0.00018504174322091227,
+        "challenge": 0.10447273424855454,
+        "kick": 0.00018718130015818595
+      },
+      "score": {
+        "red": 3,
+        "blue": 4
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "6e88975b-9d9d-4634-8c08-47a123a6cb94",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 338,
+        "boost": 0.24803409184468753,
+        "turn": 0.23714178419760606,
+        "reverse": 0.11501722905126094,
+        "lateralBias": 0.009887916846090656,
+        "straight": 0.6379277388309835,
+        "wall": 0.18314031321583338,
+        "challenge": 0.5095086258426951,
+        "kick": 0.08524457754115104
+      },
+      "score": {
+        "red": 6,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "4e1b20dc-cd8f-44eb-9016-5ae563bfd141",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1171,
+        "boost": 0.2839779739108157,
+        "turn": 0.15178870931993793,
+        "reverse": 0.03480066615050277,
+        "lateralBias": 0.025884175696096006,
+        "straight": 0.739191977839878,
+        "wall": 0.3374395841419823,
+        "challenge": 0.6747624200308643,
+        "kick": 0.04326441881127494
+      },
+      "score": {
+        "red": 14,
+        "blue": 1
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "0358b4a1-eef4-44a0-9ff9-43b2de618e0a",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 259,
+        "boost": 0.29131212436540144,
+        "turn": 0.14105080654829572,
+        "reverse": 0.00448911291973374,
+        "lateralBias": -0.029741983567672048,
+        "straight": 0.7754696953557146,
+        "wall": 0.19106033986407298,
+        "challenge": 0.3808504466551548,
+        "kick": 0.06586114415336373
+      },
+      "score": {
+        "red": 1,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "53294d6c-3bee-4767-9e7e-aa9db65c6b47",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 495,
+        "boost": 0.20663186868018837,
+        "turn": 0.08386269052839622,
+        "reverse": 0.039792788899416814,
+        "lateralBias": -0.17395622777010683,
+        "straight": 0.7633003250712517,
+        "wall": 0.16604530391082306,
+        "challenge": 0.4688594478761318,
+        "kick": 0.08073058305569986
+      },
+      "score": {
+        "red": 4,
+        "blue": 7
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "ac014761-5ab8-436a-b202-1fc613f529ab",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1172,
+        "boost": 0.22665243481889585,
+        "turn": 0.0791748507766353,
+        "reverse": 0.04703621630327345,
+        "lateralBias": -0.08985488144293355,
+        "straight": 0.8206705048987853,
+        "wall": 0.11927136072726406,
+        "challenge": 0.8201873759515728,
+        "kick": 0.0915550166049825
+      },
+      "score": {
+        "red": 3,
+        "blue": 7
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "34372ab1-e790-4cf2-88ea-3ef193f370d1",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 196,
+        "boost": 0.39837610939140294,
+        "turn": 0.12374558634954114,
+        "reverse": 0.006328567021428228,
+        "lateralBias": -0.0942536899711533,
+        "straight": 0.7906584259861439,
+        "wall": 0.00655089938426331,
+        "challenge": 0.6051429013641593,
+        "kick": 0.024994332967920516
+      },
+      "score": {
+        "red": 1,
+        "blue": 2
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "463d42bb-42d4-43c5-a79d-909d2c05e4b1",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 641,
+        "boost": 0.2712224980367437,
+        "turn": 0.1833825546488214,
+        "reverse": 0.03071025624153422,
+        "lateralBias": -0.006057608313576976,
+        "straight": 0.5803022164479656,
+        "wall": 0.10582535120373247,
+        "challenge": 0.7214063959065627,
+        "kick": 0.10109801183602002
+      },
+      "score": {
+        "red": 6,
+        "blue": 2
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "574682cf-a74e-4b2f-8b84-bd5e6a4761c8",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1106,
+        "boost": 0.2078257648474154,
+        "turn": 0.06275825536464785,
+        "reverse": 0.018276702841799695,
+        "lateralBias": 0.020053705286344186,
+        "straight": 0.6625525844815192,
+        "wall": 0.1110490400315717,
+        "challenge": 0.6283054193081583,
+        "kick": 0.04048249449795454
+      },
+      "score": {
+        "red": 11,
+        "blue": 6
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "d476ebc6-4a23-473f-b81a-2589daf06945",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1174,
+        "boost": 0.261863819350421,
+        "turn": 0.07181914114142886,
+        "reverse": 0.019185836413817707,
+        "lateralBias": -0.015693116772992614,
+        "straight": 0.8455653574490074,
+        "wall": 0.06341852938639612,
+        "challenge": 0.8588707705671359,
+        "kick": 0.07611780135435367
+      },
+      "score": {
+        "red": 11,
+        "blue": 9
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "1c75e246-352b-402f-a498-507c01d5e64f",
+      "size": 3,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 2152,
+        "boost": 0.36388094457096576,
+        "turn": 0.11056223827278028,
+        "reverse": 0.03215644935708396,
+        "lateralBias": 0.08837286396844934,
+        "straight": 0.7279201381462729,
+        "wall": 0.27355539052900735,
+        "challenge": 0.40109179652473803,
+        "kick": 0.0409573013182592
+      },
+      "score": {
+        "red": 3,
+        "blue": 2
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "7e8fc5d8-128d-40ac-97a4-a642c632e0de",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1157,
+        "boost": 0.35548196121836534,
+        "turn": 0.1849588607305594,
+        "reverse": 0.07509771584955151,
+        "lateralBias": 0.09826868325084057,
+        "straight": 0.6479743443096299,
+        "wall": 0.2343263512357607,
+        "challenge": 0.6956580212329272,
+        "kick": 0.07245411485820744
+      },
+      "score": {
+        "red": 8,
+        "blue": 3
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "536c5c60-6cb3-4850-9719-1c2f27fafc50",
+      "size": 2,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 178,
+        "boost": 0.35303136682972236,
+        "turn": 0.14366676779967738,
+        "reverse": 0.03281727945801107,
+        "lateralBias": 0.1281720405601079,
+        "straight": 0.7312540749826114,
+        "wall": 0.07558526681536237,
+        "challenge": 0.37267630243147387,
+        "kick": 0.02706412416670093
+      },
+      "score": {
+        "red": 3,
+        "blue": 2
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
+    },
+    {
+      "id": "e413d9cd-3d91-4499-b9c6-3a8c7b10bc64",
+      "size": 1,
+      "completed": true,
+      "human": true,
+      "participants": 1,
+      "pattern": {
+        "samples": 1125,
+        "boost": 0.23785728080528568,
+        "turn": 0.13801415510046364,
+        "reverse": 0.0564518545803874,
+        "lateralBias": -0.043650790362475975,
+        "straight": 0.3134530818619744,
+        "wall": 0.21095164190708607,
+        "challenge": 0.36723127272669054,
+        "kick": 0.08247601222508452
+      },
+      "score": {
+        "red": 5,
+        "blue": 7
+      },
+      "status": "candidate",
+      "source": "authoritative-server"
     }
   ],
   "rejected": [],

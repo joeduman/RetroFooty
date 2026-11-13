@@ -12,7 +12,7 @@ export class ReplayRecorder {
     this.moments=[];this.scenes=[];this.sceneKey='';this.sceneIndex=-1;this.lastState='';this.finalized=false;
     this.meta={build:BUILD,online:Boolean(match.online),joinedLate:Boolean(match.joinedLate),pitch:copy(match.pitch),size:match.size,practice:match.practice,drill:match.drill,
       ballRadius:match.engine.ball.radius,headerStride:HEADER,spectator:match.spectator,duration:match.duration,unlimitedStamina:match.unlimitedStamina,
-      players:match.players.map(p=>({id:p.id,team:p.team,number:p.number,name:p.name,human:p.human,radius:p.radius}))};
+      mode:match.mode,matchId:match.matchId,players:match.players.map(p=>({id:p.id,team:p.team,number:p.number,name:p.name,human:p.human,radius:p.radius,shirtId:p.shirtId}))};
     this.capture();
   }
   capture(){
@@ -26,7 +26,7 @@ export class ReplayRecorder {
     if(key!==this.sceneKey||!this.count){this.sceneKey=key;this.sceneIndex=this.scenes.length;this.scenes.push(scene);}
     const offset=this.count*this.width;if(offset+this.width>this.data.length){const next=new Float32Array(this.data.length*2);next.set(this.data);this.data=next;}
     const row=[this.time,STATES.indexOf(m.state),m.score.red,m.score.blue,m.remaining,m.wait,m.tracker.elapsed,m.overtime?1:0,b.x,b.y,b.angle,this.sceneIndex,m.goalTeam==='red'?1:m.goalTeam==='blue'?2:0,m.sidesSwapped?1:0];
-    for(const p of m.players)row.push(p.x,p.y,p.stamina,p.sprinting?1:0,p.vx,p.vy,p.input?.shoot||p.kickFlash>0?1:0);
+    for(const original of this.meta.players){const p=m.players.find(p=>p.id===original.id);row.push(p?.x??-10000,p?.y??-10000,p?.stamina??0,p?.sprinting?1:0,p?.vx??0,p?.vy??0,p?.input?.shoot||p?.kickFlash>0?1:0);}
     this.data.set(row,offset);this.count++;this.lastState=m.state;
   }
   step(dt){
@@ -37,7 +37,7 @@ export class ReplayRecorder {
     this.capture();const report=this.match.report();
     const summary={id:this.id,startedAt:this.startedAt,build:BUILD,online:this.meta.online,joinedLate:this.meta.joinedLate,status,size:this.meta.size,practice:this.meta.practice,
       drill:this.meta.drill,spectator:this.meta.spectator,score:{...report.score},elapsed:report.elapsed,
-      replaySeconds:this.time,report,players:this.meta.players};
+      mode:this.meta.mode,matchId:this.meta.matchId,replaySeconds:this.time,report,players:this.meta.players};
     return {summary,replay:{id:this.id,meta:this.meta,playerStride:PLAYER,moments:copy(this.moments),width:this.width,count:this.count,duration:this.time,
       frames:this.data.slice(0,this.count*this.width),scenes:copy(this.scenes)}};
   }
@@ -51,7 +51,7 @@ export function replayFrame(record,seconds){
   const mix=same&&interval>0?clamp((time-f[a])/interval,0,1):0;
   const lerp=(i,limit=80)=>Math.abs(f[b+i]-f[a+i])>limit?f[a+i]:f[a+i]+(f[b+i]-f[a+i])*mix;
   const players=meta.players.map((p,i)=>{const k=(meta.headerStride||13)+(record.playerStride??6)*i;return {...p,x:lerp(k),y:lerp(k+1),stamina:lerp(k+2,100),
-    sprinting:Boolean(f[a+k+3]),vx:f[a+k+4],vy:f[a+k+5],exhausted:f[a+k+2]<=0,input:{shoot:record.playerStride===7?Boolean(f[a+k+6]):false}};});
+    sprinting:Boolean(f[a+k+3]),vx:f[a+k+4],vy:f[a+k+5],exhausted:f[a+k+2]<=0,input:{shoot:record.playerStride===7?Boolean(f[a+k+6]):false}};}).filter(p=>p.x> -9000);
   const scene=record.scenes[f[a+11]];let training=null;
   if(scene){training=copy(scene);if(training.gates.length&&training.target)training.target=training.gates[training.score%training.gates.length];}
   return {...(record.moments?.findLast(m=>m.time<=time+1e-6)||{}),pitch:meta.pitch,size:meta.size,players,human:players.find(p=>p.human),spectator:meta.spectator,

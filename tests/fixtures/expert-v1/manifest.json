@@ -1,0 +1,29 @@
+{
+  "version": "expert-predictive-1",
+  "reason": "Controller before hehe.mp4 refinement",
+  "change": "Only relative imports for shared physics/config/legacy dependencies adjusted; predictive helpers frozen too.",
+  "files": {
+    "expert-ai.mjs": {
+      "source": "public/js/expert-ai.mjs",
+      "originalSha256": "5dd46185eeeec8f4da9c1b7f907744e27fb0683ee5efe6eafabd11e6d944861c",
+      "snapshotSha256": "808150b4c5381648528b3eed7ef7cdd69e44bd599b36b687aeef43aea5f2b8c7"
+    },
+    "ai-prediction.mjs": {
+      "source": "public/js/ai-prediction.mjs",
+      "originalSha256": "103aeb4ea7288fa2fa3d176c5e25ba3255afa787b1ad6d85a5aa9f63a041133f",
+      "snapshotSha256": "936a321988863b85c8c2ef26ac57a6bccd651dee13690d9be5b91c8c235aab5d"
+    },
+    "ai-active-memory.mjs": {
+      "source": "public/js/ai-active-memory.mjs",
+      "originalSha256": "a7d8b28cd1da4890888ece18aaede02c4d89fe3786f82a8075323f8317db16d4",
+      "snapshotSha256": "100cd08da0720609144d9fe0cfcec706f23e3921a10d145e5e1d5a4496a857a4"
+    }
+  },
+  "sharedSources": {
+    "public/js/physics.mjs": "3d00616f3dc46b53314b361ebeb8da94822fe52bca9cefaf104c2e9e9dd9f25d",
+    "public/js/config.mjs": "e62cf69a1bc33ce19ed14223ffeb8f4b19134bffa283e92af3b9626b84a1d023",
+    "public/js/ai-policy.mjs": "f2a60a91e32a9a29c407afd551723efbd2be1faae2823d5bfaccea78092f896b",
+    "public/js/neural-policy.mjs": "e5d141d2802377bfa65224fcffbab13c7129e4df6095e567de457eaf9c38dc00",
+    "public/js/ai-legacy.mjs": "bc2f9d87e218c2d934b9a27eeb5fcdd3e5e844c5eac391d1c146fd5bdd7a0eea"
+  }
+}

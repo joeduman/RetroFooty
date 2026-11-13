@@ -24,8 +24,9 @@ cleared on sending, cancellation, focus loss and disconnect. Bots never inherit
 a departed human's messages or typing indicator.
 
 Chat history is transient server memory, not saved to account files, bot
-training data or disk. New arrivals receive the current channel's recent log,
-without replaying old speech bubbles. A server restart clears chat history.
+training data or disk. As of Build 15.1, new connections and reconnections start
+with an empty display and receive only new messages. Retained channel history
+is not sent to joining clients. A server restart clears internal history.
 
 ## Files and checks
 
@@ -44,7 +45,4 @@ controls, suppressed movement, literal text rendering, typing indicators,
 hidden-panel composition, on-field chat and mobile layout. Set
 `TEAMBALL_BROWSER` to a Chrome executable path if needed.
 
-Desktop and mobile screenshots are saved as `tests/screenshots/chat-*.png`.
-`tests/chat-full-results.txt` records the full run: **313/314 passing**, with
-the pre-existing Build 12 pitch-shrink assertion still failing against the
-later enlarged pitch dimensions.
+Desktop and mobile screenshots are saved as `reports/screenshots/chat-*.png`.

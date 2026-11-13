@@ -1,0 +1,12 @@
+node_modules/
+.ai-venv/
+__pycache__/
+*.pyc
+reports/
+public/ai-results/
+.retrofooty-server.json
+.teamball-server.json
+server-data/
+bot-memory/
+bot-memory-backup*.zip
+retrofooty-bot-memory-export.json

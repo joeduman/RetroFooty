@@ -3,7 +3,7 @@ import path from 'node:path';
 const dir=path.join(process.cwd(),'bot-memory');
 const get=name=>{try{return JSON.parse(fs.readFileSync(path.join(dir,name),'utf8'));}catch{return null;}};
 const s=get('overnight-status.json'),a=get('server-activity.json'),t=get('models/trainer-state.json');
-console.log('\nTEAMBALL OVERNIGHT AI TRAINING\n');
+console.log('\nRETROFOOTY OVERNIGHT AI TRAINING\n');
 console.log('Overnight:',s?.status||'Not started');
 if(s){console.log(`Session PID ${s.pid}; started ${s.startedAt}`);
  console.log(`Completed ${s.completedCycles} successful cycles, ${s.failedCycles} interrupted/failed cycles`);

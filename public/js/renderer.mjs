@@ -1,7 +1,8 @@
+import {RANK_SHIRTS} from './rank-rewards.mjs';
 import {drawChatBubbles} from './chat-bubbles.mjs';
 import {grassPattern} from './grass-texture.mjs';
 import {LOOK,TEXT} from './customize.mjs';
-import {normalizeGoalEffect,BLACK_HOLE_TIMING} from './goal-effects.mjs';
+import {normalizeGoalEffect,BLACK_HOLE_TIMING,GOAL_REACTION,goalPlayerPose} from './goal-effects.mjs';
 import {kickDirection} from './physics.mjs';
 import { clamp,unit,seededRandom,TUNING as C } from './config.mjs';
 
@@ -12,8 +13,9 @@ export class Renderer {
     this.goalBursts=new Map();
     this.motionQuery=typeof globalThis.matchMedia==='function'?globalThis.matchMedia('(prefers-reduced-motion: reduce)'):null;
     // Shirt assets live in public/images/shirts/. Keep these paths together for easy swaps.
-    this.shirtSprites=new Map();
-    this.registerShirt('plain','/images/shirts/shirt1.png');
+    this.shirtSprites=new Map();this.rankShirtSources=new Map(RANK_SHIRTS.map(item=>[item.value,item.image]));
+    this.registerShirt('plain','/images/shirts/shirt_rookie.png');
+    if(this.shirtSprites.has('plain'))this.shirtSprites.set('rookie',this.shirtSprites.get('plain'));
     this.registerShirt('bot','/images/shirts/shirt_bot.png');
     this.registerShirt('inferno','/images/shirts/shirt_inferno.png');
 
@@ -57,6 +59,7 @@ export class Renderer {
     const requested = p.shirtId ||
         (p.human === true ? prefs.shirtId : 'plain');
 
+    if(!this.shirtSprites.has(requested)&&this.rankShirtSources.has(requested))this.registerShirt(requested,this.rankShirtSources.get(requested));
     const choice = this.shirtSprites.has(requested)
         ? requested
         : 'plain';
@@ -161,12 +164,13 @@ export class Renderer {
     c.setTransform(this.dpr,0,0,this.dpr,0,0);c.fillStyle='#1b6341';c.fillRect(0,0,this.width,this.height);
     c.translate(this.offsetX,this.offsetY);c.scale(this.scale,this.scale);this.pitchArt(p,match.sidesSwapped);this.trainingArt(match);
     this.aimGuide(match,prefs,pointer,paused);
-    for(const q of match.players)this.player(q,prefs);
+    const shown=this.drawMatchPlayers(match,match.players,prefs);
     if(match.state!=='kickoff')this.drawMatchBall(match,b);
-    this.chatBubbles(match.players);
+    this.chatBubbles(shown);
     this.overlay(match,paused);
   }
   aimGuide(match,prefs,pointer,paused=false){
+    if(['goal','ended','intermission','halftime'].includes(match.state)&&match.goalInfo?.goalEffectId==='black-hole')return;
     const c=this.ctx,p=match.pitch,b=match.engine.ball;
     if(match.human&&prefs.aimGuide&&pointer&&!paused){
       const h=match.human,dx=pointer.x-h.x,dy=pointer.y-h.y,d=Math.hypot(dx,dy)||1;
@@ -187,6 +191,15 @@ export class Renderer {
     c.beginPath();for(let i=0;i<5;i++){const a=i*Math.PI*2/5;c.lineTo(Math.cos(a)*b.radius*.35,Math.sin(a)*b.radius*.35);}c.closePath();c.fill();
     for(let i=0;i<5;i++){const a=i*Math.PI*2/5;this.circle(Math.cos(a)*b.radius*.82,Math.sin(a)*b.radius*.82,b.radius*.17,'#314437');}c.restore();
   }
+  drawMatchPlayers(match,players,prefs,now=globalThis.performance?.now?.()??Date.now()){
+    const burst=this.goalBurst(match,now);
+    if(!burst||burst.effectId==='classic'){for(const player of players)this.player(player,prefs);return players;}
+    const age=Math.max(0,(now-burst.at)/1000),shown=[];
+    for(const player of players){const pose=goalPlayerPose(burst,player,age);if(!pose)continue;
+      this.ctx.save();this.ctx.globalAlpha=pose.effectAlpha??1;this.player(pose,prefs);this.ctx.restore();
+      if((pose.effectAlpha??1)>.5)shown.push(pose);
+    }return shown;
+  }
   drawMatchBall(match,ball=match.engine?.ball,now=globalThis.performance?.now?.()??Date.now()){
     const burst=this.goalBurst(match,now);
     // The swallowed ball remains hidden until the next play state, even after
@@ -195,7 +208,7 @@ export class Renderer {
     if(ball)this.ball(ball);
   }
   goalBurst(match,now=globalThis.performance?.now?.()??Date.now()){
-    const p=match.pitch,b=match.engine?.ball;
+    const p=match.pitch,b=match.goalInfo?.effectOrigin??match.engine?.ball;
     if(!p)return null;
     // The park shares one Renderer across its five differently sized pitches.
     // Keep a separate burst per pitch and never restart it on a network update.
@@ -216,12 +229,14 @@ export class Renderer {
       const goalX=right?p.right:p.left;
       const random=seededRandom((match.score?.red??0)*193+(match.score?.blue??0)*977+p.width+(right?1:0));
       const effectId=normalizeGoalEffect(match.goalInfo?.goalEffectId);
-      burst={token,at:now,effectId,dir,x:clamp(b.x,Math.min(goalX,goalX+dir*p.goalDepth),Math.max(goalX,goalX+dir*p.goalDepth)),
+      const elapsed=match.state==='goal'&&Number.isFinite(match.wait)?Math.max(0,C.celebrationSeconds-match.wait):0;
+      burst={token,at:now-elapsed*1000,effectId,dir,authoritativeFire:match.goalInfo?.effectMotion==='physics-v1',players:new Map((match.goalInfo?.effectPlayers??match.players??[]).map(q=>[q.id,{x:q.x,y:q.y}])),x:clamp(b.x,Math.min(goalX,goalX+dir*p.goalDepth),Math.max(goalX,goalX+dir*p.goalDepth)),
         y:clamp(b.y,p.goalTop,p.goalBottom),pieces:Array.from({length:22},(_,i)=>({
           vx:dir*(25+random()*70)+(random()-.5)*55,vy:(random()-.62)*145,
           rotation:random()*Math.PI,spin:(random()-.5)*12,width:2.5+random()*2,height:3+random()*3,
           color:i%2?'#101614':'#fffdf3'
         }))};
+      if(effectId!=='classic')burst.debris=Array.from({length:16},(_,i)=>{const a=random()*Math.PI*2,speed=65+random()*170;return {vx:Math.cos(a)*speed,vy:Math.sin(a)*speed,size:1.5+random()*3,spin:random()*10,angle:a,color:i%3?'#f1c47b':'#6b5543'};});
       if(effectId==='fire')burst.embers=Array.from({length:34},(_,i)=>{
         const angle=random()*Math.PI*2,speed=35+random()*105;
         return {vx:Math.cos(angle)*speed+dir*18,vy:Math.sin(angle)*speed-24,
@@ -231,7 +246,8 @@ export class Renderer {
       if(effectId==='black-hole'){
         burst.ball={x:b.x,y:b.y,radius:b.radius??C.ballRadius,angle:b.angle??0};
         burst.holeX=goalX+dir*p.goalDepth*.62;burst.holeY=burst.y;
-        burst.stars=Array.from({length:38},(_,i)=>({angle:random()*Math.PI*2,radius:42+random()*35,
+        burst.infall=Array.from({length:12},(_,i)=>({angle:random()*Math.PI*2,radius:90+random()*110,phase:random(),speed:.55+random()*.35,size:2+random()*3,spin:random()*8,color:['#8a9c6a','#d4c5a4','#84705d'][i%3]}));
+        burst.stars=Array.from({length:38},(_,i)=>({angle:random()*Math.PI*2,radius:60+random()*135,
           speed:.5+random()*.45,phase:random(),size:1+random()*1.3,color:i%3?'#c4b4ff':'#8be9ef'}));
       }
       this.goalBursts.set(key,burst);
@@ -253,27 +269,39 @@ export class Renderer {
     c.restore();
   }
   blackHoleBurst(burst,age){
-    const c=this.ctx,{swallowEnd,collapseStart,duration}=BLACK_HOLE_TIMING;
-    const collapse=clamp((age-collapseStart)/(duration-collapseStart),0,1);
+    const c=this.ctx,{swallowEnd,collapseStart,collapseEnd}=BLACK_HOLE_TIMING;
+    if(age>=collapseEnd){this.singularityExplosion(burst,age-collapseEnd);return;}
+    const collapse=clamp((age-collapseStart)/(collapseEnd-collapseStart),0,1);
     const opening=Math.sin(clamp(age/.22,0,1)*Math.PI/2);
-    const scale=opening*Math.pow(1-collapse,2),radius=31*scale;
+    const scale=opening*Math.pow(1-collapse,2),pulse=1+Math.sin(age*8)*.06,radius=31*scale*pulse;
     const turn=age*(2.5+collapse*7);
     c.save();c.translate(burst.holeX,burst.holeY);
     // A bright accretion disc makes the dark center readable against the net.
     const halo=c.createRadialGradient(0,0,Math.max(.01,radius*.6),0,0,Math.max(.02,68*scale));
-    halo.addColorStop(0,'#080316dd');halo.addColorStop(.5,'#8c55f66b');halo.addColorStop(.78,'#5b8be336');halo.addColorStop(1,'#2b104500');
+    halo.addColorStop(0,'#080316dd');halo.addColorStop(.5,`hsla(${265+Math.sin(age*3)*22},85%,64%,.42)`);halo.addColorStop(.78,`hsla(${205+Math.sin(age*2)*18},85%,65%,.22)`);halo.addColorStop(1,'#2b104500');
     c.fillStyle=halo;c.beginPath();c.arc(0,0,68*scale,0,Math.PI*2);c.fill();
-    c.save();c.rotate(-.28);
+    c.save();c.rotate(-.28+Math.sin(age*2.5)*.1);
     for(let ring=0;ring<3;ring++){
-      c.strokeStyle=['#7b50bfa0','#baa3fbd9','#8ce7eee8'][ring];c.lineWidth=(5-ring)*scale;
+      c.strokeStyle=[`hsla(${270+Math.sin(age*4)*20},75%,63%,.65)`,'#baa3fbd9','#8ce7eee8'][ring];c.lineWidth=(5-ring)*scale;
+      c.rotate(.07*Math.sin(age*4+ring));
       c.beginPath();c.ellipse(0,0,(57-ring*5)*scale,(17-ring*2)*scale,0,0,Math.PI*2);c.stroke();
     }
     c.restore();
     for(const star of burst.stars){
-      const travel=(age*star.speed+star.phase)%1,radial=(star.radius*(1-travel)+10)*scale;
-      const angle=star.angle+turn+travel*2.8;
+      const travel=(age*star.speed+star.phase)%1,radial=(star.radius*Math.pow(1-travel,1.4)+7)*scale;
+      const angle=star.angle+turn+travel*4.5;
       c.globalAlpha=Math.sin(travel*Math.PI)*(1-collapse);c.fillStyle=star.color;
+      // Short curved tails show direction and acceleration toward the core.
+      const tail=Math.min(18,radial*.2),back=angle-.12;
+      c.strokeStyle=star.color;c.lineWidth=Math.max(.4,star.size*.55*scale);c.beginPath();c.moveTo(Math.cos(back)*(radial+tail),Math.sin(back)*(radial+tail)*.7);c.lineTo(Math.cos(angle)*radial,Math.sin(angle)*radial*.7);c.stroke();
       c.beginPath();c.arc(Math.cos(angle)*radial,Math.sin(angle)*radial*.7,Math.max(.05,star.size*scale),0,Math.PI*2);c.fill();
+    }
+    // Turf and stone fragments tumble inward independently of the light trails.
+    for(const shard of burst.infall){
+      const travel=(age*shard.speed+shard.phase)%1,radial=(shard.radius*Math.pow(1-travel,1.35)+5)*scale;
+      const angle=shard.angle+age*1.6+travel*4.3,size=shard.size*scale*(1-travel*.7);
+      c.save();c.globalAlpha=Math.sin(travel*Math.PI)*(1-collapse);c.translate(Math.cos(angle)*radial,Math.sin(angle)*radial*.8);c.rotate(angle+age*shard.spin);c.fillStyle=shard.color;
+      c.beginPath();c.moveTo(-size,-size*.6);c.lineTo(size,-size*.2);c.lineTo(size*.3,size);c.closePath();c.fill();c.restore();
     }
     c.globalAlpha=1;c.shadowColor='#9271ed';c.shadowBlur=12*scale;
     c.fillStyle='#02030a';c.strokeStyle='#cfbdff';c.lineWidth=1.5*scale;
@@ -291,12 +319,27 @@ export class Renderer {
       c.restore();
     }
     if(collapse>0){
-      // The disc folds inward, ending in a short pinprick rather than a flash.
+      // Tight contraction precedes the outward release.
       c.save();c.globalAlpha=(1-collapse)*.8;c.strokeStyle='#c6e9ff';c.lineWidth=1.5;
       c.beginPath();c.ellipse(burst.holeX,burst.holeY,Math.max(.1,60*scale),Math.max(.1,8*scale),-.28,0,Math.PI*2);c.stroke();c.restore();
     }
   }
+  debrisBurst(burst,age,x=burst.x,y=burst.y,purple=false){
+    const c=this.ctx,fade=Math.max(0,1-age/.95);if(!fade)return;
+    c.save();c.globalAlpha=fade;
+    for(const shard of burst.debris){c.save();c.translate(x+shard.vx*age,y+shard.vy*age+35*age*age);c.rotate(shard.angle+shard.spin*age);
+      c.fillStyle=purple?'#c7b7ef':shard.color;c.beginPath();c.moveTo(-shard.size,-shard.size*.5);c.lineTo(shard.size,0);c.lineTo(0,shard.size);c.closePath();c.fill();c.restore();}c.restore();
+  }
+  singularityExplosion(burst,age){
+    const c=this.ctx,life=BLACK_HOLE_TIMING.duration-BLACK_HOLE_TIMING.collapseEnd,fade=Math.max(0,1-age/life),radius=12+180*(1-Math.exp(-age*4));
+    c.save();c.translate(burst.holeX,burst.holeY);
+    const glow=c.createRadialGradient(0,0,0,0,0,Math.max(1,radius*.7));glow.addColorStop(0,'#f4eeff');glow.addColorStop(.18,'#c7b0ff');glow.addColorStop(.5,'#8263d58a');glow.addColorStop(1,'#8263d500');
+    c.globalAlpha=fade*.8;c.fillStyle=glow;c.beginPath();c.arc(0,0,radius*.7,0,Math.PI*2);c.fill();
+    for(let i=0;i<2;i++){c.globalAlpha=fade*(i?.4:.85);c.strokeStyle=i?'#a891e5':'#cff4ff';c.lineWidth=(i?7:3)*fade+.3;c.beginPath();c.arc(0,0,radius*(i?.75:1),0,Math.PI*2);c.stroke();}
+    c.restore();this.debrisBurst(burst,age,burst.holeX,burst.holeY,true);
+  }
   fireBurst(burst,age){
+    this.debrisBurst(burst,age);
     const c=this.ctx;
     c.save();c.translate(burst.x,burst.y);
     // Slow charcoal puffs sit behind the warm flash rather than hiding the ball.
@@ -316,8 +359,8 @@ export class Renderer {
       c.globalAlpha=heat*.96;c.fillStyle=glow;c.beginPath();c.arc(0,0,radius,0,Math.PI*2);c.fill();
     }
     if(age<.65){
-      c.globalAlpha=(1-age/.65)*.65;c.strokeStyle='#ffac48';c.lineWidth=2.5*(1-age/.65)+.5;
-      c.beginPath();c.arc(0,0,8+age*105,0,Math.PI*2);c.stroke();
+      c.globalAlpha=(1-age/.65)*.85;c.strokeStyle='#ffac48';c.lineWidth=2.5*(1-age/.65)+.5;
+      c.beginPath();c.arc(0,0,8+Math.min(GOAL_REACTION.fireRadius,age*GOAL_REACTION.fireSpeed),0,Math.PI*2);c.stroke();
     }
     for(const [index,ember] of burst.embers.entries()){
       if(age>=ember.life)continue;
@@ -338,7 +381,7 @@ export class Renderer {
     const c=this.ctx,p=match.pitch;
     this.goalConfetti?.(match);
     let title='',subtitle='';
-    if(match.state==='kickoff'){title=String(Math.max(1,Math.ceil(match.wait-1e-9)));subtitle=TEXT.kickoff(match.kickoffTeam,match.players.find(p=>p.id===match.kickoffPlayer)?.name);}
+    if(match.state==='kickoff'&&!match.externalCountdown){title=String(Math.max(1,Math.ceil(match.wait-1e-9)));subtitle=TEXT.kickoff(match.kickoffTeam,match.players.find(p=>p.id===match.kickoffPlayer)?.name);}
     if(match.state==='practice-ready'){title=String(Math.max(1,Math.ceil(match.wait-1e-9)));subtitle=match.training.meta.title.toUpperCase()+' · Get ready';}
     if(match.state==='goal'){title=TEXT.goalTitle(match.goalTeam);subtitle=TEXT.goalDetail(match.goalInfo); }
     if(match.state==='halftime'){title='HALF TIME';subtitle=`${match.score.red}  –  ${match.score.blue}   ·   Switching sides`; }

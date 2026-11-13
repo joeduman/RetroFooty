@@ -52,7 +52,7 @@ export class Match {
       this.kickoffTeam??=this.random()<.5?'red':'blue';
       const eligible=this.players.filter(q=>q.team===this.kickoffTeam);
       const taker=eligible[Math.floor(this.random()*eligible.length)];
-      this.kickoffPlayer=taker.id;
+      if(taker){this.kickoffPlayer=taker.id;
       const dir=this.engine.attackDir(taker.team);
       taker.x=p.width/2-dir*(taker.radius+this.engine.ball.radius+RULES.kickoffTakerGap);taker.y=cy;
       this.engine.kickoff={
@@ -63,6 +63,7 @@ export class Match {
       for(const player of this.players){
         this.engine.protectKickoff(player);
       }
+      }else{this.kickoffPlayer=null;this.engine.kickoff=null;}
     }
     this.ai.reset();this.tracker?.resetPlay();
   }
@@ -133,7 +134,7 @@ export class Match {
   update(dt,input){
     this.events=[];if(this.state==='ended')return;
     if(this.state==='goal'&&!this.practice){
-      if(this.human)this.human.input=input?{...input}:{x:0,y:0,sprint:false,shoot:false,aimX:1,aimY:0};
+      if(this.human)this.human.input=input?{...input}:{x:0,y:0,sprint:false,shoot:false,aimX:this.human.faceX,aimY:this.human.faceY};
       for(const p of this.players)if(!p.human){
         const angle=this.engine.time*1.8+p.id;
         p.input={x:Math.cos(angle)*.6,y:Math.sin(angle)*.6,sprint:false,shoot:Boolean(p.celebrating&&Math.floor((this.engine.time+p.id*.09)/RULES.botCelebrationPulse)%2===0),aimX:p.faceX,aimY:p.faceY};
@@ -181,6 +182,14 @@ export class Match {
       // Freeze the credited scorer's choice for this goal, including replays.
       // Uncredited/own goals use the classic effect.
       this.goalInfo.goalEffectId=normalizeGoalEffect(this.players.find(p=>p.id===this.goalInfo.scorerId)?.goalEffectId);
+      if(this.goalInfo.goalEffectId!=='classic'){
+        const b=this.engine.ball;this.goalInfo.effectOrigin={x:b.x,y:b.y,radius:b.radius,angle:b.angle};
+        this.goalInfo.effectPlayers=this.players.map(p=>({id:p.id,x:p.x,y:p.y}));
+        if(this.goalInfo.goalEffectId==='fire'&&(!this.practice||this.drill==='free')){
+          this.goalInfo.effectMotion='physics-v1';
+          this.engine.startGoalBlast(this.goalInfo.effectOrigin,this.engine.attackDir(scored));
+        }
+      }
       this.kickoffTeam=scored==='red'?'blue':'red';
       for(const player of this.players)player.celebrating=!player.human&&player.team===scored&&this.random()<RULES.botCelebrationChance;
       this.goalTeam=scored;this.events.push({type:'goal',team:scored,time:this.engine.time,...this.goalInfo});

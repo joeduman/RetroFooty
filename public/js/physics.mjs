@@ -1,4 +1,5 @@
 import {RULES} from './customize.mjs';
+import {GOAL_REACTION} from './goal-effects.mjs';
 import { TUNING as C, clamp, unit } from './config.mjs';
 
 // Aim supplies a small correction; the contact face determines the shot.
@@ -83,9 +84,10 @@ export class PhysicsEngine {
   }
 
   clearMotion() {
+    this.goalBlast=null;this.ballBlastUntil=0;
     this.kickoff=null;
     this.contacts.clear();this.touchTimes.clear();
-    for (const p of this.players) { p.vx = p.vy = 0; p.sprinting = false;
+    for (const p of this.players) { p.vx = p.vy = 0; p.sprinting = false;p.goalBlastUntil=0;
       p.stamina = 100; p.exhausted = false; p.recovery = 0; p.shotCooldown = 0;p.kickFlash=0;p.kickWasDown=false;
       p.input = { x:0,y:0,aimX:this.attackDir(p.team),aimY:0,sprint:false,shoot:false }; }
     Object.assign(this.ball, {x:this.pitch.width/2,y:this.pitch.height/2,vx:0,vy:0,spin:0,rollSpin:0,angle:0,lastTeam:null,lastPlayer:null});
@@ -237,16 +239,59 @@ export class PhysicsEngine {
     for(const cone of this.obstacles)this.post(body,cone);
     this.protectKickoff(body);
   }
+  startGoalBlast(origin,scoringDirection){
+    // Goal-only impulse, evaluated on the host and recorded as ordinary positions.
+    // Integrate the velocity instead of drawing an offset that snaps back later.
+    const speed=GOAL_REACTION.firePush*3/(1-Math.exp(-3*GOAL_REACTION.fireInputLock));
+    this.goalBlast={elapsed:0,targets:this.players.map(player=>{
+      const dx=player.x-origin.x,dy=player.y-origin.y,distance=Math.hypot(dx,dy);
+      return {player,distance,nx:distance?dx/distance:-scoringDirection,ny:distance?dy/distance:0,hit:false};
+    }),speed};
+    const b=this.ball,dx=b.x-origin.x,dy=b.y-origin.y,distance=Math.hypot(dx,dy);
+    if(distance<=GOAL_REACTION.fireRadius){
+      const impulse=speed*(1-distance/GOAL_REACTION.fireRadius);
+      b.vx=(distance?dx/distance:-scoringDirection)*impulse;b.vy=(distance?dy/distance:0)*impulse;
+      b.spin=b.rollSpin=0;this.limitBall();
+      this.ballBlastUntil=this.time+GOAL_REACTION.fireInputLock+GOAL_REACTION.fireRadius/GOAL_REACTION.fireSpeed;
+    }
+  }
+  advanceGoalBlast(dt){
+    const blast=this.goalBlast;if(!blast)return;
+    blast.elapsed+=dt;
+    for(const target of blast.targets){
+      if(target.hit||target.distance>GOAL_REACTION.fireRadius||blast.elapsed<target.distance/GOAL_REACTION.fireSpeed)continue;
+      target.hit=true;const p=target.player;if(!this.players.includes(p))continue;
+      const speed=blast.speed*(1-target.distance/GOAL_REACTION.fireRadius);
+      p.vx=target.nx*speed;p.vy=target.ny*speed;p.goalBlastUntil=this.time+GOAL_REACTION.fireInputLock;p.sprinting=false;p.kickFlash=0;
+    }
+    if(blast.elapsed>GOAL_REACTION.fireRadius/GOAL_REACTION.fireSpeed+GOAL_REACTION.fireInputLock)this.goalBlast=null;
+  }
+  celebrationSnapshot(){
+    return {time:this.time,ballBlastUntil:this.ballBlastUntil??0,goalBlast:this.goalBlast?{
+      elapsed:this.goalBlast.elapsed,speed:this.goalBlast.speed,
+      targets:this.goalBlast.targets.map(({player,...target})=>({...target,id:player.id}))
+    }:null};
+  }
+  restoreCelebration(snapshot){
+    this.time=snapshot.time??0;this.ballBlastUntil=snapshot.ballBlastUntil??0;
+    this.goalBlast=snapshot.goalBlast?{...snapshot.goalBlast,targets:snapshot.goalBlast.targets.map(target=>({
+      ...target,player:this.players.find(p=>p.id===target.id)
+    })).filter(target=>target.player)}:null;
+  }
   celebrate(dt,animateBall=false){
     this.events=[];
     const count=Math.max(1,Math.ceil(dt/(1/240))),h=dt/count;
     for(let s=0;s<count;s++){
       this.time+=h;
-      for(const p of this.players)this.motor(p,h);
+      if(animateBall)this.advanceGoalBlast(h);
+      for(const p of this.players){
+        if((p.goalBlastUntil??0)>this.time){const drag=Math.exp(-3*h);p.vx*=drag;p.vy*=drag;}
+        else this.motor(p,h);
+      }
       // Celebration keeps the same contact reach, alignment, momentum and
       // cooldown rules as live play. Park walking passes animateBall=false,
       // so its hidden ball remains inactive.
-      if(animateBall)for(const p of this.players)if(p.input.shoot)this.shoot(p);
+      if(animateBall&&this.time>=(this.ballBlastUntil??0))for(const p of this.players)if(p.input.shoot&&this.time>=(p.goalBlastUntil??0))this.shoot(p);
       for(const p of this.players){p.x+=p.vx*h;p.y+=p.vy*h;}
       // A scored ball still rolls, curves and bounces in the net during the GOAL display.
       // This does not check for another score or start a second kickoff.

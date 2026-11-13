@@ -26,7 +26,7 @@ export function calculateElo(roster,score,{drawBonus=RANKED.drawBonus}={}){
 }
 export class RankedStore {
  constructor({file=path.join(process.cwd(),'server-data','ranked.json'),now=()=>Date.now(),config={}}={}){
-  this.file=file;this.now=now;this.config={...RANKED,...config};this.online=new Map();
+  this.file=file;this.now=now;this.config={...RANKED,...config};this.online=new Map();this.seasonListeners=new Set();
   this.db={version:1,season:'season-1',players:{},bots:{},matches:{},seasons:[],audit:[]};
   if(fs.existsSync(file)){this.db=JSON.parse(fs.readFileSync(file,'utf8'));if(this.db.version!==1)throw Error('Unsupported ranked database');}
   // Live physics is not persisted. Unfinished matches are voided on restart;
@@ -35,6 +35,7 @@ export class RankedStore {
   if(changed)this.save();this.sweep();
  }
  save(){fs.mkdirSync(path.dirname(this.file),{recursive:true});const temp=this.file+'.tmp';const fd=fs.openSync(temp,'w',0o600);try{fs.writeFileSync(fd,JSON.stringify(this.db));fs.fsyncSync(fd);}finally{fs.closeSync(fd);}fs.renameSync(temp,this.file);}
+ onSeasonChange(listener){this.seasonListeners.add(listener);return ()=>this.seasonListeners.delete(listener);}
  player(name){const key=canonicalName(name);if(!key||['__proto__','constructor','prototype'].includes(key))throw Error('Choose another username');
   if(!Object.hasOwn(this.db.players,key)){this.db.players[key]={id:randomUUID(),accountId:null,key,name:String(name).trim(),elo:this.config.initialElo,peak:this.config.initialElo,seasonPeak:this.config.initialElo,wins:0,losses:0,draws:0,played:0,season:this.db.season,history:[]};this.save();}
   return this.db.players[key];
@@ -58,13 +59,14 @@ export class RankedStore {
   m.players[index]=this.rosterPlayer(participant);this.save();
  }
  release(name,owner){const key=canonicalName(name);if(this.online.get(key)===owner)this.online.delete(key);}
- hasPending(name){const key=canonicalName(name);return Object.values(this.db.matches).some(m=>!m.void&&[...m.players,...(m.departures||[])].some(p=>p.key===key&&!p.settled));}
+ pending(name){this.sweep();const key=canonicalName(name);for(const m of Object.values(this.db.matches)){if(m.void)continue;const p=[...m.players,...(m.departures||[])].find(p=>p.key===key&&!p.settled);if(p)return {pending:true,active:!m.score,disconnected:p.disconnected,deadline:p.deadline,seconds:p.deadline?Math.max(0,Math.ceil((p.deadline-this.now())/1000)):null};}return {pending:false};}
+ hasPending(name){return this.pending(name).pending;}
  summary(name){const p=this.player(name);return {name:p.name,key:p.key,elo:p.elo,peak:p.peak,wins:p.wins,losses:p.losses,draws:p.draws,played:p.played,season:p.season,rank:division(p.elo)};}
  leaderboard(onlineOnly=false){return Object.values(this.db.players).filter(p=>!onlineOnly||this.online.has(p.key)).sort((a,b)=>b.elo-a.elo||a.key.localeCompare(b.key,'en')).map(p=>({...this.summary(p.name),online:this.online.has(p.key)}));}
  begin(id,roster,duration){
   if(this.db.matches[id])throw Error('Match already exists');
   const n=roster.length/2;
-  if(!RANKED.k[n]||!Number.isFinite(duration)||duration<=0||roster.some(p=>p.bot&&(!p.botId||typeof p.botId!=='string'))||new Set(roster.map(p=>p.bot?'bot:'+p.botId:canonicalName(p.name))).size!==roster.length||['red','blue'].some(t=>roster.filter(p=>p.team===t).length!==n))throw Error('Ranked requires a complete valid roster');
+  if(!RANKED.k[n]||!Number.isFinite(duration)||duration<=0||roster.some(p=>p.bot)||new Set(roster.map(p=>canonicalName(p.name))).size!==roster.length||['red','blue'].some(t=>roster.filter(p=>p.team===t).length!==n))throw Error('Ranked requires complete human teams');
   const players=roster.map(p=>this.rosterPlayer(p));
   // Prevent entering a second ranked match while an earlier result is pending.
   if(players.some(p=>!p.bot&&this.hasPending(p.name)))throw Error('A previous ranked result is still pending');
@@ -72,8 +74,8 @@ export class RankedStore {
  }
  voteAllowed(size,votes){return votes>=overtimeThreshold(size);}
  disconnect(id,name){const m=this.db.matches[id],p=m&&[...m.players,...(m.departures||[])].find(p=>p.key===canonicalName(name));if(!p||p.settled||m.void)return;p.disconnected=true;p.deadline??=this.now()+m.duration*500;this.save();}
- reconnect(id,name,token){const m=this.db.matches[id],p=m&&[...m.players,...(m.departures||[])].find(p=>p.key===canonicalName(name));if(!p||m.void||p.token!==token||!p.disconnected||p.deadline<=this.now())return false;p.disconnected=false;this.settle(m);this.save();return true;}
- recoverPending(name,token){const key=canonicalName(name);for(const m of Object.values(this.db.matches)){const p=m.players.find(p=>p.key===key&&!p.settled);if(m.void||!p)continue;if(!m.score)continue;if(!this.reconnect(m.id,name,token))throw Error('A valid reconnect token is required for the pending result');}}
+ reconnect(id,name,token){this.sweep();const m=this.db.matches[id],p=m&&[...m.players,...(m.departures||[])].find(p=>p.key===canonicalName(name));if(!p||p.settled||m.void||typeof token!=='string'||p.token!==token||!p.disconnected||p.deadline<=this.now())return false;p.disconnected=false;this.settle(m);this.save();return true;}
+ recoverPending(name,token){this.sweep();const key=canonicalName(name);for(const m of Object.values(this.db.matches)){const p=[...m.players,...(m.departures||[])].find(p=>p.key===key&&!p.settled);if(m.void||!p||!m.score)continue;this.reconnect(m.id,name,token);}return this.pending(name);}
  finish(id,score){const m=this.db.matches[id];if(!m||m.void)return null;if(!m.score){
    m.score={red:score.red,blue:score.blue};m.finished=this.now();
    const group=JSON.stringify(m.players.map(p=>p.key).sort());
@@ -94,11 +96,13 @@ export class RankedStore {
   }}
  applyResult(p,delta,outcome,abandoned){const record=this.record(p),before=record.elo;record.elo=Math.max(0,before+delta);record.peak=Math.max(record.peak,record.elo);record.seasonPeak=Math.max(record.seasonPeak,record.elo);record[outcome]++;record.played++;Object.assign(p,{settled:true,abandoned,before,after:record.elo,delta:record.elo-before,outcome,rankBefore:division(before).name,rankAfter:division(record.elo).name});}
  sweep(){let dirty=false;for(const m of Object.values(this.db.matches)){if(m.void)continue;
-  for(const p of [...m.players,...(m.departures||[])])if(!p.settled&&p.disconnected&&p.deadline<=this.now()&&!p.abandoned){p.abandoned=true;dirty=true;}
+  for(const p of [...m.players,...(m.departures||[])])if(!p.settled&&p.disconnected&&p.deadline<=this.now()){
+   const delta=p.lossDelta??m.losses?.[p.key]??calculateElo(m.players,p.team==='red'?{red:0,blue:1}:{red:1,blue:0})[p.key];this.applyResult(p,delta,'losses',true);dirty=true;
+  }
   if(m.score&&[...m.players,...(m.departures||[])].some(p=>!p.settled&&(!p.disconnected||p.deadline<=this.now()))){this.settle(m);dirty=true;}
  }if(dirty)this.save();}
  result(id){const m=this.db.matches[id];return m&&!m.void?{id,season:m.season,players:[...m.players,...(m.departures||[])].map(({token,...p})=>p)}:null;}
  rollover(next){this.sweep();if(typeof next!=='string'||!next.trim()||next===this.db.season||this.db.seasons.includes(next))throw Error('Season already processed or invalid');if(Object.values(this.db.matches).some(m=>!m.void&&[...m.players,...(m.departures||[])].some(p=>!p.settled)))throw Error('Finish ranked matches and pending results first');
-  this.db.seasons.push(this.db.season);for(const p of [...Object.values(this.db.players),...Object.values(this.db.bots)]){p.history.push({season:p.season,elo:p.elo,peak:p.seasonPeak,wins:p.wins,losses:p.losses,draws:p.draws,played:p.played});if(p.elo>=1000)p.elo=division(p.elo).min;Object.assign(p,{season:next,seasonPeak:p.elo,wins:0,losses:0,draws:0,played:0});}this.db.season=next;this.save();return {season:next};
+  this.db.seasons.push(this.db.season);for(const p of [...Object.values(this.db.players),...Object.values(this.db.bots)]){p.history.push({season:p.season,elo:p.elo,peak:p.seasonPeak,wins:p.wins,losses:p.losses,draws:p.draws,played:p.played});if(p.elo>=1000)p.elo=division(p.elo).min;Object.assign(p,{season:next,seasonPeak:p.elo,wins:0,losses:0,draws:0,played:0});}this.db.season=next;this.save();for(const listener of this.seasonListeners)listener(next);return {season:next};
  }
 }

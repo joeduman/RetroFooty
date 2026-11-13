@@ -1,21 +1,28 @@
 // Live Match/Physics comparison. This never imports, trains, or promotes a model.
 import {createHash} from 'node:crypto';
-import {readFileSync,writeFileSync,readdirSync} from 'node:fs';
+import {mkdirSync,readFileSync,writeFileSync,readdirSync} from 'node:fs';
 import {performance} from 'node:perf_hooks';
 import {fileURLToPath} from 'node:url';
-import {resolve} from 'node:path';
+import {resolve,dirname} from 'node:path';
 import {Match} from '../public/js/match.mjs';
 import {AIController} from '../public/js/ai.mjs';
 import {AIController as BaselineAI} from './fixtures/expert-baseline/ai.mjs';
+import {AIController as PredictiveV1AI} from './fixtures/expert-v1/expert-ai.mjs';
 import {STEP,TUNING as C,distance} from '../public/js/config.mjs';
 
 const other=team=>team==='red'?'blue':'red';
 const round=n=>Number(n.toFixed(5));
+const opponentController=opponent=>{
+  if(opponent==='legacy')return BaselineAI;
+  if(opponent==='predictive-v1')return PredictiveV1AI;
+  throw new Error(`Unknown benchmark opponent: ${opponent}`);
+};
 export class ComparisonController {
-  constructor(engine,seed,candidateTeam='red',control=false){
+  constructor(engine,seed,candidateTeam='red',control=false,opponent='legacy'){
     this.engine=engine;this.candidateTeam=candidateTeam;
-    this.baseline=new BaselineAI(engine,seed);
-    this.candidate=new (control?BaselineAI:AIController)(engine,seed);
+    const Opponent=opponentController(opponent);
+    this.baseline=new Opponent(engine,seed);
+    this.candidate=new (control?Opponent:AIController)(engine,seed);
     this.memory=new Map(engine.players.map(p=>[p.id,this.owner(p.team).memory.get(p.id)]));
   }
   owner(team){return team===this.candidateTeam?this.candidate:this.baseline;}
@@ -37,9 +44,9 @@ function teamTelemetry(){return {boostSpent:0,kickoffBoostSpent:0,spacingSamples
   supportSamples:0,supportAvailable:0,roleChanges:0,roles:new Map(),dangerSamples:0,dangerBoost:0,
   ownDirectedContacts:0,loopEpisodes:0,loopWindow:null,loopActive:false};}
 
-export function runComparison({size=1,seed=42000,duration=60,candidateTeam='red',control=false,initialSwapped=false}={}){
+export function runComparison({size=1,seed=42000,duration=60,candidateTeam='red',control=false,initialSwapped=false,opponent='legacy'}={}){
   const game=new Match({size,spectator:true,seed,duration,goldenGoal:false,loop:false});
-  game.ai=new ComparisonController(game.engine,seed,candidateTeam,control);
+  game.ai=new ComparisonController(game.engine,seed,candidateTeam,control,opponent);
   if(initialSwapped){game.sidesSwapped=true;game.engine.setSidesSwapped(true);game.tracker.sidesSwapped=true;game.spawn();}
   const rows={red:teamTelemetry(),blue:teamTelemetry()},start=performance.now();
   let frames=0,nonFinite=0,maxLiveUpdateMs=0,nextSample=0,nextLoop=0;
@@ -111,7 +118,7 @@ export function runComparison({size=1,seed=42000,duration=60,candidateTeam='red'
       roleChanges:r.roleChanges,meanBoostDuringDanger:r.dangerSamples?round(r.dangerBoost/r.dangerSamples):null,
       ownDirectedContacts:r.ownDirectedContacts,stationaryPossessionLoops:r.loopEpisodes};
   }
-  return {size,seed,duration,candidateTeam,initialSwapped,control,score:{...game.score},finished:game.state==='ended',
+  return {size,seed,duration,candidateTeam,initialSwapped,control,opponent,score:{...game.score},finished:game.state==='ended',
     censored:game.state!=='ended',liveSeconds:round(game.tracker.elapsed),frames,nonFinite,
     wallMilliseconds:round(performance.now()-start),maxLiveUpdateMs:round(maxLiveUpdateMs),teams,
     candidate:teams[candidateTeam],baseline:teams[other(candidateTeam)]};
@@ -149,22 +156,25 @@ function sources(){
     ...readdirSync(root).filter(n=>/^(ai-(prediction|active-memory|expert|legacy)|expert-ai)\.mjs$/.test(n))];
   const entries=names.map(name=>['public/js/'+name,createHash('sha256').update(readFileSync(new URL(name,root))).digest('hex')]);
   entries.push(['tests/fixtures/expert-baseline/ai.mjs',createHash('sha256').update(readFileSync(new URL('./fixtures/expert-baseline/ai.mjs',import.meta.url))).digest('hex')]);
+  for(const name of ['expert-ai.mjs','ai-prediction.mjs','ai-active-memory.mjs','manifest.json'])
+    entries.push(['tests/fixtures/expert-v1/'+name,createHash('sha256').update(readFileSync(new URL('./fixtures/expert-v1/'+name,import.meta.url))).digest('hex')]);
   entries.push(['tests/expert-benchmark.mjs',createHash('sha256').update(readFileSync(fileURLToPath(import.meta.url))).digest('hex')]);
   return Object.fromEntries(entries);
 }
 
 export async function benchmark(options={}){
-  const {games=12,duration=60,seed=42000,control=false,sizes=[1,2,3,4,5]}=options,matches=[],sourceHashes=sources();
+  const {games=12,duration=60,seed=42000,control=false,sizes=[1,2,3,4,5],opponent='legacy'}=options,matches=[],sourceHashes=sources();
+  opponentController(opponent);
   for(const size of sizes){
     for(let run=0;run<games;run++)for(const candidateTeam of ['red','blue'])
-      matches.push(runComparison({size,seed:seed+run*7919,duration,candidateTeam,control,initialSwapped:Boolean(run%2)}));
+      matches.push(runComparison({size,seed:seed+run*7919,duration,candidateTeam,control,initialSwapped:Boolean(run%2),opponent}));
     const group=summarize(matches).find(r=>r.size===size);
     console.log(`${size}v${size}: ${group.wins}W ${group.draws}D ${group.losses}L; goal difference/game ${group.goalDifferentialPerGame}`);
   }
   const finalSources=sources(),sourcesChanged=JSON.stringify(sourceHashes)!==JSON.stringify(finalSources);
   return {schema:'teamball.expert-benchmark.v1',testedAt:new Date().toISOString(),engineStep:STEP,control,
-    candidateVersion:control?'frozen previous Expert':'working tree Expert',baselineVersion:JSON.parse(readFileSync(new URL('./fixtures/expert-baseline/manifest.json',import.meta.url),'utf8').replace(/^\uFEFF/,'')),
-    sources:sourceHashes,sourcesChanged,...(sourcesChanged?{sourcesAtCompletion:finalSources}:{}),configuration:{pairedSeedsPerMode:games,duration,firstSeed:seed,seedStride:7919,sizes,maps:'createPitch(size), unchanged build 15 geometry',
+    candidateVersion:control?(opponent==='predictive-v1'?'frozen predictive Expert v1':'frozen previous Expert'):'working tree Expert',baselineVersion:JSON.parse(readFileSync(new URL(opponent==='predictive-v1'?'./fixtures/expert-v1/manifest.json':'./fixtures/expert-baseline/manifest.json',import.meta.url),'utf8').replace(/^\uFEFF/,'')),
+    sources:sourceHashes,sourcesChanged,...(sourcesChanged?{sourcesAtCompletion:finalSources}:{}),configuration:{pairedSeedsPerMode:games,duration,firstSeed:seed,seedStride:7919,sizes,opponent,maps:'createPitch(size), unchanged build 15 geometry',
       models:'none; default policy for both',colors:'paired each seed red and blue',sides:'alternate initial orientation; normal halftime rules retained',goldenGoal:false},
     limitations:['No human opponents evaluated.','Short fixtures measure runtime policy under these maps and seeds, not elite-human strength.',
       'Own-directed contacts include intentional defensive/backward touches; not equivalent to unintended own-goal mistakes.',
@@ -181,8 +191,9 @@ if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const args=Object.fromEntries(process.argv.slice(2).map(a=>a.replace(/^--/,'').split('=')));
   const games=Math.max(1,Number(args.games)||12),duration=Math.max(5,Number(args.duration)||60),seed=Number(args.seed)||42000,
     control=Object.hasOwn(args,'control'),sizes=args.sizes?args.sizes.split(',').map(Number).filter(n=>n>=1&&n<=5):[1,2,3,4,5];
-  const result=await benchmark({games,duration,seed,control,sizes});
-  const output=args.output||'docs/expert-ai/benchmark-results.json';writeFileSync(output,JSON.stringify(result,null,2)+'\n');
+  const opponent=args.opponent||'legacy';
+  const result=await benchmark({games,duration,seed,control,sizes,opponent});
+  const output=args.output||'reports/benchmark-results.json';mkdirSync(dirname(output),{recursive:true});writeFileSync(output,JSON.stringify(result,null,2)+'\n');
   console.log(`Saved ${result.matches.length} matches to ${output}; CPU/wall ${round(result.totalWallMilliseconds/1000)} seconds.`);
   if(result.matches.some(m=>m.nonFinite||m.censored))process.exitCode=1;
 }

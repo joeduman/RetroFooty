@@ -55,6 +55,7 @@ export class OnlinePrediction {
     engine.obstacles=(state.engine.obstacles||[]).map(o=>({...o}));
 
     Object.assign(engine.ball,state.engine.ball);
+    if(state.state==='goal'&&state.goalInfo?.effectMotion==='physics-v1')engine.restoreCelebration(state.engine);
 
     // Copy the lock so prediction cannot mutate the received server state.
     engine.kickoff=state.engine.kickoff

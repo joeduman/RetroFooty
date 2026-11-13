@@ -9,7 +9,6 @@ import {createPitch} from './public/js/config.mjs';
 import {NeuralModelStore} from './bot-model-store.mjs';
 export const SAVE_SCHEMA='teamball.bot-memory.v1';
 const folder=path.join(process.cwd(),'bot-memory');
-const file=path.join(folder,'teamball-bot-memory.v1.json');
 const replayDir=path.join(folder,'replays');
 const MAX_BYTES=8000000;
 const fresh=()=>({schema:SAVE_SCHEMA,version:1,model:'14.0',updatedAt:new Date().toISOString(),games:0,humanGames:0,
@@ -24,8 +23,12 @@ const ctx=(game,p)=>{const b=game.engine.ball,pi=game.pitch,dir=game.engine.atta
  rivals=game.players.filter(v=>v.team!==p.team),pressure=Math.min(999,...rivals.map(v=>Math.hypot(v.x-b.x,v.y-b.y)));
  return `${game.size}v${game.size}:${progress<.33?'def':progress>.67?'att':'mid'}:${pressure<90?'press':'free'}:${b.y<pi.top+65||b.y>pi.bottom-65?'wall':'open'}`;};
 export class BotMemoryStore{
- constructor({directory=folder}={}){this.folder=directory;this.file=path.join(directory,'teamball-bot-memory.v1.json');this.replayDir=path.join(directory,'replays');
-  fs.mkdirSync(this.replayDir,{recursive:true});this.memory=fresh();try{this.memory=validate(JSON.parse(fs.readFileSync(this.file,'utf8')));}catch(e){if(e.code!=='ENOENT'){this.error=e.message;}}
+ constructor({directory=folder}={}){this.folder=directory;this.file=path.join(directory,'retrofooty-bot-memory.v1.json');this.replayDir=path.join(directory,'replays');
+  fs.mkdirSync(this.replayDir,{recursive:true});
+  // Migrate an existing save without replacing a newer RetroFooty save.
+  const legacyFile=path.join(directory,'teamball-bot-memory.v1.json');
+  if(!fs.existsSync(this.file)&&fs.existsSync(legacyFile))fs.renameSync(legacyFile,this.file);
+  this.memory=fresh();try{this.memory=validate(JSON.parse(fs.readFileSync(this.file,'utf8')));}catch(e){if(e.code!=='ENOENT'){this.error=e.message;}}
   this.neural=new NeuralModelStore(directory);this.sessions=new Map();this.recentSave=0;this.paused=false;this.imported=false;}
  policy(){return this.memory.policy;}
  neuralModel(){return this.neural.model();}

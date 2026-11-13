@@ -26,7 +26,7 @@ test('Singularity saves as a preference and reaches park players across field re
   assert.equal(world.state(client).state.players.find(player=>player.id===client.slot).goalEffectId,'black-hole');
   world.restart(field,'warmup');
   assert.equal(world.state(client).state.players.find(player=>player.id===client.slot).goalEffectId,'black-hole');
-  world.setGoalEffect(client,'fire');world.setGoalEffect(client,'black-hole');
+  assert.throws(()=>world.setGoalEffect(client,'fire'),/full time/);field.game.state='ended';world.setGoalEffect(client,'fire');world.setGoalEffect(client,'black-hole');
   assert.equal(world.state(client).state.players.find(player=>player.id===client.slot).goalEffectId,'black-hole');
 });
 
@@ -49,6 +49,9 @@ test('physical Singularity goals keep scorer attribution and their frozen effect
     assert.equal(game.goalInfo.goalEffectId,'black-hole','changing equipment leaves the scored goal intact');
     const record=recorder.snapshot('complete').replay,frame=replayFrame(record,record.duration);
     assert.equal(frame.goalInfo.goalEffectId,'black-hole');assert.equal(frame.goalInfo.scorerId,scorer.id);
+    assert.deepEqual(frame.goalInfo.effectOrigin,game.goalInfo.effectOrigin);
+    assert.equal(frame.goalInfo.effectPlayers.length,2);
+    assert.deepEqual(frame.goalInfo.effectPlayers,game.goalInfo.effectPlayers,'replays retain the goal-time reaction origins');
   }
 });
 

@@ -9,7 +9,7 @@ if (Number(process.versions.node.split('.')[0]) < 20) {
   process.exit(1);
 }
 const token = crypto.randomBytes(24).toString('hex');
-const statePath = path.join(__dirname, '.teamball-server.json');
+const statePath = path.join(__dirname, '.retrofooty-server.json');
 const port = Number(process.env.PORT) || 25568;
 
 const publicDir = path.join(__dirname, 'public');
@@ -56,10 +56,10 @@ const server = http.createServer((req, res) => {
       }catch(error){res.writeHead(400,{'Content-Type':'application/json'}).end(JSON.stringify({error:error.message}));}
     });return;
   }
-  if (req.url === '/_teamball/ai/export'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Content-Disposition':'attachment; filename=teamball-bot-memory.v1.json','Cache-Control':'no-store'}).end(JSON.stringify(learning?.memory||{}));return;}
+  if (req.url === '/_teamball/ai/export'&&req.method==='GET'){res.writeHead(200,{'Content-Type':'application/json','Content-Disposition':'attachment; filename=retrofooty-bot-memory.v1.json','Cache-Control':'no-store'}).end(JSON.stringify(learning?.memory||{}));return;}
   if (req.url === '/_teamball/health' && req.method === 'GET') {
     res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
-    res.end(JSON.stringify({ app: 'teamball', build: '15', root: __dirname, pid: process.pid }));
+    res.end(JSON.stringify({ app: 'teamball', build: '16', root: __dirname, pid: process.pid }));
     return;
   }
   if (req.url === '/_teamball/stop' && req.method === 'POST') {
@@ -106,24 +106,25 @@ function shutdown() {
 process.on('SIGINT', shutdown); process.on('SIGTERM', shutdown); process.on('exit', cleanState);
 server.on('error', error => {
   console.error(error.code === 'EADDRINUSE'
-    ? `Port ${port} is already in use. Run STOP-TEAMBALL.cmd in the folder of the running copy.\nFor an older build, see Teamball-PowerShell-Commands.txt. Nothing was replaced or stopped.`
+    ? `Port ${port} is already in use. Run STOP-RETROFOOTY.cmd in the folder of the running copy. Nothing was replaced or stopped.`
     : error.message);
   process.exit(1);
 });
 let closeOnline=()=>{};
-Promise.all([import('./online.mjs'),import('./park.mjs'),import('./accounts.mjs'),import('./bot-learning.mjs'),import('./bot-trainer.mjs'),import('./neural-training-manager.mjs'),import('./active-match-store.mjs'),import('./ranked.mjs'),import('./economy.mjs')]).then(([{attachOnline},{attachPark},{Accounts},{BotMemoryStore},{startTrainer},{startNeuralTrainer},{ActiveMatchStore},{RankedStore},{EconomyStore}])=>{
+Promise.all([import('./online.mjs'),import('./park.mjs'),import('./accounts.mjs'),import('./bot-learning.mjs'),import('./bot-trainer.mjs'),import('./neural-training-manager.mjs'),import('./active-match-store.mjs'),import('./ranked.mjs'),import('./economy.mjs'),import('./player-profiles.mjs')]).then(([{attachOnline},{attachPark},{Accounts},{BotMemoryStore},{startTrainer},{startNeuralTrainer},{ActiveMatchStore},{RankedStore},{EconomyStore},{PlayerProfiles}])=>{
 economy=new EconomyStore();ranked=new RankedStore();accounts=new Accounts();learning=new BotMemoryStore();activeMemory=new ActiveMatchStore();
-const opts={learning,accounts,activeMemory,ranked,economy};
+const profiles=new PlayerProfiles({ranked,economy,accounts});
+const opts={learning,accounts,activeMemory,ranked,economy,profiles};
 const closeRooms=attachOnline(server,opts),closePark=attachPark(server,opts);
 closeTrainer=startTrainer(learning,closePark,closeRooms);
 closeNeuralTrainer=startNeuralTrainer(learning,closePark,closeRooms);
 closeOnline=()=>{closeRooms();closePark();};
 server.on('upgrade',(req,socket)=>{if(!['/park','/online'].includes(req.url))socket.destroy();});
 server.listen(port, '0.0.0.0', () => {
-  fs.writeFileSync(statePath, JSON.stringify({ app: 'teamball', build: '15', pid: process.pid, port, root: __dirname, token }), { mode: 0o600 });
-  console.log(`\nRETROFOOTY - BUILD 15 OVERNIGHT TRAINING\nhttp://localhost:${port}\nServing: ${publicDir}\nStop: double-click STOP-TEAMBALL.cmd, or run node stop.js\n`);
+  fs.writeFileSync(statePath, JSON.stringify({ app: 'teamball', build: '16', pid: process.pid, port, root: __dirname, token }), { mode: 0o600 });
+  console.log(`\nRETROFOOTY - BUILD 16 OVERNIGHT TRAINING\nhttp://localhost:${port}\nServing: ${publicDir}\nStop: double-click STOP-RETROFOOTY.cmd, or run node stop.js\n`);
   if (process.argv.includes('--open')) {
-    const url = `http://localhost:${port}/?build=15`;
+    const url = `http://localhost:${port}/?build=16`;
     if (process.platform === 'win32') spawn('cmd.exe', ['/d', '/c', 'start', '""', url], { stdio: 'ignore' });
     else if (process.platform === 'darwin') spawn('open', [url], { stdio: 'ignore' }).on('error', () => {});
   }

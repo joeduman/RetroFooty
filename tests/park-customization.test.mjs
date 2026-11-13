@@ -10,7 +10,7 @@ test('park goal effects are validated, assigned and preserved across matches',()
  const field=world.fields.find(f=>f.size===2),slot=()=>field.game.players.find(p=>p.id===player.slot);
  assert.equal(slot().goalEffectId,'fire');assert.equal(world.state(player).state.players.find(p=>p.id===player.slot).goalEffectId,'fire');
  field.game.goalInfo={goalEffectId:'fire'};
- world.setGoalEffect(player,'classic');
+ assert.throws(()=>world.setGoalEffect(player,'classic'),/full time/);field.game.state='ended';world.setGoalEffect(player,'classic');
  assert.equal(slot().goalEffectId,'classic');assert.equal(player.avatar.goalEffectId,'classic');
  assert.equal(field.game.goalInfo.goalEffectId,'fire','a choice during a celebration changes future goals only');
  world.setGoalEffect(player,'https://example.invalid/effect.js');

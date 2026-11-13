@@ -7,7 +7,7 @@ export class ChatChannel{
  constructor(emit,{now=()=>Date.now()}={}){this.emit=emit;this.now=now;this.members=new Map();this.history=[];}
  join(id,name){if(!this.members.has(id))this.members.set(id,{name,typingUntil:0,lastTyping:-Infinity,sent:[]});}
  leave(id){const p=this.members.get(id);if(!p)return;if(p.typingUntil)this.emit({type:'chat-typing',sender:id,name:p.name,typing:false});this.members.delete(id);}
- snapshot(){const now=this.now();return {type:'chat-history',messages:this.history,typing:[...this.members].filter(([,p])=>p.typingUntil>now).map(([sender,p])=>({sender,name:p.name,remaining:p.typingUntil-now}))};}
+ snapshot(){const now=this.now();return {type:'chat-history',messages:[],typing:[...this.members].filter(([,p])=>p.typingUntil>now).map(([sender,p])=>({sender,name:p.name,remaining:p.typingUntil-now}))};}
  handle(id,message){const p=this.members.get(id);if(!p)return null;const now=this.now();
   if(message.type==='chat-typing'){
    if(typeof message.typing!=='boolean')return null;

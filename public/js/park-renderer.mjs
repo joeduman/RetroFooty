@@ -13,6 +13,7 @@ const clock=seconds=>{const value=Number.isFinite(seconds)?Math.max(0,Math.ceil(
 // Spectators read the same authoritative match time as field participants.
 export function spectatorClock(field,compact=false){
  if(!field)return '';
+ if(field.mode==='ranked'&&field.phase==='warmup')return 'WAITING FOR HUMANS';
  if(field.state==='ended'||field.state==='intermission')return Number.isFinite(field.nextMatchIn)?compact?`NEXT ${clock(field.nextMatchIn)}`:TEXT.matchEnded(field.nextMatchIn):'FULL TIME';
  if(compact)return `${field.overtime?'+':''}${clock(field.overtime?field.extraElapsed:field.remaining)}`;
  if(field.state==='halftime')return `${clock(field.remaining)} · HALF TIME`;
@@ -117,19 +118,23 @@ export class ParkRenderer {
   if(me){c.strokeStyle='#ecd69a88';c.lineWidth=1.5/scale;c.beginPath();c.arc(me.x,me.y,(8+Math.sin(now/300))/scale,0,Math.PI*2);c.stroke();c.fillStyle='#f1d692';c.beginPath();c.arc(me.x,me.y,4/scale,0,Math.PI*2);c.fill();}
   c.restore();c.textAlign='left';c.font=`500 10px ${LOOK.font}`;c.fillStyle='#ead298';c.fillText('\u25cf  You',x+18,y+panelH-14);c.fillStyle='#b4c7aa';c.fillText('13 pitches · Ranked / Unranked',x+83,y+panelH-14);c.restore();
  }
- draw(park,id,destination,now,{field=null,view=null,pointer=null,overview=false,prefs={showNames:true,aimGuide:true}}={}){
+ avatarAt(park,x,y,ownName){
+  if(this.focus)return null;const candidates=(park?.players||[]).filter(p=>p.field===null).map(p=>({...p}));
+  for(const f of COURTS){const live=park?.fields.find(q=>q.id===f.id);for(const p of live?.players||[])if(p.isBot===false)candidates.push({...p,x:f.x+p.x,y:f.y+p.y});}
+  return candidates.filter(p=>p.name?.toLowerCase()!==ownName?.toLowerCase()&&Math.hypot(p.x-x,p.y-y)<=Math.max(p.radius||18,8/Math.max(.2,this.scale||1))).sort((a,b)=>Math.hypot(a.x-x,a.y-y)-Math.hypot(b.x-x,b.y-y))[0]||null;
+ }
+ draw(park,id,destination,now,{field=null,view=null,pointer=null,overview=false,spectating=null,prefs={showNames:true,aimGuide:true}}={}){
   const c=this.c,r=this.canvas.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),dt=Math.min(.05,(now-(this.last||now-16))/1000);this.last=now;
   if(this.canvas.width!==Math.round(r.width*dpr)||this.canvas.height!==Math.round(r.height*dpr)){this.canvas.width=Math.round(r.width*dpr);this.canvas.height=Math.round(r.height*dpr);}
   this.focus=COURTS.find(f=>f.id===field)||null;
   const me=park?.players.find(p=>p.id===id);
-  // Near a sideline, frame the live court and watcher together. Walking away
-  // returns to the following camera; the avatar remains under your control.
-  const nearby=!this.focus&&me?COURTS.find(f=>Math.hypot(Math.max(f.x-me.x,0,me.x-f.x-f.w),Math.max(f.y-me.y,0,me.y-f.y-f.h))<150):null;
-  const framed=this.focus||nearby;
+  // Sidelines never take over the walking camera. Spectating is explicit.
+  const watched=!this.focus&&!overview?COURTS.find(f=>f.id===spectating):null;
+  const framed=this.focus||watched;
   const target=framed?{x:framed.x+framed.w/2,y:framed.y+framed.h/2}:me||PARK.spawn;
   const fit=framed?Math.min((r.width-30)/(framed.w+LOOK.spectatorMargin*2),(r.height-100)/(framed.h+LOOK.spectatorMargin*2)):1;
 const zoom=framed
-  ? fit*(this.focus?this.fieldZoom:this.zoom)
+  ? fit*this.fieldZoom
   : Math.min(this.zoom,r.height/650);
   if(!this.camera)this.camera={x:target.x,y:target.y};
   const ease=1-Math.exp(-dt*12);this.camera.x+=(target.x-this.camera.x)*ease;this.camera.y+=(target.y-this.camera.y)*ease;this.scale+=(zoom-this.scale)*ease;
@@ -141,12 +146,14 @@ const zoom=framed
    if(left>r.width+250||left+f.w*this.scale< -250||top>r.height+200||top+f.h*this.scale< -200)continue;
    const live=park?.fields.find(q=>(q.id??q.size)===f.id);if(!live)continue;
    const focused=field===f.id&&view;
-   const match=focused?view:{pitch:live.pitch,round:live.matchId,sidesSwapped:live.sidesSwapped,players:live.players,engine:{ball:live.ball,obstacles:live.obstacles||[]},training:live.training,score:live.score,state:live.practice&&!live.members.length?'idle':live.state,wait:live.wait,goalTeam:live.goalTeam,goalInfo:live.goalInfo,kickoffTeam:live.kickoffTeam,kickoffPlayer:live.kickoffPlayer};
+   const match=focused?{...view,externalCountdown:true}:{pitch:live.pitch,round:live.matchId,sidesSwapped:live.sidesSwapped,players:live.players,engine:{ball:live.ball,obstacles:live.obstacles||[]},training:live.training,score:live.score,state:live.practice&&!live.members.length?'idle':live.state,wait:live.wait,goalTeam:live.goalTeam,goalInfo:live.goalInfo,kickoffTeam:live.kickoffTeam,kickoffPlayer:live.kickoffPlayer};
+   match.visualKey='park:'+f.id;
    c.save();c.translate(f.x,f.y);this.art.pitchArt(match.pitch,match.sidesSwapped);if(focused)this.art.aimGuide(match,prefs,pointer);
-   for(const player of match.players){const p=focused?player:this.pose(`f${f.id}-${player.id}`,player,dt);this.art.player({...p,human:Boolean(focused&&p.id===view.human.id)},prefs);}
+   const poses=match.players.map(player=>{const p=focused?player:this.pose(`f${f.id}-${player.id}`,player,dt);return {...p,human:Boolean(focused&&p.id===view.human.id)};});
+   const shown=this.art.drawMatchPlayers(match,poses,prefs,now);
    this.art.drawMatchBall(match,focused?match.engine.ball:this.pose(`ball${f.id}`,match.engine.ball,dt),now);
    // A nearby watcher sees the same goal scorer and countdown as participants.
-   this.art.chatBubbles(match.players);this.art.overlay(match,false);
+   this.art.chatBubbles(shown);this.art.overlay(match,false);
    c.restore();
    if(!focused){c.fillStyle='#252d27f2';c.beginPath();c.roundRect(f.x+f.w/2-150,f.y-108,300,102,4);c.fill();c.strokeStyle=f.color+'77';c.lineWidth=1;c.stroke();
    this.text(f.name,f.x+f.w/2,f.y-77,18,f.color,850);

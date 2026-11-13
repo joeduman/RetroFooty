@@ -1,11 +1,12 @@
+import {normalizeShirt} from './cosmetics.mjs';
 import { clamp, unit, STEP, TUNING as C } from './config.mjs';
 import {normalizeGoalEffect} from './goal-effects.mjs';
 
 // Shirt IDs are shared by the client menus and the multiplayer servers.
 // Add new designs to both this list and the server allowlist before exposing them.
-export const SHIRT_OPTIONS=[{id:'plain',name:'Plain White',src:'/images/shirts/shirt1.png'},
+export const SHIRT_OPTIONS=[{id:'rookie',name:'Rookie',src:'/images/shirts/shirt_rookie.png'},
   {id:'inferno',name:'Inferno',src:'/images/shirts/shirt_inferno.png'},{id:'barcelona',name:'Barcelona',src:'/images/shirts/barcelona.png'},{id:'psg',name:'Psg',src:'/images/shirts/psg.png'}];
-export const DEFAULTS={movement:'mouse',volume:.2,showNames:true,aimGuide:true,shirtId:'plain',goalEffectId:'classic',
+export const DEFAULTS={movement:'mouse',volume:.2,showNames:true,aimGuide:true,shirtId:'rookie',goalEffectId:'classic',
   bindings:{shoot:'Mouse0',alternate:'Space',sprint:'Shift',up:'KeyW',down:'KeyS',left:'KeyA',right:'KeyD'}};
 export function loadPreferences(){
   let data={};try{data=JSON.parse(localStorage.getItem('teamball05')||'{}');}catch{}
@@ -13,7 +14,7 @@ export function loadPreferences(){
     size:clamp(Number(data.size)||4,1,5),movement:data.movement==='keys'?'keys':'mouse',
     volume:clamp(Number.isFinite(data.volume)?data.volume:.2,0,1),showNames:data.showNames!==false,
     aimGuide:data.aimGuide!==false,goldenGoal:data.goldenGoal!==false,
-    shirtId:SHIRT_OPTIONS.some(shirt=>shirt.id===data.shirtId)?data.shirtId:'plain',
+    shirtId:normalizeShirt(data.shirtId),
     goalEffectId:normalizeGoalEffect(data.goalEffectId),
     bindings:{...DEFAULTS.bindings,...data.bindings}};
 }

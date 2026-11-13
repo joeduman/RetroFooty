@@ -1,6 +1,6 @@
 import {RULES} from './customize.mjs';
-export const BUILD = '15.0';
-export const VERSION = '15.0';
+export const BUILD = '15.1';
+export const VERSION = '15.1';
 export const STEP = 1 / 120;
 export const MATCH_SECONDS = Object.freeze({1:180,2:240,3:300,4:360,5:480});
 export const TUNING = Object.freeze({

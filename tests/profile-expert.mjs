@@ -1,10 +1,10 @@
 // Runtime profiler only: no model training, memory promotion, or network server.
 import {performance} from 'node:perf_hooks';
 import {createHash} from 'node:crypto';
-import {readFileSync,writeFileSync} from 'node:fs';
+import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {cpus,platform,release} from 'node:os';
 import {fileURLToPath} from 'node:url';
-import {resolve} from 'node:path';
+import {resolve,dirname} from 'node:path';
 import {Match} from '../public/js/match.mjs';
 import {ParkWorld} from '../park.mjs';
 import {AIController as Baseline} from './fixtures/expert-baseline/ai.mjs';
@@ -113,6 +113,6 @@ function markdown(report){
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const args=Object.fromEntries(process.argv.slice(2).map(value=>value.replace(/^--/,'').split('=')));
   const result=profileExpert({seconds:Number(args.seconds)||30,warmup:Number(args.warmup)||8,seed:Number(args.seed)||117731,burstSamples:Number(args.burst)||120});
-  const output=args.output||'docs/expert-ai/performance.json';writeFileSync(output,JSON.stringify(result,null,2)+'\n');
+  const output=args.output||'reports/performance.json';mkdirSync(dirname(output),{recursive:true});writeFileSync(output,JSON.stringify(result,null,2)+'\n');
   writeFileSync(output.replace(/\.json$/,'.md'),markdown(result));
 }

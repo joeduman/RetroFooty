@@ -1,0 +1,3 @@
+export function reconnectToken(name,kind){try{return JSON.parse(sessionStorage.getItem(`retrofooty-${kind}-tokens`)||'{}')[name.trim().toLowerCase()]||'';}catch{return '';}}
+export function saveReconnectToken(name,kind,token){try{const key=`retrofooty-${kind}-tokens`,tokens=JSON.parse(sessionStorage.getItem(key)||'{}');Object.defineProperty(tokens,name.trim().toLowerCase(),{value:token,enumerable:true,writable:true,configurable:true});sessionStorage.setItem(key,JSON.stringify(tokens));}catch{}}
+export function migrateReconnectToken(name,kind){if(!name||reconnectToken(name,kind))return;try{const old=sessionStorage.getItem(`teamball-${kind}-reconnect`);if(old)saveReconnectToken(name,kind,old);}catch{}}

@@ -1,3 +1,10 @@
 @echo off
 cd /d "%~dp0"
-call START-TEAMBALL.cmd
+where node >nul 2>nul
+if errorlevel 1 (
+  echo Node.js 20 or later is needed. Install it from https://nodejs.org then run this file again.
+  pause
+  exit /b 1
+)
+node server.js --open
+if errorlevel 1 pause

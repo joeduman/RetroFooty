@@ -33,7 +33,7 @@ try{
  await until("document.getElementById('online-leaderboard').innerText.includes('Browser Player')");
 
  const key=async(code,key,virtualKey,text)=>{await c('Input.dispatchKeyEvent',{type:'keyDown',code,key,windowsVirtualKeyCode:virtualKey,...(text?{text}:{})});await c('Input.dispatchKeyEvent',{type:'keyUp',code,key,windowsVirtualKeyCode:virtualKey});};
- const screenshot=async name=>{const {data}=await c('Page.captureScreenshot',{format:'png'});fs.writeFileSync(new URL('./screenshots/'+name,import.meta.url),Buffer.from(data,'base64'));};
+ const screenshot=async name=>{fs.mkdirSync(new URL('../reports/screenshots/',import.meta.url),{recursive:true});const {data}=await c('Page.captureScreenshot',{format:'png'});fs.writeFileSync(new URL('../reports/screenshots/'+name,import.meta.url),Buffer.from(data,'base64'));};
  const position=()=>evaluate("(()=>{const p=window.teamballPark.snapshot().park.players.find(p=>p.name==='Browser Player');return {x:p.x,y:p.y}})()");
  await key('Enter','Enter',13);await until("document.activeElement.id==='chat-input'");
  assert.ok(peerMessages.some(m=>m.type==='chat-typing'&&m.typing&&m.name==='Browser Player'));
